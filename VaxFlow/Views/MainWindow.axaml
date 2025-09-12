@@ -9,7 +9,7 @@
         WindowState="Maximized"
         MinHeight="600"
         MinWidth="900"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/vax.ico"
         Title="VaxFlow">
   <views:MainView />
 </Window>
