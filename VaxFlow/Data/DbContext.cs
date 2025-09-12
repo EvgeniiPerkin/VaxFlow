@@ -22,12 +22,56 @@ namespace VaxFlow.Data
             try
             {
                 string sql = @"
+                    CREATE TABLE IF NOT EXISTS [doctors] (
+                        id INTEGER NOT NULL,
+                        initials TEXT NOT NULL,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+                    CREATE TABLE IF NOT EXISTS [job_categories] (
+                        id INTEGER NOT NULL,
+                        desc TEXT NOT NULL,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+                    CREATE TABLE IF NOT EXISTS [parties] (
+                        id INTEGER NOT NULL,
+                        party_name TEXT NOT NULL,
+                        count INTEGER NOT NULL DEFAULT 0,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+
+                    CREATE TABLE IF NOT EXISTS [vaccines] (
+                        id INTEGER NOT NULL,
+                        desc TEXT NOT NULL,
+                        party_id INTEGER NOT NULL REFERENCES [parties](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+                    CREATE TABLE IF NOT EXISTS [patients] (
+                        id INTEGER NOT NULL,
+                        last_name TEXT NOT NULL,
+                        first_name TEXT NOT NULL,
+                        middle_name TEXT NOT NULL,
+                        age INTEGER DEFAULT 0,
+                        job_category_id INTEGER NOT NULL REFERENCES [job_categories](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+                    CREATE TABLE IF NOT EXISTS [dotrors_patients] (
+                        [doctor_id] INTEGER NOT NULL REFERENCES [doctors](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        [patient_id] INTEGER NOT NULL REFERENCES [patients](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        [dt_of_admission] TEXT,
+                        PRIMARY KEY (doctor_id, patient_id)
+                    );
+                    CREATE TABLE IF NOT EXISTS [vaccines_patients] (
+                        [vaccine_id] INTEGER NOT NULL REFERENCES [vaccines](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        [patient_id] INTEGER NOT NULL REFERENCES [patients](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        [date_of_vaccination] TEXT,
+                        PRIMARY KEY (vaccine_id, patient_id)
+                    );
+
                     CREATE TABLE IF NOT EXISTS [patterns] ( 
                         id INTEGER NOT NULL,
                         desc TEXT,
                         PRIMARY KEY(id AUTOINCREMENT)
                     );
-
                     CREATE TABLE IF NOT EXISTS [parts] ( 
                         id INTEGER NOT NULL,
                         pattern_id INTEGER NOT NULL REFERENCES [patterns](id) ON DELETE CASCADE ON UPDATE CASCADE,
