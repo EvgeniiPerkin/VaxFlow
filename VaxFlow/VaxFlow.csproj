@@ -13,7 +13,6 @@
     <AvaloniaXaml Remove="Assets\Icons.axaml" />
     <Folder Include="Data\Repositories\" />
     <Folder Include="Data\Services\" />
-    <Folder Include="Data\Mappings\" />
     <Folder Include="Reports\" />
   </ItemGroup>
 
