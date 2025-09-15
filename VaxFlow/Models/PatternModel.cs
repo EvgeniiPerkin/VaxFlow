@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace VaxFlow.Models
 {
@@ -22,6 +23,9 @@ namespace VaxFlow.Models
         private string _Desc = string.Empty;
 
         /// <summary> Описание </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(255, ErrorMessage = "До 255 симв.")]
         public string Desc
         {
             get { return _Desc; }

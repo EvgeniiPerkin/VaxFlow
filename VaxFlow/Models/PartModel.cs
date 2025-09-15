@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace VaxFlow.Models
 {
@@ -46,6 +47,9 @@ namespace VaxFlow.Models
         private string _Body = string.Empty;
 
         /// <summary> Содержание </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(2048, ErrorMessage = "До 2048 симв.")]
         public string Body
         {
             get { return _Body; }
@@ -58,6 +62,9 @@ namespace VaxFlow.Models
         private string? _Desc;
 
         /// <summary> Описание фрагмента </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(3, ErrorMessage = "От 3 симв.")]
+        [MaxLength(60, ErrorMessage = "До 60 симв.")]
         public string? Desc
         {
             get { return _Desc; }
@@ -70,6 +77,7 @@ namespace VaxFlow.Models
         private bool _IsUrl;
 
         /// <summary> Является ссылкой </summary>
+        [MaxLength(200, ErrorMessage = "До 200 симв.")]
         public bool IsUrl
         {
             get { return _IsUrl; }

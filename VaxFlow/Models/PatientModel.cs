@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VaxFlow.Models
 {
@@ -23,6 +24,9 @@ namespace VaxFlow.Models
         private string _LastName = string.Empty;
 
         /// <summary> Фамилия </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(100, ErrorMessage = "До 100 симв.")]
         public string LastName
         {
             get { return _LastName; }
@@ -35,6 +39,9 @@ namespace VaxFlow.Models
         private string _FirstName = string.Empty;
 
         /// <summary> Имя </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(100, ErrorMessage = "До 100 симв.")]
         public string FirstName
         {
             get { return _FirstName; }
@@ -47,6 +54,7 @@ namespace VaxFlow.Models
         private string? _Patronymic;
 
         /// <summary> Отчество </summary>
+        [MaxLength(100, ErrorMessage = "До 100 симв.")]
         public string? Patronymic
         {
             get { return _Patronymic; }
@@ -59,6 +67,7 @@ namespace VaxFlow.Models
         private string? _NameSuffix;
 
         /// <summary> Префикс(оглы, кызы) </summary>
+        [MaxLength(100, ErrorMessage = "До 100 симв.")]
         public string? NameSuffix
         {
             get { return _NameSuffix; }
@@ -83,6 +92,9 @@ namespace VaxFlow.Models
         private string _RegistrationAddress = string.Empty;
 
         /// <summary> Адрес регистрации </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(255, ErrorMessage = "До 255 симв.")]
         public string RegistrationAddress
         {
             get { return _RegistrationAddress; }
@@ -95,6 +107,9 @@ namespace VaxFlow.Models
         private string _PolicyNumber = string.Empty;
 
         /// <summary> Номер полиса </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(30, ErrorMessage = "До 30 симв.")]
         public string PolicyNumber
         {
             get { return _PolicyNumber; }
@@ -107,6 +122,9 @@ namespace VaxFlow.Models
         private string _WorkingPosition = string.Empty;
 
         /// <summary> Должность на работе </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(255, ErrorMessage = "До 255 симв.")]
         public string WorkingPosition
         {
             get { return _WorkingPosition; }
