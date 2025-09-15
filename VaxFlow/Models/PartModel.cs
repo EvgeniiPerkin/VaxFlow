@@ -1,0 +1,130 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace VaxFlow.Models
+{
+    /// <summary>
+    /// Часть документа
+    /// </summary>
+    public class PartModel : ObservableValidator
+    {
+        private int _Id;
+
+        /// <summary> Идентификатор </summary>
+        public int Id
+        {
+            get { return _Id; }
+            set
+            {
+                SetProperty(ref _Id, value);
+            }
+        }
+
+        private int _PatternId;
+
+        /// <summary> Идентификатор шаблона </summary>
+        public int PatternId
+        {
+            get { return _PatternId; }
+            set
+            {
+                SetProperty(ref _PatternId, value);
+            }
+        }
+
+        private int _SerialNumber;
+
+        /// <summary> Порядковый номер </summary>
+        public int SerialNumber
+        {
+            get { return _SerialNumber; }
+            set
+            {
+                SetProperty(ref _SerialNumber, value);
+            }
+        }
+
+        private string _Body = string.Empty;
+
+        /// <summary> Содержание </summary>
+        public string Body
+        {
+            get { return _Body; }
+            set
+            {
+                SetProperty(ref _Body, value);
+            }
+        }
+
+        private string? _Desc;
+
+        /// <summary> Описание фрагмента </summary>
+        public string? Desc
+        {
+            get { return _Desc; }
+            set
+            {
+                SetProperty(ref _Desc, value);
+            }
+        }
+
+        private bool _IsUrl;
+
+        /// <summary> Является ссылкой </summary>
+        public bool IsUrl
+        {
+            get { return _IsUrl; }
+            set
+            {
+                SetProperty(ref _IsUrl, value);
+            }
+        }
+
+        private string? _Url;
+
+        /// <summary> Ссылка </summary>
+        public string? Url
+        {
+            get { return _Url; }
+            set
+            {
+                SetProperty(ref _Url, value);
+            }
+        }
+
+        private bool _IsBold;
+
+        /// <summary> Жирный </summary>
+        public bool IsBold
+        {
+            get { return _IsBold; }
+            set
+            {
+                SetProperty(ref _IsBold, value);
+            }
+        }
+
+        private bool _IsItalicl;
+
+        /// <summary> Курсив </summary>
+        public bool IsItalic
+        {
+            get { return _IsItalicl; }
+            set
+            {
+                SetProperty(ref _IsItalicl, value);
+            }
+        }
+
+        private bool _IsUnderline;
+
+        /// <summary> Подчеркивать </summary>
+        public bool IsUnderline
+        {
+            get { return _IsUnderline; }
+            set
+            {
+                SetProperty(ref _IsUnderline, value);
+            }
+        }
+    }
+}

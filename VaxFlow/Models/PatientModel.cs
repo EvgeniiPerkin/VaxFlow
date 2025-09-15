@@ -1,0 +1,155 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.Generic;
+
+namespace VaxFlow.Models
+{
+    /// <summary>
+    /// Модель данных пациента
+    /// </summary>
+    public class PatientModel : ObservableValidator
+    {
+        private int _Id;
+
+        /// <summary> Идентификатор </summary>
+        public int Id
+        {
+            get { return _Id; }
+            set
+            {
+                SetProperty(ref _Id, value);
+            }
+        }
+        private string _LastName = string.Empty;
+
+        /// <summary> Фамилия </summary>
+        public string LastName
+        {
+            get { return _LastName; }
+            set
+            {
+                SetProperty(ref _LastName, value);
+            }
+        }
+
+        private string _FirstName = string.Empty;
+
+        /// <summary> Имя </summary>
+        public string FirstName
+        {
+            get { return _FirstName; }
+            set
+            {
+                SetProperty(ref _FirstName, value);
+            }
+        }
+
+        private string? _Patronymic;
+
+        /// <summary> Отчество </summary>
+        public string? Patronymic
+        {
+            get { return _Patronymic; }
+            set
+            {
+                SetProperty(ref _Patronymic, value);
+            }
+        }
+
+        private string? _NameSuffix;
+
+        /// <summary> Префикс(оглы, кызы) </summary>
+        public string? NameSuffix
+        {
+            get { return _NameSuffix; }
+            set
+            {
+                SetProperty(ref _NameSuffix, value);
+            }
+        }
+
+        private DateTime _Birthday = DateTime.MinValue;
+
+        /// <summary> День рождения </summary>
+        public DateTime Birthday
+        {
+            get { return _Birthday; }
+            set
+            {
+                SetProperty(ref _Birthday, value);
+            }
+        }
+
+        private string _RegistrationAddress = string.Empty;
+
+        /// <summary> Адрес регистрации </summary>
+        public string RegistrationAddress
+        {
+            get { return _RegistrationAddress; }
+            set
+            {
+                SetProperty(ref _RegistrationAddress, value);
+            }
+        }
+
+        private string _PolicyNumber = string.Empty;
+
+        /// <summary> Номер полиса </summary>
+        public string PolicyNumber
+        {
+            get { return _PolicyNumber; }
+            set
+            {
+                SetProperty(ref _PolicyNumber, value);
+            }
+        }
+        
+        private string _WorkingPosition = string.Empty;
+
+        /// <summary> Должность на работе </summary>
+        public string WorkingPosition
+        {
+            get { return _WorkingPosition; }
+            set
+            {
+                SetProperty(ref _WorkingPosition, value);
+            }
+        }
+        
+        private int _JobCategoryId;
+
+        /// <summary> Идентификатор категории работы </summary>
+        public int JobCategoryId
+        {
+            get { return _JobCategoryId; }
+            set
+            {
+                SetProperty(ref _JobCategoryId, value);
+            }
+        }
+
+        private DateTime _DateTimeCreate = DateTime.Now;
+
+        /// <summary> Дата и время создания записи </summary>
+        public DateTime DateTimeCreate
+        {
+            get { return _DateTimeCreate; }
+            set
+            {
+                SetProperty(ref _DateTimeCreate, value);
+            }
+        }
+
+        private List<DoctorsAppointmentsModel> _Appointments = [];
+
+        /// <summary> Приемы пациета доктором </summary>
+        public List<DoctorsAppointmentsModel> Appointments
+        {
+            get { return _Appointments; }
+            set
+            {
+                SetProperty(ref _Appointments, value);
+            }
+        }
+    }
+}
