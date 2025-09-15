@@ -63,9 +63,9 @@ namespace VaxFlow.Data
                     CREATE TABLE IF NOT EXISTS [doctors_appointments] (
                         doctor_id INTEGER NOT NULL REFERENCES [doctors](id) ON DELETE CASCADE ON UPDATE CASCADE,
                         patient_id INTEGER NOT NULL REFERENCES [patients](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        vaccine_id INTEGER NOT NULL REFERENCES [vaccines](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        party_id INTEGER NOT NULL REFERENCES [parties](id) ON DELETE CASCADE ON UPDATE CASCADE,
                         dt_of_appointment DATETIME NOT NULL,
-                        PRIMARY KEY (doctor_id, patient_id, vaccine_id)
+                        PRIMARY KEY (doctor_id, patient_id, party_id)
                     );
                     CREATE TABLE IF NOT EXISTS [patterns] ( 
                         id INTEGER NOT NULL,
