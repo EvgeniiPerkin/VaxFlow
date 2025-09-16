@@ -1,4 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using VaxFlow.Services;
 
@@ -17,98 +21,137 @@ namespace VaxFlow.Data
 
         public async Task<int> SetupAsync()
         {
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync();
+            using var transaction = connection.BeginTransaction();
+
             try
             {
-                string sql = @"
-                    CREATE TABLE IF NOT EXISTS [doctors] (
-                        id INTEGER NOT NULL,
-                        last_name TEXT NOT NULL,
-                        first_name TEXT NOT NULL,
-                        patronymic TEXT,
-                        name_suffix TEXT,
-                        is_dismissed BOOLEAN NOT NULL CHECK (is_dismissed IN (0, 1)),
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [job_categories] (
-                        id INTEGER NOT NULL,
-                        category TEXT NOT NULL,
-                        desc TEXT NOT NULL,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [vaccines] (
-                        id INTEGER NOT NULL,
-                        desc TEXT NOT NULL,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [vaccine_versions] (
-                        id INTEGER NOT NULL,
-                        version TEXT NOT NULL,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [parties] (
-                        id INTEGER NOT NULL,
-                        vaccine_id INTEGER NOT NULL REFERENCES [vaccines](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        vaccine_version_id INTEGER NOT NULL REFERENCES [vaccine_versions](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        party_name TEXT NOT NULL,
-                        count INTEGER NOT NULL DEFAULT 0,
-                        dt_create DATETIME NOT NULL,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [patients] (
-                        id INTEGER NOT NULL,
-                        last_name TEXT NOT NULL,
-                        first_name TEXT NOT NULL,
-                        patronymic TEXT,
-                        name_suffix TEXT,
-                        birthday DATE NOT NULL,
-                        registration_address TEXT NOT NULL,
-                        dt_create DATETIME NOT NULL,
-                        policy_number TEXT NOT NULL,
-                        working_position TEXT NOT NULL,
-                        job_category_id INTEGER REFERENCES [job_categories](id) ON DELETE SET NULL,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [doctors_appointments] (
-                        doctor_id INTEGER NOT NULL REFERENCES [doctors](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        patient_id INTEGER NOT NULL REFERENCES [patients](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        party_id INTEGER NOT NULL REFERENCES [parties](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        dt_of_appointment DATETIME NOT NULL,
-                        PRIMARY KEY (doctor_id, patient_id, party_id)
-                    );
-                    CREATE TABLE IF NOT EXISTS [patterns] ( 
-                        id INTEGER NOT NULL,
-                        desc TEXT,
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                    CREATE TABLE IF NOT EXISTS [parts] ( 
-                        id INTEGER NOT NULL,
-                        pattern_id INTEGER NOT NULL REFERENCES [patterns](id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        serial_number INTEGER NOT NULL,
-                        body TEXT NOT NULL,
-                        desc TEXT,
-                        is_url BOOLEAN NOT NULL CHECK (is_url IN (0, 1)),
-                        url TEXT,
-                        is_bold BOOLEAN NOT NULL CHECK (is_bold IN (0, 1)),
-                        is_italic BOOLEAN NOT NULL CHECK (is_italic IN (0, 1)),
-                        is_underline BOOLEAN NOT NULL CHECK (is_underline IN (0, 1)),
-                        PRIMARY KEY(id AUTOINCREMENT)
-                    );
-                ";
+                List<Migration> filesMigrations = await Task.Run(() => GetMigrationsFromFiles()).ConfigureAwait(false);
+                if (filesMigrations.Count == 0)
+                {
+                    throw new Exception("Migration files are missing!");
+                }
 
-                using var connection = new SqliteConnection(configuration.DataSourceSQLite);
-                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = @"
+                        CREATE TABLE IF NOT EXISTS [migrations] (
+                            id INTEGER NOT NULL,
+                            version INTEGER NOT NULL,
+                            sql TEXT NOT NULL,
+                            PRIMARY KEY(id AUTOINCREMENT)
+                        );
+                    ";
+                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                }
 
-                using var command = connection.CreateCommand();
-                command.CommandText = sql;
+                List<Migration> dbMigrations = await GetMigrationsFromDbAsync(connection);
 
-                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                foreach (var mFl in filesMigrations)
+                {
+                    foreach (var mDb in dbMigrations)
+                    {
+                        if (mDb.Version.Equals(mFl.Version))
+                        {
+                            if (!mDb.Sql.Equals(mFl.Sql))
+                                throw new Exception("The migration file has been changed!");
+                            
+                            mFl.IsFound = true;
+                            break;
+                        }                        
+                    }
+                }
+                foreach (var mFl in filesMigrations)
+                {
+                    if (!mFl.IsFound)
+                    {
+                        await ApplyMigrationAsync(connection, mFl);
+                        await AddMigragionInDb(connection, mFl);
+                    }
+                }
 
+                transaction.Commit();
                 return 0;
             }
             catch
             {
+                transaction.Rollback();
                 return -1;
             }
         }
+        private static async Task<List<Migration>> GetMigrationsFromDbAsync(SqliteConnection connection)
+        {
+            List<Migration> migrations = [];
+
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT version, sql FROM [migrations] ORDER BY version;";
+            
+            using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
+            while (await reader.ReadAsync().ConfigureAwait(false))
+            {
+                migrations.Add(new Migration()
+                {
+                    Version = reader.GetInt32(0),
+                    Sql = reader.GetString(1)
+                });
+            }
+
+            return migrations;
+        }
+        private static List<Migration> GetMigrationsFromFiles()
+        {
+            List<Migration> migrations = [];
+            DirectoryInfo directory = new(Path.Combine(Directory.GetCurrentDirectory(), "Migrations"));
+            FileInfo[] files = directory.GetFiles("*.sql");
+            var sortedByName = files.OrderBy(f => f.Name);
+
+            foreach (FileInfo file in sortedByName)
+            {
+                if (file.Name.Substring(0, 1) != "V") throw new Exception("Incorrect naming of the migration file.");
+
+                if (int.TryParse(file.Name.AsSpan(1, 1), out int version))
+                {
+                    using StreamReader reader = file.OpenText();
+                    string content = reader.ReadToEnd();
+                    migrations.Add(new()
+                    {
+                        Version = version,
+                        Sql = content
+                    });
+                }
+                else
+                {
+                    throw new Exception("Incorrect naming of the migration file.");
+                }
+            }
+
+            return migrations;
+        }
+        private static async Task ApplyMigrationAsync(SqliteConnection connection, Migration migration)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = migration.Sql;
+            await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
+        private static async Task AddMigragionInDb(SqliteConnection connection, Migration mFl)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                INSERT INTO [migrations] (version, sql) 
+                VALUES (@version, @sql)";
+            var versionParam = cmd.Parameters.Add("@version", SqliteType.Integer);
+            var sqlParam = cmd.Parameters.Add("@sql", SqliteType.Text);
+            versionParam.Value = mFl.Version;
+            sqlParam.Value = mFl.Sql;
+            await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
+    }
+
+    public record Migration
+    {
+        public int Version { get; set; }
+        public string Sql { get; set; } = string.Empty;
+        public bool IsFound { get; set; } = false;
     }
 }
