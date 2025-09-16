@@ -39,9 +39,15 @@ namespace VaxFlow.Data
                         desc TEXT NOT NULL,
                         PRIMARY KEY(id AUTOINCREMENT)
                     );
+                    CREATE TABLE IF NOT EXISTS [vaccine_versions] (
+                        id INTEGER NOT NULL,
+                        version TEXT NOT NULL,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
                     CREATE TABLE IF NOT EXISTS [parties] (
                         id INTEGER NOT NULL,
                         vaccine_id INTEGER NOT NULL REFERENCES [vaccines](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        vaccine_version_id INTEGER NOT NULL REFERENCES [vaccine_versions](id) ON DELETE CASCADE ON UPDATE CASCADE,
                         party_name TEXT NOT NULL,
                         count INTEGER NOT NULL DEFAULT 0,
                         dt_create DATETIME NOT NULL,

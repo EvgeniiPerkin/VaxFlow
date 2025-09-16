@@ -33,6 +33,18 @@ namespace VaxFlow.Models
             }
         }
 
+        private int _VaccineVersionId;
+
+        /// <summary> Идентификатор версии вакцины </summary>
+        public int VaccineVersionId
+        {
+            get { return _VaccineVersionId; }
+            set
+            {
+                SetProperty(ref _VaccineVersionId, value);
+            }
+        }
+        
         private string _PartyName = string.Empty;
 
         /// <summary> Имя партии </summary>
