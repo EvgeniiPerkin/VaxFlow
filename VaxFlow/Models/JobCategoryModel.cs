@@ -19,6 +19,23 @@ namespace VaxFlow.Models
                 SetProperty(ref _Id, value);
             }
         }
+
+        private string _Category = string.Empty;
+
+        /// <summary> Категория </summary>
+        /// <summary> Описание </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(150, ErrorMessage = "До 150 симв.")]
+        public string Category
+        {
+            get { return _Category; }
+            set
+            {
+                SetProperty(ref _Category, value);
+            }
+        }
+
         private string _Desc = string.Empty;
 
         /// <summary> Описание </summary>

@@ -30,6 +30,7 @@ namespace VaxFlow.Data
                     );
                     CREATE TABLE IF NOT EXISTS [job_categories] (
                         id INTEGER NOT NULL,
+                        category TEXT NOT NULL,
                         desc TEXT NOT NULL,
                         PRIMARY KEY(id AUTOINCREMENT)
                     );
