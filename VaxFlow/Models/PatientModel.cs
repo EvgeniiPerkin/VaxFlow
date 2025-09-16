@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace VaxFlow.Models
@@ -158,10 +158,10 @@ namespace VaxFlow.Models
             }
         }
 
-        private List<DoctorsAppointmentsModel> _Appointments = [];
+        private ObservableCollection<DoctorsAppointmentsModel> _Appointments = [];
 
         /// <summary> Приемы пациета доктором </summary>
-        public List<DoctorsAppointmentsModel> Appointments
+        public ObservableCollection<DoctorsAppointmentsModel> Appointments
         {
             get { return _Appointments; }
             set
