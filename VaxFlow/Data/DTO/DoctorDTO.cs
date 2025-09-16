@@ -7,5 +7,6 @@
         public string FirstName { get; set; } = string.Empty;
         public string? Patronymic { get; set; }
         public string? NameSuffix { get; set; }
+        public bool IsDismissed { get; set; } = false;
     }
 }

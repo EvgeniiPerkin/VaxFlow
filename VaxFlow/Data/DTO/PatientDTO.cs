@@ -15,7 +15,7 @@ namespace VaxFlow.Data.DTO
         public string RegistrationAddress { get; set; } = string.Empty;
         public string PolicyNumber { get; set; } = string.Empty;
         public string WorkingPosition { get; set; } = string.Empty;
-        public int JobCategoryId { get; set; }
+        public int? JobCategoryId { get; set; }
         public DateTime DateTimeCreate { get; set; } = DateTime.Now;
         public List<DoctorsAppointmentsModel> Appointments { get; set; } = [];
     }

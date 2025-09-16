@@ -134,10 +134,10 @@ namespace VaxFlow.Models
             }
         }
         
-        private int _JobCategoryId;
+        private int? _JobCategoryId;
 
         /// <summary> Идентификатор категории работы </summary>
-        public int JobCategoryId
+        public int? JobCategoryId
         {
             get { return _JobCategoryId; }
             set

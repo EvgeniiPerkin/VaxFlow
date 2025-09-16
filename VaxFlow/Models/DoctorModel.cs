@@ -75,5 +75,17 @@ namespace VaxFlow.Models
                 SetProperty(ref _NameSuffix, value);
             }
         }
+
+        private bool _IsDismissed = false;
+
+        /// <summary> Уволен? Истина-да, Ложь-нет(действующий сотрудник) </summary>
+        public bool IsDismissed
+        {
+            get { return _IsDismissed; }
+            set
+            {
+                SetProperty(ref _IsDismissed, value);
+            }
+        }
     }
 }

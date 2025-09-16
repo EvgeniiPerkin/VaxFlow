@@ -26,6 +26,7 @@ namespace VaxFlow.Data
                         first_name TEXT NOT NULL,
                         patronymic TEXT,
                         name_suffix TEXT,
+                        is_dismissed BOOLEAN NOT NULL CHECK (is_dismissed IN (0, 1)),
                         PRIMARY KEY(id AUTOINCREMENT)
                     );
                     CREATE TABLE IF NOT EXISTS [job_categories] (
@@ -64,7 +65,7 @@ namespace VaxFlow.Data
                         dt_create DATETIME NOT NULL,
                         policy_number TEXT NOT NULL,
                         working_position TEXT NOT NULL,
-                        job_category_id INTEGER NOT NULL REFERENCES [job_categories](id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        job_category_id INTEGER REFERENCES [job_categories](id) ON DELETE SET NULL,
                         PRIMARY KEY(id AUTOINCREMENT)
                     );
                     CREATE TABLE IF NOT EXISTS [doctors_appointments] (
