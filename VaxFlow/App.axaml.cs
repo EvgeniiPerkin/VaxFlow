@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.Data.Repositories;
+using VaxFlow.Data.Services;
 using VaxFlow.Services;
 using VaxFlow.ViewModels;
 using VaxFlow.Views;
@@ -55,14 +57,25 @@ namespace VaxFlow
             services.AddSingleton<IAppConfiguration, AppConfiguration>();
             services.AddSingleton<IMyLogger, Logger>();
             services.AddSingleton<DbContext>();
+            services.AddSingleton<DoctorRepository>();
+            services.AddSingleton<DoctorsAppointmentsRepository>();
+            services.AddSingleton<JobCategoryRepository>();
+            services.AddSingleton<PartRepository>();
+            services.AddSingleton<PatternRepository>();
+            services.AddSingleton<VaccineVersionRepository>();
+            services.AddSingleton<VaccineRepository>();
+            services.AddSingleton<PartyRepository>();
+            services.AddSingleton<PatientRepository>();
+
+            services.AddSingleton<DoctorService>();
 
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<HomeView>();
+            services.AddTransient<VaccinationJournalView>();
             services.AddTransient<SettingsView>();
             services.AddTransient<HelpView>();
             
             services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<VaccinationJournalViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<HelpViewModel>();
         }

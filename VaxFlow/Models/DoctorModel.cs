@@ -87,5 +87,12 @@ namespace VaxFlow.Models
                 SetProperty(ref _IsDismissed, value);
             }
         }
+
+        public override string ToString()
+        {
+            return $"{ LastName } { FirstName }"
+                + (string.IsNullOrEmpty(Patronymic) ? "" : $" { Patronymic }")
+                + (string.IsNullOrEmpty(NameSuffix) ? "" : $" { NameSuffix }");
+        }
     }
 }

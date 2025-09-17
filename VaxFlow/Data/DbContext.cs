@@ -4,23 +4,34 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using VaxFlow.Data.Services;
 using VaxFlow.Services;
 
 namespace VaxFlow.Data
 {
     public class DbContext
     {
-        public DbContext(IAppConfiguration configuration, IMyLogger logger)
+        public DbContext(
+            IAppConfiguration configuration,
+            IMyLogger logger,
+            DoctorService doctorService
+            )
         {
             this.configuration = configuration;
             this.logger = logger;
+            this.Doctor = doctorService;
         }
 
-        #region Properties
+        #region fields
         private readonly IAppConfiguration configuration;
         private readonly IMyLogger logger;
         #endregion
 
+        #region properties
+        public DoctorService Doctor {  get; private set; }
+        #endregion
+
+        #region methods
         public async Task<int> SetupAsync()
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
@@ -151,6 +162,7 @@ namespace VaxFlow.Data
             sqlParam.Value = mFl.Sql;
             await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
+        #endregion
     }
 
     public record Migration

@@ -13,7 +13,7 @@ namespace VaxFlow
         public ViewLocator()
         {
             RegisterViewFactory<MainWindowViewModel, MainWindow>();
-            RegisterViewFactory<HomeViewModel, HomeView>();
+            RegisterViewFactory<VaccinationJournalViewModel, VaccinationJournalView>();
             RegisterViewFactory<SettingsViewModel, SettingsView>();
             RegisterViewFactory<HelpViewModel, HelpView>();
         }

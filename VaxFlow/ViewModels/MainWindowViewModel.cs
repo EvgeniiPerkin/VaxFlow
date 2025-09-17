@@ -14,7 +14,7 @@ namespace VaxFlow.ViewModels
         public MainWindowViewModel()
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
-            SelectedListItem = Items.First(vm => vm.ModelType == typeof(HomeViewModel));
+            SelectedListItem = Items.First(vm => vm.ModelType == typeof(VaccinationJournalViewModel));
         }
 
         [ObservableProperty]
@@ -48,7 +48,7 @@ namespace VaxFlow.ViewModels
 
         private readonly List<ListItemTemplate> _templates =
         [
-            new ListItemTemplate(typeof(HomeViewModel), "HomeRegular", "Home"),
+            new ListItemTemplate(typeof(VaccinationJournalViewModel), "Journal", "Журнал вакцинации"),
             new ListItemTemplate(typeof(SettingsViewModel), "SettingsRegular", "Settings"),
             new ListItemTemplate(typeof(HelpViewModel), "HelpRegular", "Help"),
         ];
