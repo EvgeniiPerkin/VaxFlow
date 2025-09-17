@@ -33,12 +33,13 @@ namespace VaxFlow
             appConf.Init();
 
             var context = Ioc.Default.GetRequiredService<DbContext>();
-            Task.Run(() => context.SetupAsync());
+            int resultInit = Task.Run(() => context.SetupAsync()).Result;
 
             var vm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                if (resultInit == -1) desktop.Shutdown(0);
                 desktop.MainWindow = new MainWindow { DataContext = vm };
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)

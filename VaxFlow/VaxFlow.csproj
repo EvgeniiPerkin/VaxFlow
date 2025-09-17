@@ -44,8 +44,5 @@
     <None Update="Migrations\V1_init.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Migrations\V2_create_test.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

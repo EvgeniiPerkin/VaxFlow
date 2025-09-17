@@ -77,7 +77,6 @@ namespace VaxFlow.Models
         private bool _IsUrl;
 
         /// <summary> Является ссылкой </summary>
-        [MaxLength(200, ErrorMessage = "До 200 симв.")]
         public bool IsUrl
         {
             get { return _IsUrl; }
@@ -90,6 +89,7 @@ namespace VaxFlow.Models
         private string? _Url;
 
         /// <summary> Ссылка </summary>
+        [MaxLength(200, ErrorMessage = "До 200 симв.")]
         public string? Url
         {
             get { return _Url; }

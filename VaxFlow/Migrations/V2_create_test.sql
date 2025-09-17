@@ -1,6 +1,0 @@
-﻿
-CREATE TABLE IF NOT EXISTS [test_table] (
-    id INTEGER NOT NULL,
-    sinsa TEXT NOT NULL,
-    PRIMARY KEY(id AUTOINCREMENT)
-);

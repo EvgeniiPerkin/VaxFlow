@@ -10,13 +10,15 @@ namespace VaxFlow.Data
 {
     public class DbContext
     {
-        public DbContext(IAppConfiguration configuration)
+        public DbContext(IAppConfiguration configuration, IMyLogger logger)
         {
             this.configuration = configuration;
+            this.logger = logger;
         }
 
         #region Properties
         private readonly IAppConfiguration configuration;
+        private readonly IMyLogger logger;
         #endregion
 
         public async Task<int> SetupAsync()
@@ -33,18 +35,20 @@ namespace VaxFlow.Data
                     throw new Exception("Migration files are missing!");
                 }
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS [migrations] (
-                            id INTEGER NOT NULL,
-                            version INTEGER NOT NULL,
-                            sql TEXT NOT NULL,
-                            PRIMARY KEY(id AUTOINCREMENT)
-                        );
-                    ";
-                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-                }
+                using var enableFkCommand = connection.CreateCommand();
+                enableFkCommand.CommandText = "PRAGMA foreign_keys = ON;";
+                await enableFkCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
+
+                using var command = connection.CreateCommand();
+                command.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS [migrations] (
+                        id INTEGER NOT NULL,
+                        version INTEGER NOT NULL,
+                        sql TEXT NOT NULL,
+                        PRIMARY KEY(id AUTOINCREMENT)
+                    );
+                ";
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                 List<Migration> dbMigrations = await GetMigrationsFromDbAsync(connection);
 
@@ -74,9 +78,10 @@ namespace VaxFlow.Data
                 transaction.Commit();
                 return 0;
             }
-            catch
+            catch(Exception ex) 
             {
                 transaction.Rollback();
+                logger.Error(ex, "Error during database initialization.");
                 return -1;
             }
         }
