@@ -48,9 +48,14 @@ namespace VaxFlow.ViewModels
 
         private readonly List<ListItemTemplate> _templates =
         [
-            new ListItemTemplate(typeof(VaccinationJournalViewModel), "Journal", "Журнал вакцинации"),
-            new ListItemTemplate(typeof(SettingsViewModel), "SettingsRegular", "Settings"),
-            new ListItemTemplate(typeof(HelpViewModel), "HelpRegular", "Help"),
+            new ListItemTemplate(typeof(VaccinationJournalViewModel), "JournalRegular", "Журнал вакцинации"),
+            new ListItemTemplate(typeof(PatryViewModel), "PatryRegular", "Партии вакцин"),
+            new ListItemTemplate(typeof(VaccineViewModel),"VaccineRegular", "Вакцины"),
+            new ListItemTemplate(typeof(VaccineVersionsViewModel),"VaccineVersionRegular", "Версии вакцин"),
+            new ListItemTemplate(typeof(DoctorViewModel), "PeopleSettingsRegular", "Список врачей"),
+            new ListItemTemplate(typeof(JobCategoryViewModel), "JobCategoryRegular", "Категории трудовой деятельности"),
+            new ListItemTemplate(typeof(SettingsViewModel), "SettingsRegular", "Настройки"),
+            new ListItemTemplate(typeof(HelpViewModel), "HelpRegular", "Помощь"),
         ];
     }
     public record ListItemTemplate(Type ModelType, string IconKey, string Label);

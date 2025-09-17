@@ -71,11 +71,21 @@ namespace VaxFlow
 
             services.AddSingleton<MainWindow>();
             services.AddTransient<VaccinationJournalView>();
+            services.AddSingleton<DoctorView>();
+            services.AddSingleton<VaccineVersionsView>();
+            services.AddSingleton<VaccineView>();
+            services.AddSingleton<PatryView>();
+            services.AddSingleton<JobCategoryView>();
             services.AddTransient<SettingsView>();
             services.AddTransient<HelpView>();
             
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<VaccinationJournalViewModel>();
+            services.AddSingleton<DoctorViewModel>();
+            services.AddSingleton<VaccineVersionsViewModel>();
+            services.AddSingleton<VaccineViewModel>();
+            services.AddSingleton<PatryViewModel>();
+            services.AddSingleton<JobCategoryViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<HelpViewModel>();
         }
