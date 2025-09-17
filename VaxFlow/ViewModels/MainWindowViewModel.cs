@@ -52,8 +52,9 @@ namespace VaxFlow.ViewModels
             new ListItemTemplate(typeof(PatryViewModel), "PatryRegular", "Партии вакцин"),
             new ListItemTemplate(typeof(VaccineViewModel),"VaccineRegular", "Вакцины"),
             new ListItemTemplate(typeof(VaccineVersionsViewModel),"VaccineVersionRegular", "Версии вакцин"),
-            new ListItemTemplate(typeof(DoctorViewModel), "PeopleSettingsRegular", "Список врачей"),
-            new ListItemTemplate(typeof(JobCategoryViewModel), "JobCategoryRegular", "Категории трудовой деятельности"),
+            new ListItemTemplate(typeof(DoctorViewModel), "PeopleSettingsRegular", "Врачи"),
+            new ListItemTemplate(typeof(JobCategoryViewModel), "JobCategoryRegular", "Рабочие категории"),
+            new ListItemTemplate(typeof(PatternsViewModel), "DocumentRegular", "Редактор документации"),
             new ListItemTemplate(typeof(SettingsViewModel), "SettingsRegular", "Настройки"),
             new ListItemTemplate(typeof(HelpViewModel), "HelpRegular", "Помощь"),
         ];

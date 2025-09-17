@@ -8,5 +8,18 @@
   <Design.DataContext>
     <vm:DoctorViewModel/>
   </Design.DataContext>
-  doctor view
+  <Border
+      Classes="b1"
+      DockPanel.Dock="Top">
+    <Grid
+      RowDefinitions="auto,auto,auto,auto,auto"
+      ColumnDefinitions="auto,*,*,*">
+      <TextBlock
+        Grid.Row="0"
+        Grid.Column="0"
+        Grid.ColumnSpan="4"
+        Classes="h1"
+        Text="Врачи"/>
+    </Grid>
+  </Border>
 </UserControl>

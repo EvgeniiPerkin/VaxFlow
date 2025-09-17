@@ -4,5 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="VaxFlow.PatryView">
-  Партии вакцин
+
+  <Border
+      Classes="b1"
+      DockPanel.Dock="Top">
+    <Grid
+      RowDefinitions="auto,auto,auto,auto,auto"
+      ColumnDefinitions="auto,*,*,*">
+      <TextBlock
+        Grid.Row="0"
+        Grid.Column="0"
+        Grid.ColumnSpan="4"
+        Classes="h1"
+        Text="Партии вакцин"/>
+    </Grid>
+  </Border>
 </UserControl>

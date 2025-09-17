@@ -76,6 +76,7 @@ namespace VaxFlow
             services.AddSingleton<VaccineView>();
             services.AddSingleton<PatryView>();
             services.AddSingleton<JobCategoryView>();
+            services.AddSingleton<PatternsView>();
             services.AddTransient<SettingsView>();
             services.AddTransient<HelpView>();
             
@@ -86,6 +87,7 @@ namespace VaxFlow
             services.AddSingleton<VaccineViewModel>();
             services.AddSingleton<PatryViewModel>();
             services.AddSingleton<JobCategoryViewModel>();
+            services.AddSingleton<PatternsViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<HelpViewModel>();
         }

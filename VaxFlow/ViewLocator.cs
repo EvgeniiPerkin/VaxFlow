@@ -19,6 +19,7 @@ namespace VaxFlow
             RegisterViewFactory<VaccineViewModel, VaccineView>();
             RegisterViewFactory<PatryViewModel, PatryView>();
             RegisterViewFactory<JobCategoryViewModel, JobCategoryView>();
+            RegisterViewFactory<PatternsViewModel, PatternsView>();
             RegisterViewFactory<SettingsViewModel, SettingsView>();
             RegisterViewFactory<HelpViewModel, HelpView>();
         }
