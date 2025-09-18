@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,12 +53,11 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                var pttrns = await context.Pattern.GetAllAsync();
-                Patterns = new(pttrns);
+                Patterns = await context.Pattern.GetAllAsync();
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Ошибка загрузки шаблонов.");
+                logger.Error(ex, "Ошибка загрузки шаблонов документов.");
             }
         }
         private async Task LoadingPartsAsync(int id)
@@ -67,16 +65,11 @@ namespace VaxFlow.ViewModels
             try
             {
                 SelectedPart = null;
-                List<PartModel> prts = new(await context.Part.GetAllAsync());
-                var filtParts = prts.Where<PartModel>(i => i.PatternId == id);
-                if (filtParts != null)
-                {
-                    Parts = new(filtParts);
-                }
+                Parts = await context.Part.FindByPatternIdAsync(id);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Ошибка загрузки частей шаблонов.");
+                logger.Error(ex, "Ошибка загрузки частей шаблонов документов.");
             }
         }
         #endregion
@@ -87,10 +80,13 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                var p = await context.Pattern.CreateAsync(new() { Desc = "Новый шаблон." });
-                Patterns.Add(p);
-                logger.Info($"Создание шаблона id:{this.SelectedPattern?.Id}.");
-
+                PatternModel newPattern = new() { Desc = "Новый шаблон." };
+                int affectedRows = await context.Pattern.CreateAsync(newPattern);
+                if (affectedRows > 0)
+                {
+                    Patterns.Add(newPattern);
+                    logger.Info($"Создание шаблона id:{this.SelectedPattern?.Id}.");
+                }
             }
             catch (Exception ex)
             {
@@ -103,9 +99,13 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                await context.Pattern.UpdateAsync(this.SelectedPattern);
-                logger.Info($"Обновление шаблона id:{this.SelectedPattern?.Id}, desc:{this.SelectedPattern?.Desc}");
+                if (SelectedPattern == null) return;
 
+                int affectedRows = await context.Pattern.UpdateAsync(SelectedPattern);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Обновление шаблона id:{SelectedPattern?.Id}, desc:{SelectedPattern?.Desc}");
+                }
             }
             catch (Exception ex)
             {
@@ -122,9 +122,13 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                await context.Pattern.DeleteAsync(this.SelectedPattern);
-                logger.Info($"Удаление шаблона id:{this.SelectedPattern?.Id}, desc:{this.SelectedPattern?.Desc}");
-                Patterns.Remove(this.SelectedPattern);
+                if (SelectedPattern == null) return;
+                int affectedRows = await context.Pattern.DeleteAsync(SelectedPattern);
+                if (affectedRows > 0)
+                { 
+                    logger.Info($"Удаление шаблона id:{SelectedPattern.Id}, desc:{SelectedPattern.Desc}");
+                    Patterns.Remove(SelectedPattern);
+                }
             }
             catch (Exception ex)
             {
@@ -141,9 +145,30 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                var p = await context.Part.CreateAsync(new() { SerialNumber = 1, PatternId = SelectedPattern.Id, Desc = "Новая часть документа.", Body = "Содержание" });
-                Parts?.Add(p);
-                logger.Info($"Создание новой части id:{p.Id}, для шаблона {this.SelectedPattern?.Desc}");
+                if (SelectedPattern == null) return;
+                int sn = 1;
+                if (Parts != null && Parts.Any())
+                {
+                    sn = Parts?.Max(x => x.SerialNumber) ?? 1;
+                }
+                PartModel newPart = new()
+                {
+                    SerialNumber = ++sn,
+                    PatternId = SelectedPattern.Id,
+                    Desc = "Новая часть документа.",
+                    Body = "Содержание",
+                    IsUrl = false,
+                    IsBold = false,
+                    IsItalic = false,
+                    IsUnderline = false
+                };
+
+                int newId = await context.Part.CreateAsync(newPart);
+                if (newId > 0)
+                {
+                    Parts?.Add(newPart);
+                    logger.Info($"Создание новой части id:{newPart.Id}, для шаблона {SelectedPattern?.Desc}");
+                }
             }
             catch (Exception ex)
             {
@@ -160,12 +185,17 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                await context.Part.UpdateAsync(this.SelectedPart);
-                logger.Info($"Обновление части id:{this.SelectedPart.Id}," +
-                    $" serialNumber {this.SelectedPart.SerialNumber}," +
-                    $" desc:{this.SelectedPart.Desc}," +
-                    $" body:{this.SelectedPart.Body}," +
-                    $" шаблона {this.SelectedPattern?.Desc}");
+                if (SelectedPart == null) return;
+
+                int affectedRows = await context.Part.UpdateAsync(SelectedPart);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Обновление части id:{SelectedPart.Id}," +
+                        $" serialNumber {SelectedPart.SerialNumber}," +
+                        $" desc:{SelectedPart.Desc}," +
+                        $" body:{SelectedPart.Body}," +
+                        $" шаблона {SelectedPattern?.Desc}");
+                }
             }
             catch (Exception ex)
             {
@@ -182,13 +212,18 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                await context.Part.DeleteAsync(this.SelectedPart);
-                logger.Info($"Удаление части id:{this.SelectedPart.Id}," +
-                    $" serialNumber {this.SelectedPart.SerialNumber}," +
-                    $" desc:{this.SelectedPart.Desc}," +
-                    $" body:{this.SelectedPart.Body}," +
-                    $" из шаблона {this.SelectedPattern?.Desc}");
-                Parts?.Remove(this.SelectedPart);
+                if (SelectedPart == null) return;
+
+                int affectedRows = await context.Part.DeleteAsync(SelectedPart);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Удаление части id:{SelectedPart.Id}," +
+                        $" serialNumber {SelectedPart.SerialNumber}," +
+                        $" desc:{SelectedPart.Desc}," +
+                        $" body:{SelectedPart.Body}," +
+                        $" из шаблона {SelectedPattern?.Desc}");
+                    Parts?.Remove(SelectedPart);
+                }
             }
             catch (Exception ex)
             {

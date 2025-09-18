@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data.Repositories;
 using VaxFlow.Models;
@@ -19,24 +20,33 @@ namespace VaxFlow.Data.Services
         private readonly IAppConfiguration configuration;
         private readonly PartRepository repository;
         #endregion
-        internal async Task<PartModel> CreateAsync(PartModel value)
+
+        internal async Task<int> CreateAsync(PartModel value)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.CreateAsync(connection, value);
         }
 
-        internal async Task DeleteAsync(PartModel? selectedPart)
+        internal async Task<int> DeleteAsync(PartModel selectedPart)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.DeleteAsync(connection, selectedPart);
         }
 
-        internal async Task<IEnumerable<PartModel>> GetAllAsync()
+        internal async Task<ObservableCollection<PartModel>> FindByPatternIdAsync(int patternId)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.FindByPatternIdAsync(connection, patternId);
         }
 
-        internal async Task UpdateAsync(PartModel? selectedPart)
+        internal async Task<int> UpdateAsync(PartModel selectedPart)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.UpdateAsync(connection, selectedPart);
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data.Repositories;
 using VaxFlow.Models;
@@ -20,24 +21,32 @@ namespace VaxFlow.Data.Services
         private readonly PatternRepository repository;
         #endregion
 
-        internal async Task<PatternModel> CreateAsync(PatternModel value)
+        internal async Task<int> CreateAsync(PatternModel value)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.CreateAsync(connection, value);
         }
 
-        internal async Task DeleteAsync(PatternModel? selectedPattern)
+        internal async Task<int> DeleteAsync(PatternModel value)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.DeleteAsync(connection, value);
         }
 
-        internal async Task<IEnumerable<PatternModel>> GetAllAsync()
+        internal async Task<ObservableCollection<PatternModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.GetAllAsync(connection);
         }
 
-        internal async Task UpdateAsync(PatternModel? selectedPattern)
+        internal async Task<int> UpdateAsync(PatternModel value)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.UpdateAsync(connection, value);
         }
     }
 }

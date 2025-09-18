@@ -3,12 +3,12 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
   x:Class="VaxFlow.PatternsView"
   x:CompileBindings="False">
   <Grid
     RowDefinitions="*"
-    ColumnDefinitions="0.1*,*,*,0.1*">
+    ColumnDefinitions="0*,*,*,0.1*">
     <Border
       Classes="b1"
       Grid.Row="0"
@@ -122,7 +122,7 @@
           Grid.Row="1"
           Grid.Column="1"
           Grid.RowSpan="2"
-          RowDefinitions="auto,auto,auto,auto,auto,auto"
+          RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
           ColumnDefinitions="*">
           <StackPanel
             Grid.Row="0"
@@ -177,8 +177,26 @@
               Height="50"
               Text="{Binding SelectedPart.Url}"/>
           </StackPanel>
-          <Button
+          <CheckBox
+            Grid.Row="5"
+            Grid.Column="0"
+            Margin="4"
+            IsChecked="{Binding SelectedPart.IsBold}"
+            Content="Жирный"/>
+          <CheckBox
             Grid.Row="6"
+            Grid.Column="0"
+            Margin="4"
+            IsChecked="{Binding SelectedPart.IsItalic}"
+            Content="Курсивный"/>
+          <CheckBox
+            Grid.Row="7"
+            Grid.Column="0"
+            Margin="4"
+            IsChecked="{Binding SelectedPart.IsUnderline}"
+            Content="Подчеркнутый"/>
+          <Button
+            Grid.Row="8"
             Grid.Column="0"
             Margin="4"
             HorizontalAlignment="Center"

@@ -111,15 +111,15 @@ namespace VaxFlow.Models
             }
         }
 
-        private bool _IsItalicl;
+        private bool _IsItalic;
 
         /// <summary> Курсив </summary>
         public bool IsItalic
         {
-            get { return _IsItalicl; }
+            get { return _IsItalic; }
             set
             {
-                SetProperty(ref _IsItalicl, value);
+                SetProperty(ref _IsItalic, value);
             }
         }
 
