@@ -1,25 +1,117 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:VaxFlow.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VaxFlow.DoctorView">
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:VaxFlow.ViewModels"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  x:Class="VaxFlow.DoctorView"
+  x:CompileBindings="False">
   <Design.DataContext>
     <vm:DoctorViewModel/>
   </Design.DataContext>
   <Border
-      Classes="b1"
-      DockPanel.Dock="Top">
+    Classes="b1"
+    Grid.Row="0"
+    Grid.Column="2"
+      >
     <Grid
-      RowDefinitions="auto,auto,auto,auto,auto"
-      ColumnDefinitions="auto,*,*,*">
+      RowDefinitions="auto,*,auto"
+      ColumnDefinitions="0.5*,*">
       <TextBlock
         Grid.Row="0"
         Grid.Column="0"
-        Grid.ColumnSpan="4"
+        Grid.ColumnSpan="2"
         Classes="h1"
-        Text="Врачи"/>
+        Text="Врачи"
+          />
+      <ListBox
+        Grid.Row="1"
+        Grid.Column="0"
+        Margin="4"
+        MaxHeight="900"
+        ItemsSource="{Binding Doctors}"
+        SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"/>
+      <Grid
+        Grid.Row="2"
+        Grid.Column="0"
+        ColumnDefinitions="*,*">
+        <Button
+          Grid.Column="0"
+          Margin="4"
+          HorizontalAlignment="Left"
+          Command="{Binding AddDoctorAsync}"
+          CommandParameter="{Binding SelectedDoctor}">Добавить</Button>
+        <Button
+          Margin="4"
+          Grid.Column="1"
+          HorizontalAlignment="Right"
+          Command="{Binding RemoveDoctorAsync}"
+          CommandParameter="{Binding SelectedDoctor}">Удалить</Button>
+      </Grid>
+      <Grid
+        Grid.Row="1"
+        Grid.Column="1"
+        RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
+        ColumnDefinitions="*,*,*">
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Grid.ColumnSpan="3"
+          Foreground="LightCoral"
+          Text="Поля с символом '*' обязательные!"/>
+        <StackPanel
+          Grid.Row="1"
+          Grid.Column="0"
+          Margin="4">
+          <TextBlock Classes="h3" Margin="0 5" Text="Фамилия*"></TextBlock>
+          <TextBox
+            Watermark="Гусейнова"
+            Text="{Binding SelectedDoctor.LastName}"/>
+        </StackPanel>
+        <StackPanel
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="4">
+          <TextBlock Classes="h3" Margin="0 5" Text="Имя*"></TextBlock>
+          <TextBox
+            Watermark="Зарема"
+            Text="{Binding SelectedDoctor.FirstName}"/>
+        </StackPanel>
+        <StackPanel
+          Grid.Row="1"
+          Grid.Column="2"
+          Margin="4">
+          <TextBlock Classes="h3" Margin="0 5" Text="Отчество"></TextBlock>
+          <TextBox
+            Watermark="Юсуф"
+            Text="{Binding SelectedDoctor.Patronymic}"/>
+        </StackPanel>
+        <StackPanel
+          Grid.Row="2"
+          Grid.Column="2"
+          Margin="4">
+          <TextBlock Classes="h3" Margin="0 5" Text="Префикс"></TextBlock>
+          <TextBox
+            Watermark="кызы"
+            Text="{Binding SelectedDoctor.NameSuffix}"/>
+        </StackPanel>
+        <CheckBox
+          Grid.Row="3"
+          Grid.Column="0"
+          Grid.ColumnSpan="3"
+          Margin="4"
+          IsChecked="{Binding SelectedDoctor.IsDismissed}"
+          Content="Уволен (не будет отображаться в списках)"/>
+        <Button
+          Grid.Row="4"
+          Grid.Column="0"
+          Grid.ColumnSpan="3"
+          Margin="4"
+          HorizontalAlignment="Center"
+          Command="{Binding UpdateDoctorAsync}"
+          CommandParameter="{Binding SelectedDoctor}">Сохранить</Button>
+      </Grid>
     </Grid>
   </Border>
 </UserControl>
