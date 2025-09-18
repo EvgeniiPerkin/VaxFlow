@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using DocumentFormat.OpenXml.EMMA;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -56,6 +57,14 @@ namespace VaxFlow.Data.Repositories
             cmd.Parameters.AddWithValue("@patronymic", SqliteHelper.FromStringNull(doctor.Patronymic));
             cmd.Parameters.AddWithValue("@name_suffix", SqliteHelper.FromStringNull(doctor.NameSuffix));
             cmd.Parameters.AddWithValue("@is_dismissed", SqliteHelper.FromBoolean(doctor.IsDismissed));
+            cmd.Parameters.AddWithValue("@id", doctor.Id);
+            return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
+
+        public async Task<int> DeleteAsync(SqliteConnection connection, DoctorModel doctor)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = "DELETE FROM doctors WHERE id=@id;";
             cmd.Parameters.AddWithValue("@id", doctor.Id);
             return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
