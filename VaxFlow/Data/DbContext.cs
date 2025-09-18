@@ -14,12 +14,16 @@ namespace VaxFlow.Data
         public DbContext(
             IAppConfiguration configuration,
             IMyLogger logger,
-            DoctorService doctorService
+            DoctorService doctorService,
+            PartService partService,
+            PatternService patternService
             )
         {
             this.configuration = configuration;
             this.logger = logger;
             this.Doctor = doctorService;
+            this.Part = partService;
+            this.Pattern = patternService;
         }
 
         #region fields
@@ -29,6 +33,8 @@ namespace VaxFlow.Data
 
         #region properties
         public DoctorService Doctor {  get; private set; }
+        public PartService Part { get; private set; }
+        public PatternService Pattern { get; private set; }
         #endregion
 
         #region methods

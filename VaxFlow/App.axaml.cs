@@ -68,6 +68,8 @@ namespace VaxFlow
             services.AddSingleton<PatientRepository>();
 
             services.AddSingleton<DoctorService>();
+            services.AddSingleton<PartService>();
+            services.AddSingleton<PatternService>();
 
             services.AddSingleton<MainWindow>();
             services.AddTransient<VaccinationJournalView>();

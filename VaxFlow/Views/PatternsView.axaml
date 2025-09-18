@@ -1,21 +1,191 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VaxFlow.PatternsView">
-  <Border
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  x:Class="VaxFlow.PatternsView"
+  x:CompileBindings="False">
+  <Grid
+    RowDefinitions="*"
+    ColumnDefinitions="0.1*,*,*,0.1*">
+    <Border
       Classes="b1"
-      DockPanel.Dock="Top">
-    <Grid
-      RowDefinitions="auto,auto,auto,auto,auto"
-      ColumnDefinitions="auto,*,*,*">
-      <TextBlock
-        Grid.Row="0"
-        Grid.Column="0"
-        Grid.ColumnSpan="4"
-        Classes="h1"
-        Text="Редактор документов"/>
-    </Grid>
-  </Border>
+      Grid.Row="0"
+      Grid.Column="1"
+      >
+      <Grid
+        RowDefinitions="auto,*,auto,auto"
+        ColumnDefinitions="*">
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Classes="h1"
+          Text="Список шаблонов"
+          />
+        <ListBox
+          Grid.Row="1"
+          Grid.Column="0"
+          Margin="4"
+          MaxHeight="800"
+          ItemsSource="{Binding Patterns}"
+          SelectedItem="{Binding SelectedPattern, Mode=TwoWay}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Desc}"/>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel
+          Grid.Row="2"
+          Grid.Column="0"
+          Margin="4">
+          <TextBlock Classes="h3" Margin="0 5" Text="Наименование шаблона"></TextBlock>
+          <TextBox
+            Watermark="Договор залога."
+            Text="{Binding SelectedPattern.Desc}"/>
+        </StackPanel>
+        <Grid
+          Grid.Row="3"
+          Grid.Column="0"
+          ColumnDefinitions="*,*,*">
+          <Button
+            Grid.Column="0"
+            Margin="4"
+            HorizontalAlignment="Left"
+            Command="{Binding AddPatternAsync}">Добавить</Button>
+          <Button
+            Margin="4"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            Command="{Binding UpdatePatternAsync}"
+            CommandParameter="{Binding SelectedPattern}">Сохранить</Button>
+          <Button
+            Margin="4"
+            Grid.Column="2"
+            HorizontalAlignment="Right"
+            Command="{Binding RemovePatternAsync}"
+            CommandParameter="{Binding SelectedPattern}">Удалить</Button>
+        </Grid>
+      </Grid>
+    </Border>
+    <Border
+      Classes="b1"
+      Grid.Row="0"
+      Grid.Column="2"
+      >
+      <Grid
+        RowDefinitions="auto,*,auto"
+        ColumnDefinitions="*,*">
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          Classes="h1"
+          Text="Список частей выбранного шаблона"
+          />
+        <ListBox
+          Grid.Row="1"
+          Grid.Column="0"
+          Margin="4"
+          MaxHeight="900"
+          ItemsSource="{Binding Parts}"
+          SelectedItem="{Binding SelectedPart, Mode=TwoWay}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding SerialNumber}"/>
+                <TextBlock Text=" | "/>
+                <TextBlock Text="{Binding Desc}"/>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid
+          Grid.Row="2"
+          Grid.Column="0"
+          ColumnDefinitions="*,*">
+          <Button
+            Grid.Column="0"
+            Margin="4"
+            HorizontalAlignment="Left"
+            Command="{Binding AddPartAsync}"
+            CommandParameter="{Binding SelectedPattern}">Добавить</Button>
+          <Button
+            Margin="4"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Command="{Binding RemovePartAsync}"
+            CommandParameter="{Binding SelectedPart}">Удалить</Button>
+        </Grid>
+        <Grid
+          Grid.Row="1"
+          Grid.Column="1"
+          Grid.RowSpan="2"
+          RowDefinitions="auto,auto,auto,auto,auto,auto"
+          ColumnDefinitions="*">
+          <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="4">
+            <TextBlock Classes="h3" Margin="0 5" Text="Порядковый номер (уникальный)"></TextBlock>
+            <NumericUpDown
+              AllowSpin="False"
+              ShowButtonSpinner="False"
+              Minimum="1"
+              Maximum="999999999"
+              Watermark="12"
+              Text="{Binding SelectedPart.SerialNumber}"/>
+          </StackPanel>
+          <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="4">
+            <TextBlock Classes="h3" Margin="0 5" Text="Описание"></TextBlock>
+            <TextBox
+              Watermark="Первая часть"
+              Text="{Binding SelectedPart.Desc}"/>
+          </StackPanel>
+          <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="4">
+            <TextBlock Classes="h3" Margin="0 5" Text="Содержание"></TextBlock>
+            <TextBox
+              AcceptsReturn="True"
+              TextWrapping="Wrap"
+              Watermark="Договор вступает в силу с"
+              Height="150"
+              Text="{Binding SelectedPart.Body}"/>
+          </StackPanel>
+          <CheckBox
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="4"
+            IsChecked="{Binding SelectedPart.IsUrl}"
+            Content="Является ссылкой"/>
+          <StackPanel
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="4"
+            IsVisible="{Binding SelectedPart.IsUrl}">
+            <TextBlock Classes="h3" Margin="0 5" Text="Сслка на ресурс"></TextBlock>
+            <TextBox
+              AcceptsReturn="True"
+              TextWrapping="Wrap"
+              Watermark="https//google.com"
+              Height="50"
+              Text="{Binding SelectedPart.Url}"/>
+          </StackPanel>
+          <Button
+            Grid.Row="6"
+            Grid.Column="0"
+            Margin="4"
+            HorizontalAlignment="Center"
+            Command="{Binding UpdatePartAsync}"
+            CommandParameter="{Binding SelectedPart}">Сохранить</Button>
+        </Grid>
+      </Grid>
+    </Border>
+  </Grid>
 </UserControl>
