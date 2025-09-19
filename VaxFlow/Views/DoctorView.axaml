@@ -9,8 +9,6 @@
   x:CompileBindings="False">
   <Border
     Classes="b1"
-    Grid.Row="0"
-    Grid.Column="2"
       >
     <Grid
       RowDefinitions="auto,*,auto,auto"
