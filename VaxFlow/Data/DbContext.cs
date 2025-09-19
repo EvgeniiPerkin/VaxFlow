@@ -16,7 +16,10 @@ namespace VaxFlow.Data
             IMyLogger logger,
             DoctorService doctorService,
             PartService partService,
-            PatternService patternService
+            PatternService patternService,
+            JobCategoryService jobCategoryService,
+            VaccineVersionService vaccineVersionService,
+            VaccineService vaccineService
             )
         {
             this.configuration = configuration;
@@ -24,6 +27,9 @@ namespace VaxFlow.Data
             this.Doctor = doctorService;
             this.Part = partService;
             this.Pattern = patternService;
+            this.JobCategory = jobCategoryService;
+            this.VaccineVersion = vaccineVersionService;
+            this.Vaccine = vaccineService;
         }
 
         #region fields
@@ -35,6 +41,9 @@ namespace VaxFlow.Data
         public DoctorService Doctor {  get; private set; }
         public PartService Part { get; private set; }
         public PatternService Pattern { get; private set; }
+        public JobCategoryService JobCategory { get; private set; }
+        public VaccineVersionService VaccineVersion { get; private set; }
+        public VaccineService Vaccine { get; private set; }
         #endregion
 
         #region methods

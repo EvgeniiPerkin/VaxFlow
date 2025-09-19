@@ -7,16 +7,13 @@
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
   x:Class="VaxFlow.DoctorView"
   x:CompileBindings="False">
-  <Design.DataContext>
-    <vm:DoctorViewModel/>
-  </Design.DataContext>
   <Border
     Classes="b1"
     Grid.Row="0"
     Grid.Column="2"
       >
     <Grid
-      RowDefinitions="auto,*,auto"
+      RowDefinitions="auto,*,auto,auto"
       ColumnDefinitions="0.5*,*">
       <TextBlock
         Grid.Row="0"
@@ -112,6 +109,12 @@
           Command="{Binding UpdateDoctorAsync}"
           CommandParameter="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
       </Grid>
+      <TextBlock
+        Grid.Row="3"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        Classes="output"
+        Text="{Binding Output}"/>
     </Grid>
   </Border>
 </UserControl>

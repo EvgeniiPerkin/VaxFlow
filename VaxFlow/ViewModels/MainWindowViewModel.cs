@@ -64,9 +64,9 @@ namespace VaxFlow.ViewModels
             try
             {
                 Doctors = await context.Doctor.GetAllAsync();
-                //JobCategories = await context.JobCategory.GetAllAsync();
-                //Vaccines = await context.Vaccine.GetAllAsync();
-                //VaccineVersions = await context.VaccineVersion.GetAllAsync();
+                JobCategories = await context.JobCategory.GetAllAsync();
+                Vaccines = await context.Vaccine.GetAllAsync();
+                VaccineVersions = await context.VaccineVersion.GetAllAsync();
             }
             catch (Exception ex) 
             {

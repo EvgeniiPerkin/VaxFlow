@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using VaxFlow.Data;
 using VaxFlow.Models;
@@ -26,6 +25,8 @@ namespace VaxFlow.ViewModels
         #region properties
         [ObservableProperty]
         private DoctorModel? _SelectedDoctor;
+        [ObservableProperty]
+        private string _Output = "";
         #endregion
 
         #region methods
@@ -53,13 +54,15 @@ namespace VaxFlow.ViewModels
                     if (affectedRows > 0)
                     {
                         logger.Info($"Создана запись доктора id:{newDoctor.Id}");
+                        collection.Add(newDoctor);
+                        Output = "Успешнове создание новой записи доктора.";
                     }
-                    collection.Add(newDoctor);
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка создания записи доктора.");
+                Output = $"Ошибка создания записи доктора: {ex.Message}";
             }
         }
         private bool CanAddDoctorAsync(object parameter)
@@ -82,14 +85,16 @@ namespace VaxFlow.ViewModels
                         if (affectedRows > 0)
                         {
                             logger.Info($"Удалена запись доктора id:{SelectedDoctor.Id}");
+                            collection.Remove(SelectedDoctor);
+                            Output = "Успешное удаление записи доктора.";
                         }
-                        collection.Remove(SelectedDoctor);
                     }
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка удаления записи доктора.");
+                Output = $"Ошибка удаления записи доктора: {ex.Message}";
             }
         }
         private bool CanRemoveDoctorAsync(object parameter)
@@ -114,12 +119,14 @@ namespace VaxFlow.ViewModels
                         logger.Info($"Обновление данных доктора id:{SelectedDoctor.Id}");
                         int indx = collection.IndexOf(SelectedDoctor);
                         collection[indx] = SelectedDoctor;
+                        Output = "Успешное обновление данных доктора.";
                     }
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка изменения данных доктора.");
+                Output = $"Ошибка изменения записи доктора: {ex.Message}";
             }
         }
         private bool CanUpdateDoctorAsync(object parameter)
