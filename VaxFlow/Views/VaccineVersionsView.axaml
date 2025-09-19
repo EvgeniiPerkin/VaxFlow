@@ -62,7 +62,7 @@
           Margin="4">
           <TextBlock Classes="h3" Margin="0 5" Text="Версия*"></TextBlock>
           <TextBox
-            Watermark="Наёмные работники частного сектора "
+            Watermark="V1"
             Text="{Binding SelectedVaccineVersion.Version}"/>
         </StackPanel>
         <Button

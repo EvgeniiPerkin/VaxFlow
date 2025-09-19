@@ -83,7 +83,7 @@ namespace VaxFlow.ViewModels
                         logger.Info($"Обновление данных версии вакцины id:{SelectedVaccineVersion.Id}");
                         int indx = collection.IndexOf(SelectedVaccineVersion);
                         collection[indx] = SelectedVaccineVersion;
-                        Output = "Успешное обновление данных рабочей категории.";
+                        Output = "Успешное обновление данных версии вакцины.";
                     }
                 }
             }
