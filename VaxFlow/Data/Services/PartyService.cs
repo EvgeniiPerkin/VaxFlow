@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data.Repositories;
 using VaxFlow.Models;
@@ -25,6 +26,19 @@ namespace VaxFlow.Data.Services
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.CreateAsync(connection, model);
         }
+        internal async Task<ObservableCollection<PartySummaryModel>> GetAvailablePartiesAsync()
+        {
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.GetAvailablePartiesAsync(connection);
+        }
+        internal async Task<ObservableCollection<PartySummaryModel>> FindByPartyNameAsync(string partyName)
+        {
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.FindByPartyNameAsync(connection, partyName);
+        }
+
         public async Task<int> UpdateCountAsync(PartyModel model)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);

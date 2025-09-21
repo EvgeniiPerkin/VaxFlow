@@ -21,28 +21,28 @@ namespace VaxFlow.Data.Services
         private readonly PartRepository repository;
         #endregion
 
-        internal async Task<int> CreateAsync(PartModel value)
+        public async Task<int> CreateAsync(PartModel value)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.CreateAsync(connection, value);
         }
 
-        internal async Task<int> DeleteAsync(PartModel selectedPart)
+        public async Task<int> DeleteAsync(PartModel selectedPart)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.DeleteAsync(connection, selectedPart);
         }
 
-        internal async Task<ObservableCollection<PartModel>> FindByPatternIdAsync(int patternId)
+        public async Task<ObservableCollection<PartModel>> FindByPatternIdAsync(int patternId)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.FindByPatternIdAsync(connection, patternId);
         }
 
-        internal async Task<int> UpdateAsync(PartModel selectedPart)
+        public async Task<int> UpdateAsync(PartModel selectedPart)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
