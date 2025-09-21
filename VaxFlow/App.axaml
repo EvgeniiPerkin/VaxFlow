@@ -11,5 +11,6 @@
         <FluentTheme />
         <StyleInclude Source="avares://VaxFlow/Styles/MyStyles.axaml"/>
         <StyleInclude Source="avares://VaxFlow/Assets/Icons.axaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     </Application.Styles>
 </Application>

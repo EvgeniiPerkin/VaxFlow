@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -99,6 +98,22 @@ namespace VaxFlow.Data.Repositories
         {
             using var cmd = connection.CreateCommand();
             cmd.CommandText = "DELETE FROM parties WHERE id=@id;";
+            cmd.Parameters.AddWithValue("@id", model.Id);
+            return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
+        public async Task<int> UpdateAsync(SqliteConnection connection, PartyModel model)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                UPDATE parties
+                SET vaccine_id=@vaccine_id, vaccine_version_id=@vaccine_version_id,
+                    party_name=@party_name, count=@count, dt_create=@dt_create
+                WHERE id=@id;";
+            cmd.Parameters.AddWithValue("@vaccine_id", model.VaccineId);
+            cmd.Parameters.AddWithValue("@vaccine_version_id", model.VaccineVersionId);
+            cmd.Parameters.AddWithValue("@party_name", model.PartyName);
+            cmd.Parameters.AddWithValue("@count", model.Count);
+            cmd.Parameters.AddWithValue("@dt_create", SqliteHelper.FromDateTime(model.DateTimeCreate));
             cmd.Parameters.AddWithValue("@id", model.Id);
             return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using DocumentFormat.OpenXml.EMMA;
+using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data.Repositories;
@@ -50,6 +52,12 @@ namespace VaxFlow.Data.Services
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.DeleteAsync(connection, model);
+        }
+        public async Task<int> UpdateAsync(PartyModel model)
+        {
+            using var connection = new SqliteConnection(configuration.DataSourceSQLite);
+            await connection.OpenAsync().ConfigureAwait(false);
+            return await repository.UpdateAsync(connection, model);
         }
     }
 }
