@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VaxFlow.Data;
 using VaxFlow.Data.Repositories;
 using VaxFlow.Data.Services;
+using VaxFlow.DialogWindows;
 using VaxFlow.Services;
 using VaxFlow.ViewModels;
 using VaxFlow.Views;
@@ -56,7 +57,9 @@ namespace VaxFlow
         {
             services.AddSingleton<IAppConfiguration, AppConfiguration>();
             services.AddSingleton<IMyLogger, Logger>();
+            services.AddSingleton<IDialogWindow, DialogWindow>();
             services.AddSingleton<DbContext>();
+
             services.AddSingleton<DoctorRepository>();
             services.AddSingleton<DoctorsAppointmentsRepository>();
             services.AddSingleton<JobCategoryRepository>();

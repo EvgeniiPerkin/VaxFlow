@@ -1,0 +1,51 @@
+<Window
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="200"
+  x:Class="VaxFlow.OkCancelWindow"
+  x:CompileBindings="False"
+  WindowStartupLocation="CenterOwner"
+  CanMinimize="False"
+  CanResize="False"
+  Width="400"
+  Height="200"
+  Title="{Binding Title}"
+  Icon="/Assets/vax.ico">
+  <Grid
+    ColumnDefinitions="*,*"
+    RowDefinitions="*,auto">
+    <TextBox
+      Grid.Row="0"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
+      Width="400"
+      Height="150"
+      Padding="10"
+      IsReadOnly="True"
+      IsEnabled="False"
+      BorderThickness="0"
+      AcceptsReturn="True"
+      TextWrapping="Wrap"
+      CornerRadius="0"
+      TextAlignment="Justify"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Top"
+      Text="{Binding Message}"/>
+    <Button
+      Grid.Row="1"
+      Grid.Column="0"
+      Margin="10"
+      HorizontalAlignment="Left"
+      Command="{Binding OkCommand}"
+      Content="Ok"/>
+    <Button
+      Grid.Row="1"
+      Grid.Column="1"
+      Margin="10"
+      HorizontalAlignment="Right"
+      Command="{Binding CancelCommand}"
+      Content="Cancel"/>
+  </Grid>
+</Window>

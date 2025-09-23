@@ -2,8 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.DialogWindows;
 using VaxFlow.Models;
 using VaxFlow.Services;
 
@@ -11,15 +13,17 @@ namespace VaxFlow.ViewModels
 {
     public partial class PatryViewModel : ViewModelBase
     {
-        public PatryViewModel(DbContext context, IMyLogger logger)
+        public PatryViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
         {
             this.context = context;
             this.logger = logger;
+            this.dialogWindow = dialogWindow;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
+        private readonly IDialogWindow dialogWindow;
         #endregion
 
         #region properties
@@ -108,12 +112,18 @@ namespace VaxFlow.ViewModels
 
                     if (parameter is ObservableCollection<PartySummaryModel> collection)
                     {
-                        int affectedRows = await context.Party.DeleteAsync(SelectedParty);
-                        if (affectedRows > 0)
+                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления", 
+                            "Удалить партию вакцины?\nВ случае удаления партии, " +
+                            "связанные с ней данныые примема пациентов так же буудут удалены безвозвратно.");
+                        if (result)
                         {
-                            logger.Info($"Удалена запись партии вакцины id:{SelectedParty.Id}");
-                            collection.Remove(SelectedParty);
-                            Output = "Успешное удаление записи партии вакцины.";
+                            int affectedRows = await context.Party.DeleteAsync(SelectedParty);
+                            if (affectedRows > 0)
+                            {
+                                logger.Info($"Удалена запись партии вакцины id:{SelectedParty.Id}");
+                                collection.Remove(SelectedParty);
+                                Output = "Успешное удаление записи партии вакцины.";
+                            }
                         }
                     }
                 }

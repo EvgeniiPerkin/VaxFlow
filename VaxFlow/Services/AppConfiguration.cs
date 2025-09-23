@@ -21,7 +21,7 @@ namespace VaxFlow.Services
             DataSourceSQLite = $"Data Source ={pathToDatabase}";
             PathToLogFile = Path.Combine(pathToAppFiles, "vax_flow.log");
         }
-        private static string GetHomeDirectory()
+        public static string GetHomeDirectory()
         {
             string? home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
