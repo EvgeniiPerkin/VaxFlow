@@ -9,8 +9,13 @@ namespace VaxFlow.Services
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File(configuration.PathToLogFile ?? "C:\\Users\\Public\\vax_flow.log",
-                    rollingInterval: RollingInterval.Month)
+                .WriteTo.File(
+                    path: configuration.PathToLogFile ?? "C:\\Users\\Public\\vax_flow.log",
+                    rollingInterval: RollingInterval.Month,
+                    retainedFileCountLimit: 10,
+                    fileSizeLimitBytes: 20_971_520,
+                    rollOnFileSizeLimit: true,
+                    shared: true)
                 .CreateLogger();
         }
 
