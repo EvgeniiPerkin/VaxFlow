@@ -1,5 +1,5 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">  
   <Style Selector="ToggleButton TextBlock.on">
     <Setter Property="IsVisible" Value="False"/>
   </Style>
@@ -12,42 +12,79 @@
   <Style Selector="ToggleButton:checked TextBlock.off">
     <Setter Property="IsVisible" Value="False"/>
   </Style>
+  
+  <Style Selector="DataGrid">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="ListBox">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="MaskedTextBox">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="TextBox">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="ComboBox">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="Button">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+  </Style>
+  <Style Selector="CheckBox">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+  <Style Selector="NumericUpDown">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
+
   <Style Selector="Border.b1">
-    <Setter Property="Margin" Value="6"/>
-    <Setter Property="Padding" Value="6"/>
-    <Setter Property="BorderBrush" Value="#BCFD4C"/>
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource DarkColor}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="CornerRadius" Value="3"/>
     <Setter Property="ClipToBounds" Value="True"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
-    <Setter Property="Background" Value="#6E6E6E"/>
   </Style>
   <Style Selector="Border.b2">
-    <Setter Property="Margin" Value="0 3 0 3"/>
-    <Setter Property="Padding" Value="6"/>
-    <Setter Property="BorderBrush" Value="#BCFD4C"/>
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InfoColor}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="CornerRadius" Value="3"/>
     <Setter Property="ClipToBounds" Value="True"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
   </Style>
+  
   <Style Selector="TextBlock.h1">
-    <Setter Property="FontSize" Value="24"/>
-    <Setter Property="Padding" Value="3"/>
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeExtraLarge}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
   </Style>
   <Style Selector="TextBlock.h2">
-    <Setter Property="FontSize" Value="10"/>
-    <Setter Property="Padding" Value="3"/>
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
   </Style>
   <Style Selector="TextBlock.h3">
-    <Setter Property="FontSize" Value="16"/>
-    <Setter Property="Padding" Value="3"/>
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+  </Style>
+  <Style Selector="TextBlock.danger">
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+    <Setter Property="Foreground" Value="{DynamicResource DangerColor}"/>
   </Style>
   <Style Selector="TextBlock.output">
-    <Setter Property="FontSize" Value="14"/>
-    <Setter Property="Padding" Value="3"/>
-    <Setter Property="Foreground" Value="LightGreen"/>
+    <Setter Property="FontSize" Value="{DynamicResource FontSizeMedium}"/>
+    <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
+    <Setter Property="Foreground" Value="{DynamicResource InfoColor}"/>
   </Style>
+  
   <Style Selector="Separator">
     <Setter Property="Margin" Value="0"/>
     <Setter Property="Padding" Value="0"/>
@@ -67,22 +104,6 @@
       </Setter.Value>
     </Setter>
   </Style>
-  <!-- <Style Selector="TextBox">
-    <Setter Property="Foreground" Value="#FF000000"/>
-    <Setter Property="Background" Value="#66FFFFFF"/>
-    <Setter Property="BorderThickness" Value="2"/>
-    <Setter Property="BorderBrush" Value="#66000000"/>
-    <Setter Property="CaretBrush" Value="#FF000000"/>
-    <Setter Property="SelectionBrush" Value="#FF0078D7"/>
-    <Setter Property="Margin" Value="3"/>
-    <Setter Property="MinHeight" Value="20"/>
-    <Setter Property="Padding" Value="5,3,5,5"/>
-    <Setter Property="UseFloatingWatermark" Value="True"/>
-    <Setter Property="TextWrapping" Value="Wrap"/>
-  </Style>
-  <Style Selector="TextBox /template/ Border">
-    <Setter Property="CornerRadius" Value="3"/>
-  </Style>-->
   <Style Selector="DataValidationErrors">
     <Setter Property="Template">
       <ControlTemplate>

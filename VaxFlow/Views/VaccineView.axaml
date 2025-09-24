@@ -6,79 +6,72 @@
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
   x:Class="VaxFlow.VaccineView"
   x:CompileBindings="False">
-  <Border
-      Classes="b1">
+  <Grid
+    RowDefinitions="auto,*,auto,auto"
+    ColumnDefinitions="0.5*,*">
+    <TextBlock
+      Grid.Row="0"
+      Grid.Column="0"
+      Grid.ColumnSpan="4"
+      Classes="h1"
+      Text="Вакцины"/>
+    <ListBox
+      Grid.Row="1"
+      Grid.Column="0"
+      MaxHeight="900"
+      ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Id}"/>
+            <TextBlock Text=" | "/>
+            <TextBlock Text="{Binding Desc}"/>
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
     <Grid
-      RowDefinitions="auto,*,auto,auto"
-      ColumnDefinitions="0.5*,*">
+      Grid.Row="2"
+      Grid.Column="0"
+      ColumnDefinitions="*">
+      <Button
+        Grid.Column="0"
+        HorizontalAlignment="Center"
+        Command="{Binding AddVaccineAsync}"
+        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+    </Grid>
+    <Grid
+      Grid.Row="1"
+      Grid.Column="1"
+      RowDefinitions="auto,auto,auto"
+      ColumnDefinitions="*">
       <TextBlock
         Grid.Row="0"
         Grid.Column="0"
-        Grid.ColumnSpan="4"
-        Classes="h1"
-        Text="Вакцины"/>
-      <ListBox
+        Grid.ColumnSpan="3"
+        Classes="danger"
+        Text="Поля с символом '*' обязательные!"/>
+      <StackPanel
         Grid.Row="1"
-        Grid.Column="0"
-        Margin="4"
-        MaxHeight="900"
-        ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
-        SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding Id}"/>
-              <TextBlock Text=" | "/>
-              <TextBlock Text="{Binding Desc}"/>
-            </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <Grid
+        Grid.Column="0">
+        <TextBlock Classes="h3" Text="Наименование*"></TextBlock>
+        <TextBox
+          Watermark="Спутник5"
+          Text="{Binding SelectedVaccine.Desc}"/>
+      </StackPanel>
+      <Button
         Grid.Row="2"
         Grid.Column="0"
-        ColumnDefinitions="*">
-        <Button
-          Grid.Column="0"
-          Margin="4"
-          HorizontalAlignment="Center"
-          Command="{Binding AddVaccineAsync}"
-          CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
-      </Grid>
-      <Grid
-        Grid.Row="1"
-        Grid.Column="1"
-        RowDefinitions="auto,auto,auto"
-        ColumnDefinitions="*">
-        <TextBlock
-          Grid.Row="0"
-          Grid.Column="0"
-          Grid.ColumnSpan="3"
-          Foreground="LightCoral"
-          Text="Поля с символом '*' обязательные!"/>
-        <StackPanel
-          Grid.Row="1"
-          Grid.Column="0"
-          Margin="4">
-          <TextBlock Classes="h3" Margin="0 5" Text="Наименование*"></TextBlock>
-          <TextBox
-            Watermark="Спутник5"
-            Text="{Binding SelectedVaccine.Desc}"/>
-        </StackPanel>
-        <Button
-          Grid.Row="2"
-          Grid.Column="0"
-          Margin="4"
-          HorizontalAlignment="Left"
-          Command="{Binding UpdateVaccineAsync}"
-          CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
-      </Grid>
-      <TextBlock
-        Grid.Row="3"
-        Grid.Column="0"
-        Grid.ColumnSpan="2"
-        Classes="output"
-        Text="{Binding Output}"/>
+        HorizontalAlignment="Left"
+        Command="{Binding UpdateVaccineAsync}"
+        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
     </Grid>
-  </Border>
+    <TextBlock
+      Grid.Row="3"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
+      Classes="output"
+      Text="{Binding Output}"/>
+  </Grid>
 </UserControl>

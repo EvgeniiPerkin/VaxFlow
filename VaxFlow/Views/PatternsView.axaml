@@ -3,16 +3,16 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
+  mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="750"
   x:Class="VaxFlow.PatternsView"
   x:CompileBindings="False">
   <Grid
     RowDefinitions="*"
-    ColumnDefinitions="0*,*,*,0.1*">
+    ColumnDefinitions="0.35*,*">
     <Border
       Classes="b1"
       Grid.Row="0"
-      Grid.Column="1"
+      Grid.Column="0"
       >
       <Grid
         RowDefinitions="auto,*,auto,auto"
@@ -26,7 +26,6 @@
         <ListBox
           Grid.Row="1"
           Grid.Column="0"
-          Margin="4"
           MaxHeight="800"
           ItemsSource="{Binding Patterns}"
           SelectedItem="{Binding SelectedPattern, Mode=TwoWay}">
@@ -38,9 +37,8 @@
         </ListBox>
         <StackPanel
           Grid.Row="2"
-          Grid.Column="0"
-          Margin="4">
-          <TextBlock Classes="h3" Margin="0 5" Text="Наименование шаблона"></TextBlock>
+          Grid.Column="0">
+          <TextBlock Classes="h3" Text="Наименование шаблона"></TextBlock>
           <TextBox
             Watermark="Договор залога."
             Text="{Binding SelectedPattern.Desc}"/>
@@ -51,17 +49,14 @@
           ColumnDefinitions="*,*,*">
           <Button
             Grid.Column="0"
-            Margin="4"
             HorizontalAlignment="Left"
             Command="{Binding AddPatternAsync}">Добавить</Button>
           <Button
-            Margin="4"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding UpdatePatternAsync}"
             CommandParameter="{Binding SelectedPattern}">Сохранить</Button>
           <Button
-            Margin="4"
             Grid.Column="2"
             HorizontalAlignment="Right"
             Command="{Binding RemovePatternAsync}"
@@ -72,7 +67,7 @@
     <Border
       Classes="b1"
       Grid.Row="0"
-      Grid.Column="2"
+      Grid.Column="1"
       >
       <Grid
         RowDefinitions="auto,*,auto"
@@ -87,7 +82,6 @@
         <ListBox
           Grid.Row="1"
           Grid.Column="0"
-          Margin="4"
           MaxHeight="900"
           ItemsSource="{Binding Parts}"
           SelectedItem="{Binding SelectedPart, Mode=TwoWay}">
@@ -107,12 +101,10 @@
           ColumnDefinitions="*,*">
           <Button
             Grid.Column="0"
-            Margin="4"
             HorizontalAlignment="Left"
             Command="{Binding AddPartAsync}"
             CommandParameter="{Binding SelectedPattern}">Добавить</Button>
           <Button
-            Margin="4"
             Grid.Column="1"
             HorizontalAlignment="Right"
             Command="{Binding RemovePartAsync}"
@@ -126,9 +118,8 @@
           ColumnDefinitions="*">
           <StackPanel
             Grid.Row="0"
-            Grid.Column="0"
-            Margin="4">
-            <TextBlock Classes="h3" Margin="0 5" Text="Порядковый номер (уникальный)"></TextBlock>
+            Grid.Column="0">
+            <TextBlock Classes="h3" Text="Порядковый номер (уникальный)"></TextBlock>
             <NumericUpDown
               AllowSpin="False"
               ShowButtonSpinner="False"
@@ -139,18 +130,16 @@
           </StackPanel>
           <StackPanel
             Grid.Row="1"
-            Grid.Column="0"
-            Margin="4">
-            <TextBlock Classes="h3" Margin="0 5" Text="Описание"></TextBlock>
+            Grid.Column="0">
+            <TextBlock Classes="h3" Text="Описание"></TextBlock>
             <TextBox
               Watermark="Первая часть"
               Text="{Binding SelectedPart.Desc}"/>
           </StackPanel>
           <StackPanel
             Grid.Row="2"
-            Grid.Column="0"
-            Margin="4">
-            <TextBlock Classes="h3" Margin="0 5" Text="Содержание"></TextBlock>
+            Grid.Column="0">
+            <TextBlock Classes="h3" Text="Содержание"></TextBlock>
             <TextBox
               AcceptsReturn="True"
               TextWrapping="Wrap"
@@ -161,15 +150,13 @@
           <CheckBox
             Grid.Row="3"
             Grid.Column="0"
-            Margin="4"
             IsChecked="{Binding SelectedPart.IsUrl}"
             Content="Является ссылкой"/>
           <StackPanel
             Grid.Row="4"
             Grid.Column="0"
-            Margin="4"
             IsVisible="{Binding SelectedPart.IsUrl}">
-            <TextBlock Classes="h3" Margin="0 5" Text="Сслка на ресурс"></TextBlock>
+            <TextBlock Classes="h3" Text="Сслка на ресурс"></TextBlock>
             <TextBox
               AcceptsReturn="True"
               TextWrapping="Wrap"
@@ -180,25 +167,21 @@
           <CheckBox
             Grid.Row="5"
             Grid.Column="0"
-            Margin="4"
             IsChecked="{Binding SelectedPart.IsBold}"
             Content="Жирный"/>
           <CheckBox
             Grid.Row="6"
             Grid.Column="0"
-            Margin="4"
             IsChecked="{Binding SelectedPart.IsItalic}"
             Content="Курсивный"/>
           <CheckBox
             Grid.Row="7"
             Grid.Column="0"
-            Margin="4"
             IsChecked="{Binding SelectedPart.IsUnderline}"
             Content="Подчеркнутый"/>
           <Button
             Grid.Row="8"
             Grid.Column="0"
-            Margin="4"
             HorizontalAlignment="Center"
             Command="{Binding UpdatePartAsync}"
             CommandParameter="{Binding SelectedPart}">Сохранить</Button>

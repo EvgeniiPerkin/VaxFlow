@@ -2,15 +2,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="VaxFlow.App"
              xmlns:local="using:VaxFlow"
-             RequestedThemeVariant="Dark">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+             RequestedThemeVariant="Light">
+  <Application.DataTemplates>
+      <local:ViewLocator/>
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://VaxFlow/Assets/Icons.axaml" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <StyleInclude Source="avares://VaxFlow/Styles/MyStyles.axaml"/>
+  </Application.Styles>
   
-    <Application.Styles>
-        <FluentTheme />
-        <StyleInclude Source="avares://VaxFlow/Styles/MyStyles.axaml"/>
-        <StyleInclude Source="avares://VaxFlow/Assets/Icons.axaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-    </Application.Styles>
+  <Application.Resources>
+    <SolidColorBrush x:Key="PrimaryColor">#007BFF</SolidColorBrush>
+    <SolidColorBrush x:Key="SecondaryColor">#6C757D</SolidColorBrush>
+    <SolidColorBrush x:Key="SuccessColor">#28A745</SolidColorBrush>
+    <SolidColorBrush x:Key="DangerColor">#DC3545</SolidColorBrush>
+    <SolidColorBrush x:Key="WarningColor">#FFC107</SolidColorBrush>
+    <SolidColorBrush x:Key="InfoColor">#17A2B8</SolidColorBrush>
+    <SolidColorBrush x:Key="LightColor">#F8F9FA</SolidColorBrush>
+    <SolidColorBrush x:Key="DarkColor">#343A40</SolidColorBrush>
+
+    <x:Double x:Key="FontSizeSmall">14</x:Double>
+    <x:Double x:Key="FontSizeMedium">16</x:Double>
+    <x:Double x:Key="FontSizeLarge">22</x:Double>
+    <x:Double x:Key="FontSizeExtraLarge">26</x:Double>
+
+    <Thickness x:Key="PaddingSmall">4</Thickness>
+    <Thickness x:Key="PaddingMedium">8</Thickness>
+    <Thickness x:Key="PaddingLarge">12</Thickness>
+    <Thickness x:Key="PaddingExtraLarge">16</Thickness>
+
+    <Thickness x:Key="MarginSmall">4</Thickness>
+    <Thickness x:Key="MarginMedium">8</Thickness>
+    <Thickness x:Key="MarginLarge">12</Thickness>
+    <Thickness x:Key="MarginExtraLarge">16</Thickness>
+  </Application.Resources>
 </Application>

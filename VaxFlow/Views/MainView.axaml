@@ -15,9 +15,7 @@
     IsPaneOpen="{Binding IsPaneOpen}"
     CompactPaneLength="45"
     DisplayMode="CompactInline"
-    OpenPaneLength="300"
-    Background="#1e1e1e"
-    PaneBackground="#1e1e1e">
+    OpenPaneLength="300">
     <SplitView.Pane>
       <StackPanel
         Orientation="Vertical"
@@ -56,11 +54,7 @@
     </SplitView.Pane>
 
     <SplitView.Content>
-      <Border
-        CornerRadius="12 0 0 0"
-        Background="#2d2d2d">
         <TransitioningContentControl Content="{Binding CurrentPage}" />
-      </Border>
     </SplitView.Content>
   </SplitView>
 </UserControl>

@@ -1,27 +1,60 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:VaxFlow.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VaxFlow.VaccinationJournalView">
-  <Design.DataContext>
-    <vm:VaccinationJournalViewModel/>
-  </Design.DataContext>
-  <DockPanel>
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:VaxFlow.ViewModels"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  x:Class="VaxFlow.VaccinationJournalView"
+  x:CompileBindings="False">
+  <Grid
+    RowDefinitions="auto,auto,*,auto"
+    ColumnDefinitions="*,auto,*">
+    <TextBlock
+      Grid.Row="0"
+      Grid.Column="0"
+      Grid.ColumnSpan="4"
+      Classes="h1"
+      Text="Журнал вакцинации"/>
+    <Menu
+      Grid.Row="1"
+      Grid.Column="0"
+      Grid.ColumnSpan="3">
+      <MenuItem Header="_Файл">
+        <MenuItem Header="_Open..."/>
+        <Separator/>
+        <MenuItem Header="_Exit"/>
+      </MenuItem>
+      <MenuItem Header="_Изменить">
+        <MenuItem Header="Copy"/>
+        <MenuItem Header="Paste"/>
+      </MenuItem>
+    </Menu>
+    <DataGrid
+      Grid.Row="2"
+      Grid.Column="0"
+      AutoGenerateColumns="False"
+      IsReadOnly="True"
+      GridLinesVisibility="All"
+      BorderThickness="1" BorderBrush="Gray"
+      ItemsSource="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+      SelectedItem="{Binding SelectedParty, Mode=TwoWay}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="№ партии"  Binding="{Binding PartyName}"/>
+        <DataGridTextColumn Header="Вакцина" Binding="{Binding VaccineName}" />
+        <DataGridTextColumn Header="Весия Вакцины" Binding="{Binding VaccineVersion}" />
+        <DataGridTextColumn Header="Кол-во" Binding="{Binding Count}" />
+        <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
+      </DataGrid.Columns>
+    </DataGrid>
     <Border
-        Classes="b1"
-        DockPanel.Dock="Top">
+      Grid.Row="2"
+      Grid.Column="2"
+      Classes="b1">
       <Grid
         RowDefinitions="auto,auto,auto,auto,auto"
         ColumnDefinitions="auto,*,*,*">
-        <TextBlock
-          Grid.Row="0"
-          Grid.Column="0"
-          Grid.ColumnSpan="4"
-          Classes="h1"
-          Text="Журнал вакцинации"/>
       </Grid>
     </Border>
-  </DockPanel>
+  </Grid>
 </UserControl>

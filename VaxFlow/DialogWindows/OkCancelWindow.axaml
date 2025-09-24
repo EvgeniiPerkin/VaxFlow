@@ -23,6 +23,7 @@
       Width="400"
       Height="150"
       Padding="10"
+      Margin="0"
       IsReadOnly="True"
       IsEnabled="False"
       BorderThickness="0"
@@ -32,6 +33,7 @@
       TextAlignment="Justify"
       HorizontalAlignment="Center"
       VerticalAlignment="Top"
+      Foreground="{DynamicResource DarkColor}"
       Text="{Binding Message}"/>
     <Button
       Grid.Row="1"
