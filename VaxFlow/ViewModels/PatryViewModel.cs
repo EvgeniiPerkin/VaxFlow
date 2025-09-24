@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using VaxFlow.Data;
 using VaxFlow.DialogWindows;
@@ -34,33 +33,47 @@ namespace VaxFlow.ViewModels
         #endregion
 
         #region methods
-        //public void RefreshCollections(ObservableCollection<PartySummaryModel> oldItems,
-        //    ObservableCollection<PartySummaryModel> newItems)
-        //{
-        //    for (int i = 0; i < oldItems.Count; i++)
-        //    {
-        //        bool isFound = false;
-        //        PartySummaryModel? required = null;
-        //        for (int j = 0; j < newItems.Count; j++)
-        //        {
-        //            if (oldItems[i].Id == newItems[j].Id)
-        //            {
-        //                required = newItems[j];
-        //                isFound = true;
-        //                break;
-        //            }
-        //        }
+        public static void RefreshCollections(ObservableCollection<PartySummaryModel> oldItems,
+            ObservableCollection<PartySummaryModel> newItems)
+        {
+            for (int i = 0; i < oldItems.Count; i++)
+            {
+                bool isFound = false;
+                
+                for (int j = 0; j < newItems.Count; j++)
+                {
+                    if (oldItems[i].Id == newItems[j].Id)
+                    {
+                        oldItems[i] = newItems[j];
+                        isFound = true;
+                        break;
+                    }
+                }
 
-        //        if (isFound)
-        //        {
-        //            oldItems[i] = required;
-        //        }
-        //        else
-        //        {
-        //            oldItems.Add(required);
-        //        }
-        //    }
-        //}
+                if (!isFound)
+                {
+                    oldItems.Remove(oldItems[i]);
+                }
+            }
+            for (int j = 0; j < newItems.Count; j++)
+            {
+                bool isFound = false;
+                
+                for (int i = 0; i < oldItems.Count; i++)
+                {
+                    if (oldItems[i].Id == newItems[j].Id)
+                    {
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                if (!isFound)
+                {
+                    oldItems.Add(newItems[j]);
+                }
+            }
+        }
         #endregion
 
         #region commands
@@ -85,7 +98,7 @@ namespace VaxFlow.ViewModels
                     if (affectedRows > 0)
                     {
                         logger.Info($"Создана запись партии вакцины id:{newParty.Id}");
-                        collection = await context.Party.GetAvailablePartiesAsync();
+                        RefreshCollections(collection, await context.Party.GetAvailablePartiesAsync());
                         Output = "Успешнове создание новой записи партии вакцины.";
                     }
                 }
@@ -154,8 +167,7 @@ namespace VaxFlow.ViewModels
                     if (affectedRows > 0)
                     {
                         logger.Info($"Обновление данных партии вакцины id:{SelectedParty.Id}");
-                        int indx = collection.IndexOf(SelectedParty);
-                        collection[indx] = SelectedParty;
+                        RefreshCollections(collection, await context.Party.GetAvailablePartiesAsync());
                         Output = "Успешное обновление данных партии вакцины.";
                     }
                 }
