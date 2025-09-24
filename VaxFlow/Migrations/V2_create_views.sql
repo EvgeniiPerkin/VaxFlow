@@ -1,6 +1,6 @@
 ﻿CREATE VIEW IF NOT EXISTS party_summary AS
 SELECT 
-    p.Id,
+    p.id,
     p.count,
     p.dt_create,
     p.party_name,
