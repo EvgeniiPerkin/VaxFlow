@@ -156,10 +156,10 @@ namespace VaxFlow.ViewModels
             try
             {
                 if (SelectedPattern == null) return;
-                int sn = 1;
+                int sn = 0;
                 if (Parts != null && Parts.Any())
                 {
-                    sn = Parts?.Max(x => x.SerialNumber) ?? 1;
+                    sn = Parts?.Max(x => x.SerialNumber) ?? 0;
                 }
                 PartModel newPart = new()
                 {
