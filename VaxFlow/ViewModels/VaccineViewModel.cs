@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.DialogWindows;
 using VaxFlow.Models;
 using VaxFlow.Services;
 
@@ -11,15 +12,17 @@ namespace VaxFlow.ViewModels
 {
     public partial class VaccineViewModel : ViewModelBase
     {
-        public VaccineViewModel(DbContext context, IMyLogger logger)
+        public VaccineViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
         {
             this.context = context;
             this.logger = logger;
+            this.dialogWindow = dialogWindow;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
+        private readonly IDialogWindow dialogWindow;
         #endregion
 
         #region properties
@@ -59,6 +62,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка создания записи вакцины.");
                 Output = $"Ошибка создания записи вакцины: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanAddVaccineAsync(object parameter)
@@ -91,6 +95,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка изменения данных вакцины.");
                 Output = $"Ошибка изменения записи вакцины: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanUpdateVaccineAsync(object parameter)

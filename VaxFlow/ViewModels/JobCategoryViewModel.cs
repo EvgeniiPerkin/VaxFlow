@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.DialogWindows;
 using VaxFlow.Models;
 using VaxFlow.Services;
 
@@ -11,15 +12,17 @@ namespace VaxFlow.ViewModels
 {
     public partial class JobCategoryViewModel : ViewModelBase
     {
-        public JobCategoryViewModel(DbContext context, IMyLogger logger)
+        public JobCategoryViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
         {
             this.context = context;
             this.logger = logger;
+            this.dialogWindow = dialogWindow;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
+        private readonly IDialogWindow dialogWindow;
         #endregion
 
         #region properties
@@ -60,6 +63,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка создания записи рабочей категории.");
                 Output = $"Ошибка создания записи рабочей категории: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanAddJobCategoryAsync(object parameter)
@@ -78,12 +82,16 @@ namespace VaxFlow.ViewModels
 
                     if (parameter is ObservableCollection<JobCategoryModel> collection)
                     {
-                        int affectedRows = await context.JobCategory.DeleteAsync(SelectedJobCategory);
-                        if (affectedRows > 0)
+                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись рабочей категории?");
+                        if (result)
                         {
-                            logger.Info($"Удалена запись рабочей категории id:{SelectedJobCategory.Id}");
-                            collection.Remove(SelectedJobCategory);
-                            Output = "Успешное удаление записи рабочей категории.";
+                            int affectedRows = await context.JobCategory.DeleteAsync(SelectedJobCategory);
+                            if (affectedRows > 0)
+                            {
+                                logger.Info($"Удалена запись рабочей категории id:{SelectedJobCategory.Id}");
+                                collection.Remove(SelectedJobCategory);
+                                Output = "Успешное удаление записи рабочей категории.";
+                            }
                         }
                     }
                 }
@@ -92,6 +100,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка удаления записи рабочей категории.");
                 Output = $"Ошибка удаления записи рабочей категории: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanRemoveJobCategoryAsync(object parameter)
@@ -124,6 +133,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка изменения данных рабочей категории.");
                 Output = $"Ошибка изменения записи рабочей категории: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanUpdateJobCategoryAsync(object parameter)

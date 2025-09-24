@@ -107,6 +107,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка создания записи партии вакцины.");
                 Output = $"Ошибка создания записи партии вакцины: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanAddPartyAsync(object parameter)
@@ -145,6 +146,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка удаления записи партии вакцины.");
                 Output = $"Ошибка удаления записи партии вакцины: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanRemovePartyAsync(object parameter)
@@ -176,6 +178,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка изменения данных партии вакцины.");
                 Output = $"Ошибка изменения записи партии вакцины: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanUpdatePartyAsync(object parameter)

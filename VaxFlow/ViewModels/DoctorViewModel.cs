@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.DialogWindows;
 using VaxFlow.Models;
 using VaxFlow.Services;
 
@@ -11,15 +12,17 @@ namespace VaxFlow.ViewModels
 {
     public partial class DoctorViewModel : ViewModelBase
     {
-        public DoctorViewModel(DbContext context, IMyLogger logger)
+        public DoctorViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
         {
             this.context = context;
             this.logger = logger;
+            this.dialogWindow = dialogWindow;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
+        private readonly IDialogWindow dialogWindow;
         #endregion
 
         #region properties
@@ -63,6 +66,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка создания записи доктора.");
                 Output = $"Ошибка создания записи доктора: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanAddDoctorAsync(object parameter)
@@ -81,12 +85,16 @@ namespace VaxFlow.ViewModels
 
                     if (parameter is ObservableCollection<DoctorModel> collection)
                     {
-                        int affectedRows = await context.Doctor.DeleteAsync(SelectedDoctor);
-                        if (affectedRows > 0)
+                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись доктора?");
+                        if (result)
                         {
-                            logger.Info($"Удалена запись доктора id:{SelectedDoctor.Id}");
-                            collection.Remove(SelectedDoctor);
-                            Output = "Успешное удаление записи доктора.";
+                            int affectedRows = await context.Doctor.DeleteAsync(SelectedDoctor);
+                            if (affectedRows > 0)
+                            {
+                                logger.Info($"Удалена запись доктора id:{SelectedDoctor.Id}");
+                                collection.Remove(SelectedDoctor);
+                                Output = "Успешное удаление записи доктора.";
+                            }
                         }
                     }
                 }
@@ -95,6 +103,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка удаления записи доктора.");
                 Output = $"Ошибка удаления записи доктора: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanRemoveDoctorAsync(object parameter)
@@ -127,6 +136,7 @@ namespace VaxFlow.ViewModels
             {
                 logger.Error(ex, "Ошибка изменения данных доктора.");
                 Output = $"Ошибка изменения записи доктора: {ex.Message}";
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
         private bool CanUpdateDoctorAsync(object parameter)

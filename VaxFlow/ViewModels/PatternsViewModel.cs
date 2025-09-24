@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using VaxFlow.Data;
+using VaxFlow.DialogWindows;
 using VaxFlow.Models;
 using VaxFlow.Services;
 
@@ -14,10 +15,12 @@ namespace VaxFlow.ViewModels
     {
         private readonly IMyLogger logger;
         private readonly DbContext context;
-        public PatternsViewModel(IMyLogger logger, DbContext context)
+        private readonly IDialogWindow dialogWindow;
+        public PatternsViewModel(IMyLogger logger, DbContext context, IDialogWindow dialogWindow)
         {
             this.logger = logger;
             this.context = context;
+            this.dialogWindow = dialogWindow;
             Task.Run(() => LoadingPatternsAsync());
         }
 
@@ -91,6 +94,7 @@ namespace VaxFlow.ViewModels
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка создания шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка создания шаблона: {ex.Message}");
             }
         }
 
@@ -110,6 +114,7 @@ namespace VaxFlow.ViewModels
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка изменения шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка изменения шаблона: {ex.Message}");
             }
         }
         private bool CanUpdatePatternAsync(object parameter)
@@ -123,16 +128,21 @@ namespace VaxFlow.ViewModels
             try
             {
                 if (SelectedPattern == null) return;
-                int affectedRows = await context.Pattern.DeleteAsync(SelectedPattern);
-                if (affectedRows > 0)
-                { 
-                    logger.Info($"Удаление шаблона id:{SelectedPattern.Id}, desc:{SelectedPattern.Desc}");
-                    Patterns.Remove(SelectedPattern);
+                bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить шаблон документа безвозвратно?");
+                if (result)
+                {
+                    int affectedRows = await context.Pattern.DeleteAsync(SelectedPattern);
+                    if (affectedRows > 0)
+                    {
+                        logger.Info($"Удаление шаблона id:{SelectedPattern.Id}, desc:{SelectedPattern.Desc}");
+                        Patterns.Remove(SelectedPattern);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка удаления шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка удаления шаблона: {ex.Message}");
             }
         }
         private bool CanRemovePatternAsync(object parameter)
@@ -173,6 +183,7 @@ namespace VaxFlow.ViewModels
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка создания части шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка создания части шаблона: {ex.Message}");
             }
         }
         private bool CanAddPartAsync(object parameter)
@@ -200,6 +211,7 @@ namespace VaxFlow.ViewModels
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка изменения части шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка изменения части шаблона: {ex.Message}");
             }
         }
         private bool CanUpdatePartAsync(object parameter)
@@ -214,20 +226,25 @@ namespace VaxFlow.ViewModels
             {
                 if (SelectedPart == null) return;
 
-                int affectedRows = await context.Part.DeleteAsync(SelectedPart);
-                if (affectedRows > 0)
+                bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить чать шаблона документа безвозвратно?");
+                if (result)
                 {
-                    logger.Info($"Удаление части id:{SelectedPart.Id}," +
-                        $" serialNumber {SelectedPart.SerialNumber}," +
-                        $" desc:{SelectedPart.Desc}," +
-                        $" body:{SelectedPart.Body}," +
-                        $" из шаблона {SelectedPattern?.Desc}");
-                    Parts?.Remove(SelectedPart);
+                    int affectedRows = await context.Part.DeleteAsync(SelectedPart);
+                    if (affectedRows > 0)
+                    {
+                        logger.Info($"Удаление части id:{SelectedPart.Id}," +
+                            $" serialNumber {SelectedPart.SerialNumber}," +
+                            $" desc:{SelectedPart.Desc}," +
+                            $" body:{SelectedPart.Body}," +
+                            $" из шаблона {SelectedPattern?.Desc}");
+                        Parts?.Remove(SelectedPart);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка удаления части шаблона.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", $"Ошибка удаления части шаблона: {ex.Message}");
             }
         }
         private bool CanRemovePartAsync(object parameter)
