@@ -44,6 +44,9 @@ namespace VaxFlow.ViewModels
 
         [ObservableProperty]
         private PatientSummaryModel? _SelectedPatient;
+
+        [ObservableProperty]
+        private PatientModel? _Patient;
         #endregion
 
         #region methods
@@ -84,48 +87,81 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", "Ошибка поиска пациентов");
             }
         }
-        //private bool CanAddDoctorAsync(object parameter)
-        //{
-        //    return parameter != null;
-        //}
 
-        //[RelayCommand]
-        //public async Task RemoveDoctorAsync(object parameter)
-        //{
-        //    try
-        //    {
-        //        if (SelectedDoctor != null)
-        //        {
-        //            if (parameter == null) return;
+        [RelayCommand]
+        public async Task GetDataPatientAsync(object parameter)
+        {
+            try
+            {
+                Patient = await context.PatientVaccinationDataProcessing.FindByPatientIdAsync(SelectedPatient.Id);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(ex, "Ошибка удаления записи доктора.");
+                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
+                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+            }
+        }
+        private bool CanGetDataPatientAsync(object parameter)
+        {
+            return parameter != null;
+        }
 
-        //            if (parameter is ObservableCollection<DoctorModel> collection)
-        //            {
-        //                bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись доктора?");
-        //                if (result)
-        //                {
-        //                    int affectedRows = await context.Doctor.DeleteAsync(SelectedDoctor);
-        //                    if (affectedRows > 0)
-        //                    {
-        //                        logger.Info($"Удалена запись доктора id:{SelectedDoctor.Id}");
-        //                        collection.Remove(SelectedDoctor);
-        //                        Output = "Успешное удаление записи доктора.";
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.Error(ex, "Ошибка удаления записи доктора.");
-        //        Output = $"Ошибка удаления записи доктора: {ex.Message}";
-        //        await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
-        //    }
-        //}
-        //private bool CanRemoveDoctorAsync(object parameter)
-        //{
-        //    return parameter != null;
-        //}
+        [RelayCommand]
+        public async Task SetDataPatientAsync(object parameter)
+        {
+            try
+            {
 
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(ex, "Ошибка удаления записи доктора.");
+                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
+                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+            }
+        }
+        private bool CanSetDataPatientAsync(object parameter)
+        {
+            return parameter != null;
+        }
+
+        [RelayCommand]
+        public async Task AddPartyAsync(object parameter)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(ex, "Ошибка удаления записи доктора.");
+                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
+                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+            }
+        }
+        private bool CanAddPartyAsync(object parameter)
+        {
+            return parameter != null;
+        }
+        [RelayCommand]
+        public async Task RemovePartyAsync(object parameter)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(ex, "Ошибка удаления записи доктора.");
+                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
+                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+            }
+        }
+        private bool CanRemovePartyAsync(object parameter)
+        {
+            return parameter != null;
+        }
         //[RelayCommand]
         //public async Task UpdateDoctorAsync(object parameter)
         //{

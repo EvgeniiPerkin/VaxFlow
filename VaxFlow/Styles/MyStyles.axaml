@@ -41,6 +41,9 @@
   <Style Selector="NumericUpDown">
     <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
   </Style>
+  <Style Selector="CalendarDatePicker">
+    <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
+  </Style>
 
   <Style Selector="Border.b1">
     <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
