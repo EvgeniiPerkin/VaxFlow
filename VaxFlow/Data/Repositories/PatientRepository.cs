@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Models;
 
@@ -31,6 +32,86 @@ namespace VaxFlow.Data.Repositories
             var id = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
             model.Id = Convert.ToInt32(id);
             return model.Id;
+        }
+        public async Task<ObservableCollection<PatientSummaryModel>> FilteredByDateCreateAsync(SqliteConnection connection, DateTime from, DateTime? to = null)
+        {
+            ObservableCollection<PatientSummaryModel> items = [];
+
+            using var cmd = connection.CreateCommand();
+            if (to == null)
+            {
+                cmd.CommandText = @"
+                SELECT patient_initials, id, last_name, first_name, patronymic, name_suffix, policy_number, dt_create
+                FROM patient_summary
+                WHERE dt_create >= @dt_create;";
+                cmd.Parameters.AddWithValue("@dt_create", SqliteHelper.FromDateTime(from));
+            }
+            else
+            {
+                cmd.CommandText = @"
+                SELECT patient_initials, id, last_name, first_name, patronymic, name_suffix, policy_number, dt_create
+                FROM patient_summary
+                WHERE dt_create BETWEEN @from AND @to;";
+                cmd.Parameters.AddWithValue("@from", SqliteHelper.FromDateTime(from));
+                cmd.Parameters.AddWithValue("@to", SqliteHelper.FromDateTime(to.Value));
+            }
+
+            using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
+            while (await reader.ReadAsync().ConfigureAwait(false))
+            {
+                items.Add(new()
+                {
+                    PatientInitials = reader.GetString(0),
+                    Id = reader.GetInt32(1),
+                    LastName = reader.GetString(2),
+                    FirstName = reader.GetString(3),
+                    Patronymic = SqliteHelper.GetStringNull(reader, 4),
+                    NameSuffix = SqliteHelper.GetStringNull(reader, 5),
+                    PolicyNumber = reader.GetString(6),
+                    DateTimeCreate = SqliteHelper.GetDateTime(reader, 7)
+                });
+            }
+            return items;
+        }
+        public async Task<ObservableCollection<PatientSummaryModel>> FindByInitialsOrPolicyNumberAsync(SqliteConnection connection, string searchStr)
+        {
+            var cleanStr= searchStr
+                .Replace("'", "''")
+                .Replace("%", "\\%")
+                .Replace("_", "\\_")
+                .Replace("[", "\\[")
+                .Replace("]", "\\]");
+
+            ObservableCollection<PatientSummaryModel> items = [];
+
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT patient_initials, id, last_name, first_name, patronymic, name_suffix, policy_number, dt_create
+                FROM patient_summary
+                WHERE last_name LIKE @str 
+                   OR first_name LIKE @str 
+                   OR patronymic LIKE @str
+                   OR name_suffix LIKE @str
+                   OR policy_number LIKE @str
+                ORDER BY id ASC LIMIT 100;";
+            cmd.Parameters.AddWithValue("@str", $"%{cleanStr.Trim()}%");
+
+            using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
+            while (await reader.ReadAsync().ConfigureAwait(false))
+            {
+                items.Add(new()
+                {
+                    PatientInitials = reader.GetString(0),
+                    Id = reader.GetInt32(1),
+                    LastName = reader.GetString(2),
+                    FirstName = reader.GetString(3),
+                    Patronymic = SqliteHelper.GetStringNull(reader, 4),
+                    NameSuffix = SqliteHelper.GetStringNull(reader, 5),
+                    PolicyNumber = reader.GetString(6),
+                    DateTimeCreate = SqliteHelper.GetDateTime(reader, 7)
+                });
+            }
+            return items;
         }
         public async Task<PatientModel?> FindByPatientIdAsync(SqliteConnection connection, int patientId)
         {
