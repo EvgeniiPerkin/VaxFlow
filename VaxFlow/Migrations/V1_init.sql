@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS patients (
     FOREIGN KEY (job_category_id) REFERENCES job_categories(id) 
         ON DELETE SET NULL
 );
-CREATE TABLE IF NOT EXISTS doctors_appointments (
+CREATE TABLE IF NOT EXISTS vaccinations (
     doctor_id INTEGER NOT NULL,
     patient_id INTEGER NOT NULL,
     party_id INTEGER NOT NULL,
-    dt_of_appointment TEXT NOT NULL,
+    dt_of_vaccination TEXT NOT NULL,
     PRIMARY KEY (doctor_id, patient_id, party_id),
     FOREIGN KEY (doctor_id) REFERENCES doctors(id) 
         ON DELETE CASCADE ON UPDATE CASCADE,

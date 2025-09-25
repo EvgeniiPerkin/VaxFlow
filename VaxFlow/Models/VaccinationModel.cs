@@ -4,9 +4,9 @@ using System;
 namespace VaxFlow.Models
 {
     /// <summary>
-    /// Модель назначения вакцинации от доктора для пациента 
+    /// Модель вакцинации пациента 
     /// </summary>
-    public class DoctorsAppointmentsModel : ObservableValidator
+    public class VaccinationModel : ObservableValidator
     {
         private int _DoctorId;
 
@@ -44,15 +44,15 @@ namespace VaxFlow.Models
             }
         }
 
-        private DateTime _DateTimeOfAppointment = DateTime.Now;
+        private DateTime _DateTimeOfVaccination = DateTime.Now;
 
         /// <summary> Дата и время назначения </summary>
-        public DateTime DateTimeOfAppointment
+        public DateTime DateTimeOfVaccination
         {
-            get { return _DateTimeOfAppointment; }
+            get { return _DateTimeOfVaccination; }
             set
             {
-                SetProperty(ref _DateTimeOfAppointment, value);
+                SetProperty(ref _DateTimeOfVaccination, value);
             }
         }
     }

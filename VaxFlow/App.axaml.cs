@@ -61,7 +61,7 @@ namespace VaxFlow
             services.AddSingleton<DbContext>();
 
             services.AddSingleton<DoctorRepository>();
-            services.AddSingleton<DoctorsAppointmentsRepository>();
+            services.AddSingleton<VaccinationRepository>();
             services.AddSingleton<JobCategoryRepository>();
             services.AddSingleton<PartRepository>();
             services.AddSingleton<PatternRepository>();

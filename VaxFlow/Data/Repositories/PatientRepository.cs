@@ -32,7 +32,7 @@ namespace VaxFlow.Data.Repositories
             model.Id = Convert.ToInt32(id);
             return model.Id;
         }
-        public async Task<PatientModel?> FindByPatternIdAsync(SqliteConnection connection, int patientId)
+        public async Task<PatientModel?> FindByPatientIdAsync(SqliteConnection connection, int patientId)
         {
             PatientModel? item = null;
             using var cmd = connection.CreateCommand();

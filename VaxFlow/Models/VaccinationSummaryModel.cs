@@ -1,9 +1,9 @@
 ﻿namespace VaxFlow.Models
 {
     /// <summary>
-    /// Модель данных из вью бд appointment_summary
+    /// Модель данных о вакцинации из вью бд vaccination_summary
     /// </summary>
-    public class AppointmentSummaryModel : DoctorsAppointmentsModel
+    public class VaccinationSummaryModel : VaccinationModel
     {
 
         private string _DoctorInitials = string.Empty;
@@ -18,17 +18,6 @@
             }
         }
 
-        private string _PatientInitials = string.Empty;
-
-        /// <summary>  Инициалы пациента (Иванов И.И.) </summary>
-        public string PatientInitials
-        {
-            get { return _PatientInitials; }
-            set
-            {
-                SetProperty(ref _PatientInitials, value);
-            }
-        }
         private string _DescParty = string.Empty;
 
         /// <summary> Описание парции вакцины </summary>
