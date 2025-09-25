@@ -158,15 +158,15 @@ namespace VaxFlow.Models
             }
         }
 
-        private ObservableCollection<VaccinationModel> _Appointments = [];
+        private ObservableCollection<VaccinationModel> _Vaccinations = [];
 
-        /// <summary> Приемы пациета доктором </summary>
-        public ObservableCollection<VaccinationModel> Appointments
+        /// <summary> Данные по вакцинации пациета </summary>
+        public ObservableCollection<VaccinationModel> Vaccinations
         {
-            get { return _Appointments; }
+            get { return _Vaccinations; }
             set
             {
-                SetProperty(ref _Appointments, value);
+                SetProperty(ref _Vaccinations, value);
             }
         }
     }
