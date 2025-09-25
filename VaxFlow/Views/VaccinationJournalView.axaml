@@ -30,23 +30,91 @@
         <MenuItem Header="Paste"/>
       </MenuItem>
     </Menu>
-    <DataGrid
+    <Border
       Grid.Row="2"
       Grid.Column="0"
-      AutoGenerateColumns="False"
-      IsReadOnly="True"
-      GridLinesVisibility="All"
-      BorderThickness="1" BorderBrush="Gray"
-      ItemsSource="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-      SelectedItem="{Binding SelectedParty, Mode=TwoWay}">
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="№ партии"  Binding="{Binding PartyName}"/>
-        <DataGridTextColumn Header="Вакцина" Binding="{Binding VaccineName}" />
-        <DataGridTextColumn Header="Весия Вакцины" Binding="{Binding VaccineVersion}" />
-        <DataGridTextColumn Header="Кол-во" Binding="{Binding Count}" />
-        <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
-      </DataGrid.Columns>
-    </DataGrid>
+      Classes="b1">
+      <Grid
+        RowDefinitions="auto,auto,*,auto">
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          Grid.ColumnSpan="4"
+          Classes="h2"
+          Text="Список пациентов"/>
+        <Border
+          Grid.Row="1"
+          Grid.Column="0"
+          Grid.ColumnSpan="3"
+          Classes="b2">
+          <Grid
+            RowDefinitions="auto,auto,auto,auto"
+            ColumnDefinitions="auto,*,auto">
+            <TextBlock
+              Grid.Row="0"
+              Grid.Column="0"
+              Classes="h3"
+              Text="Фильтры"/>
+            <TextBlock
+              Grid.Row="1"
+              Grid.Column="0"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Right"
+              Text="По дате От:"></TextBlock>
+            <DatePicker
+              Grid.Row="1"
+              Grid.Column="1"
+              SelectedDate="{Binding DtFrom}"/>
+            <TextBlock
+              Grid.Row="2"
+              Grid.Column="0"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Right"
+              Text=" По:"/>
+            <DatePicker
+              Grid.Row="2"
+              Grid.Column="1"
+              SelectedDate="{Binding DtTo}"/>
+            <TextBlock
+              Grid.Row="3"
+              Grid.Column="0"
+              VerticalAlignment="Center"
+              Text="По ФИО или №полиса:"></TextBlock>
+            <TextBox
+              Grid.Row="3"
+              Grid.Column="1"
+              Watermark="Гусейнова"
+              Text="{Binding SearchStr}"/>
+            <Button
+             Grid.Row="0"
+             Grid.RowSpan="3"
+             Grid.Column="4"
+             HorizontalAlignment="Center"
+             Command="{Binding SearchAsync}">
+              <StackPanel Orientation="Horizontal">
+                <PathIcon Data="{StaticResource SearchRegular}"></PathIcon>
+              </StackPanel>
+            </Button>
+          </Grid>
+        </Border>
+        <DataGrid
+          Grid.Row="2"
+          Grid.Column="0"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          GridLinesVisibility="All"
+          BorderThickness="1" BorderBrush="Gray"
+          ItemsSource="{Binding Patients}"
+          SelectedItem="{Binding SelectedPatient, Mode=TwoWay}">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="№"  Binding="{Binding Id}"/>
+            <DataGridTextColumn Header="ФИО" Binding="{Binding PatientInitials}" />
+            <DataGridTextColumn Header="№ Полиса" Binding="{Binding PolicyNumber}" />
+            <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
+          </DataGrid.Columns>
+        </DataGrid>
+      </Grid>
+    </Border>
     <Border
       Grid.Row="2"
       Grid.Column="2"

@@ -49,5 +49,8 @@
     <None Update="Migrations\V3_create_vaccination_summary_view.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Migrations\V4_create_patient_summary_view.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

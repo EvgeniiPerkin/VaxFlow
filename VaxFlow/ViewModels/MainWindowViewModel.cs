@@ -56,15 +56,7 @@ namespace VaxFlow.ViewModels
         public ObservableCollection<JobCategoryModel>? JobCategories { get; set; }
         public ObservableCollection<VaccineModel>? Vaccines { get; set; }
         public ObservableCollection<VaccineVersionModel>? VaccineVersions { get; set; }
-        private ObservableCollection<PartySummaryModel>? _Parties;
-        public ObservableCollection<PartySummaryModel>? Parties
-        {
-            get => _Parties;
-            set
-            {
-                SetProperty(ref _Parties, value);
-            } 
-        }
+        public ObservableCollection<PartySummaryModel>? Parties { get; set; }
         #endregion
 
         #region methods

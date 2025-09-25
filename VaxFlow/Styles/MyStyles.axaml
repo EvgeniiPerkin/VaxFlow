@@ -54,7 +54,8 @@
   <Style Selector="Border.b2">
     <Setter Property="Margin" Value="{DynamicResource MarginSmall}"/>
     <Setter Property="Padding" Value="{DynamicResource PaddingSmall}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource InfoColor}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}"/>
+    <Setter Property="Background" Value="{DynamicResource LightColor}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="CornerRadius" Value="3"/>
     <Setter Property="ClipToBounds" Value="True"/>
