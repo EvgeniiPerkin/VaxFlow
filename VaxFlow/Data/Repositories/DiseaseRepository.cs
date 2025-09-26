@@ -6,13 +6,13 @@ using VaxFlow.Models;
 
 namespace VaxFlow.Data.Repositories
 {
-    public class VaccineRepository
+    public class DiseaseRepository
     {
-        public async Task<int> CreateAsync(SqliteConnection connection, VaccineModel model)
+        public async Task<int> CreateAsync(SqliteConnection connection, DiseaseModel model)
         {
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO vaccines (desc)
+                INSERT INTO diseases (desc)
                 VALUES (@desc);
                 SELECT last_insert_rowid();";
             cmd.Parameters.AddWithValue("@desc", model.Desc);
@@ -20,11 +20,11 @@ namespace VaxFlow.Data.Repositories
             model.Id = Convert.ToInt32(id);
             return model.Id;
         }
-        public async Task<ObservableCollection<VaccineModel>> GetAllAsync(SqliteConnection connection)
+        public async Task<ObservableCollection<DiseaseModel>> GetAllAsync(SqliteConnection connection)
         {
-            ObservableCollection<VaccineModel> items = [];
+            ObservableCollection<DiseaseModel> items = [];
             using var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT id, desc FROM vaccines;";
+            cmd.CommandText = "SELECT id, desc FROM diseases;";
             using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
@@ -36,11 +36,11 @@ namespace VaxFlow.Data.Repositories
             }
             return items;
         }
-        public async Task<int> UpdateAsync(SqliteConnection connection, VaccineModel model)
+        public async Task<int> UpdateAsync(SqliteConnection connection, DiseaseModel model)
         {
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                UPDATE vaccines
+                UPDATE diseases
                 SET desc=@desc
                 WHERE id=@id;";
             cmd.Parameters.AddWithValue("@desc", model.Desc);

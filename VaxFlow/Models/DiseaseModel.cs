@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 namespace VaxFlow.Models
 {
     /// <summary>
-    /// Модель данных вакцины
+    /// Модель данных заболевания
     /// </summary>
-    public class VaccineModel : ObservableValidator
+    public class DiseaseModel : ObservableValidator
     {
         private int _Id;
 

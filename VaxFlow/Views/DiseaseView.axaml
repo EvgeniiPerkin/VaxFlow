@@ -4,7 +4,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-  x:Class="VaxFlow.VaccineView"
+  x:Class="VaxFlow.DiseaseView"
   x:CompileBindings="False">
   <Grid
     RowDefinitions="auto,*,auto,auto"
@@ -14,13 +14,13 @@
       Grid.Column="0"
       Grid.ColumnSpan="4"
       Classes="h1"
-      Text="Вакцины"/>
+      Text="Заболевания"/>
     <ListBox
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
-      SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
+      ItemsSource="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      SelectedItem="{Binding SelectedDisease, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
@@ -38,8 +38,8 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Center"
-        Command="{Binding AddVaccineAsync}"
-        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddDiseaseAsync}"
+        CommandParameter="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
@@ -58,14 +58,14 @@
         <TextBlock Classes="h3" Text="Наименование*"></TextBlock>
         <TextBox
           Watermark="Спутник5"
-          Text="{Binding SelectedVaccine.Desc}"/>
+          Text="{Binding SelectedDisease.Desc}"/>
       </StackPanel>
       <Button
         Grid.Row="2"
         Grid.Column="0"
         HorizontalAlignment="Left"
-        Command="{Binding UpdateVaccineAsync}"
-        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        Command="{Binding UpdateDiseaseAsync}"
+        CommandParameter="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"

@@ -40,6 +40,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\DiseaseView.axaml.cs">
+      <DependentUpon>DiseaseView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Migrations\V1_init.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

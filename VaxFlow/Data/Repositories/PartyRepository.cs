@@ -42,7 +42,7 @@ namespace VaxFlow.Data.Repositories
                     DateTimeCreate = SqliteHelper.GetDateTime(reader, 2),
                     PartyName = reader.GetString(3),
                     VaccineId = reader.GetInt32(4),
-                    VaccineName = reader.GetString(5),
+                    DiseaseName = reader.GetString(5),
                     VaccineVersion = reader.GetString(6),
                     VaccineVersionId = reader.GetInt32(7)
                 });
@@ -76,7 +76,7 @@ namespace VaxFlow.Data.Repositories
                     DateTimeCreate = SqliteHelper.GetDateTime(reader, 2),
                     PartyName = reader.GetString(3),
                     VaccineId = reader.GetInt32(4),
-                    VaccineName = reader.GetString(5),
+                    DiseaseName = reader.GetString(5),
                     VaccineVersion = reader.GetString(6),
                     VaccineVersionId = reader.GetInt32(7)
                 });

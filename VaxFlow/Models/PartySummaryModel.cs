@@ -7,14 +7,14 @@ namespace VaxFlow.Models
     /// </summary>
     public class PartySummaryModel : PartyModel
     {
-        private string _VaccineName = "";
-        /// <summary> Наименование вакцины </summary>
-        public string VaccineName
+        private string _DiseaseName = "";
+        /// <summary> Наименование заболевания </summary>
+        public string DiseaseName
         {
-            get { return _VaccineName; }
+            get { return _DiseaseName; }
             set
             {
-                SetProperty(ref _VaccineName, value);
+                SetProperty(ref _DiseaseName, value);
             }
         }
         private string _VaccineVersion = "";

@@ -5,9 +5,9 @@ SELECT
     p.dt_create,
     p.party_name,
     p.vaccine_id,
-    v.desc as vaccine_name,
-    p.vaccine_version_id,
+    d.desc as disease_name,
+    d.vaccine_version_id,
     vv.version as vaccine_version
 FROM parties p
-INNER JOIN vaccines v ON p.vaccine_id = v.id
+INNER JOIN diseases d ON p.disease_id = d.id
 INNER JOIN vaccine_versions vv ON p.vaccine_version_id = vv.id;

@@ -7,9 +7,9 @@ using VaxFlow.Services;
 
 namespace VaxFlow.Data.Services
 {
-    public class VaccineService
+    public class DiseaseService
     {
-        public VaccineService(IAppConfiguration configuration, VaccineRepository repository)
+        public DiseaseService(IAppConfiguration configuration, DiseaseRepository repository)
         {
             this.configuration = configuration;
             this.repository = repository;
@@ -17,22 +17,22 @@ namespace VaxFlow.Data.Services
 
         #region fields
         private readonly IAppConfiguration configuration;
-        private readonly VaccineRepository repository;
+        private readonly DiseaseRepository repository;
         #endregion
 
-        public async Task<int> CreateAsync(VaccineModel doctor)
+        public async Task<int> CreateAsync(DiseaseModel doctor)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.CreateAsync(connection, doctor);
         }
-        public async Task<ObservableCollection<VaccineModel>> GetAllAsync()
+        public async Task<ObservableCollection<DiseaseModel>> GetAllAsync()
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.GetAllAsync(connection);
         }
-        public async Task<int> UpdateAsync(VaccineModel doctor)
+        public async Task<int> UpdateAsync(DiseaseModel doctor)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);

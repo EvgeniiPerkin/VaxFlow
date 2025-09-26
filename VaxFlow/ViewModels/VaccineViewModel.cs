@@ -10,9 +10,9 @@ using VaxFlow.Services;
 
 namespace VaxFlow.ViewModels
 {
-    public partial class VaccineViewModel : ViewModelBase
+    public partial class DiseaseViewModel : ViewModelBase
     {
-        public VaccineViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public DiseaseViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
         {
             this.context = context;
             this.logger = logger;
@@ -27,7 +27,7 @@ namespace VaxFlow.ViewModels
 
         #region properties
         [ObservableProperty]
-        private VaccineModel? _SelectedVaccine;
+        private DiseaseModel? _SelectedDisease;
         [ObservableProperty]
         private string _Output = "";
         #endregion
@@ -37,68 +37,68 @@ namespace VaxFlow.ViewModels
 
         #region commands
         [RelayCommand]
-        public async Task AddVaccineAsync(object parameter)
+        public async Task AddDiseaseAsync(object parameter)
         {
             try
             {
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<VaccineModel> collection)
+                if (parameter is ObservableCollection<DiseaseModel> collection)
                 {
-                    VaccineModel newVaccine= new()
+                    DiseaseModel newDisease= new()
                     {
-                        Desc = "Спутник5"
+                        Desc = "Короновирус"
                     };
-                    int affectedRows = await context.Vaccine.CreateAsync(newVaccine);
+                    int affectedRows = await context.Disease.CreateAsync(newDisease);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Создана запись вакцины id:{newVaccine.Id}");
-                        collection.Add(newVaccine);
-                        Output = "Успешнове создание новой записи вакцины.";
+                        logger.Info($"Создана запись заболевания id:{newDisease.Id}");
+                        collection.Add(newDisease);
+                        Output = "Успешнове создание новой записи заболевания.";
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Ошибка создания записи вакцины.");
-                Output = $"Ошибка создания записи вакцины: {ex.Message}";
+                logger.Error(ex, "Ошибка создания записи заболевания.");
+                Output = $"Ошибка создания записи заболевания: {ex.Message}";
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddVaccineAsync(object parameter)
+        private bool CanAddDiseaseAsync(object parameter)
         {
             return parameter != null;
         }
 
         [RelayCommand]
-        public async Task UpdateVaccineAsync(object parameter)
+        public async Task UpdateDiseaseAsync(object parameter)
         {
             try
             {
-                if (SelectedVaccine == null) return;
+                if (SelectedDisease == null) return;
 
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<VaccineModel> collection)
+                if (parameter is ObservableCollection<DiseaseModel> collection)
                 {
-                    int affectedRows = await context.Vaccine.UpdateAsync(SelectedVaccine);
+                    int affectedRows = await context.Disease.UpdateAsync(SelectedDisease);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных вакцины id:{SelectedVaccine.Id}");
-                        int indx = collection.IndexOf(SelectedVaccine);
-                        collection[indx] = SelectedVaccine;
-                        Output = "Успешное обновление данных вакцины.";
+                        logger.Info($"Обновление данных заболевания id:{SelectedDisease.Id}");
+                        int indx = collection.IndexOf(SelectedDisease);
+                        collection[indx] = SelectedDisease;
+                        Output = "Успешное обновление данных заболевания.";
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Ошибка изменения данных вакцины.");
-                Output = $"Ошибка изменения записи вакцины: {ex.Message}";
+                logger.Error(ex, "Ошибка изменения данных заболевания.");
+                Output = $"Ошибка изменения записи заболевания: {ex.Message}";
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanUpdateVaccineAsync(object parameter)
+        private bool CanUpdateDiseaseAsync(object parameter)
         {
             return parameter != null;
         }

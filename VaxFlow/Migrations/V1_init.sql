@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS job_categories (
     category TEXT NOT NULL CHECK(length(category) <= 150),
     desc TEXT NOT NULL CHECK(length(desc) <= 255)
 );
-CREATE TABLE IF NOT EXISTS vaccines (
+CREATE TABLE IF NOT EXISTS diseases (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     desc TEXT NOT NULL CHECK(length(desc) <= 255)
 );
@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS vaccine_versions (
 );
 CREATE TABLE IF NOT EXISTS parties (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    vaccine_id INTEGER NOT NULL,
+    disease_id INTEGER NOT NULL,
     vaccine_version_id INTEGER NOT NULL,
     party_name TEXT NOT NULL CHECK(length(party_name) <= 255),
     count INTEGER NOT NULL DEFAULT 0,
     dt_create TEXT NOT NULL,
-    FOREIGN KEY (vaccine_id) REFERENCES vaccines(id) 
+    FOREIGN KEY (disease_id) REFERENCES diseases(id) 
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (vaccine_version_id) REFERENCES vaccine_versions(id) 
         ON DELETE CASCADE ON UPDATE CASCADE
