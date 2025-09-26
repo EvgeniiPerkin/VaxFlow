@@ -334,7 +334,7 @@ namespace VaxFlow.ViewModels
             Vaccination = new()
             {
                 DoctorId = 0,
-                PartyId = 0,
+                VaccineId = 0,
                 PatientId = SelectedPatient.Id,
                 DateTimeOfVaccination = DateTime.Now,
             };

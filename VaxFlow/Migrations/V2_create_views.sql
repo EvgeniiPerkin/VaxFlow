@@ -3,7 +3,7 @@ SELECT
     v.id,
     v.count,
     v.dt_create,
-    v.party_name,
+    v.vaccine_name,
     v.series,
     v.disease_id,
     v.expiration_date,

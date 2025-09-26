@@ -21,7 +21,7 @@
         private string _DescParty = string.Empty;
 
         /// <summary> Описание парции вакцины </summary>
-        public string DescParty
+        public string DescVaccine
         {
             get { return _DescParty; }
             set

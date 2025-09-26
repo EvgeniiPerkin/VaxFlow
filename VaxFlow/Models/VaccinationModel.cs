@@ -32,15 +32,15 @@ namespace VaxFlow.Models
             }
         }
 
-        private int _PartyId;
+        private int _VaccineId;
 
-        /// <summary> Идентификатор партии вакцины </summary>
-        public int PartyId
+        /// <summary> Идентификатор вакцины </summary>
+        public int VaccineId
         {
-            get { return _PartyId; }
+            get { return _VaccineId; }
             set
             {
-                SetProperty(ref _PartyId, value);
+                SetProperty(ref _VaccineId, value);
             }
         }
 

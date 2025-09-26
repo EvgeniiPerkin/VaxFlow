@@ -12,7 +12,7 @@ namespace VaxFlow.Data.Repositories
             ObservableCollection<VaccinationSummaryModel> items = [];
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                SELECT doctor_id, patient_id, party_id, dt_of_vaccination, doctor_initials, desc_party
+                SELECT doctor_id, patient_id, vaccine_id, dt_of_vaccination, doctor_initials, desc_vaccine
                 FROM vaccination_summary
                 WHERE patient_id=@patient_id;";
             cmd.Parameters.AddWithValue("@patient_id", patientId);
@@ -23,10 +23,10 @@ namespace VaxFlow.Data.Repositories
                 {
                     DoctorId = reader.GetInt32(0),
                     PatientId = reader.GetInt32(1),
-                    PartyId = reader.GetInt32(2),
+                    VaccineId = reader.GetInt32(2),
                     DateTimeOfVaccination = SqliteHelper.GetDateTime(reader, 3),
                     DoctorInitials = reader.GetString(4),
-                    DescParty = reader.GetString(5)
+                    DescVaccine = reader.GetString(5)
                 });
             }
             return items;
@@ -35,11 +35,11 @@ namespace VaxFlow.Data.Repositories
         {
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO vaccinations (doctor_id, patient_id, party_id, dt_of_vaccination)
-                VALUES (@doctor_id, @patient_id, @party_id, @dt_of_vaccination);";
+                INSERT INTO vaccinations (doctor_id, patient_id, vaccine_id, dt_of_vaccination)
+                VALUES (@doctor_id, @patient_id, @vaccine_id, @dt_of_vaccination);";
             cmd.Parameters.AddWithValue("@doctor_id", model.DoctorId);
             cmd.Parameters.AddWithValue("@patient_id", model.PatientId);
-            cmd.Parameters.AddWithValue("@party_id", model.PartyId);
+            cmd.Parameters.AddWithValue("@vaccine_id", model.VaccineId);
             cmd.Parameters.AddWithValue("@dt_of_vaccination", SqliteHelper.FromDateTime(model.DateTimeOfVaccination));
             return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
@@ -48,10 +48,10 @@ namespace VaxFlow.Data.Repositories
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
                 DELETE FROM vaccinations WHERE
-                doctor_id=@doctor_id AND patient_id=@patient_id AND party_id=@party_id;";
+                doctor_id=@doctor_id AND patient_id=@patient_id AND vaccine_id=@vaccine_id;";
             cmd.Parameters.AddWithValue("@doctor_id", model.DoctorId);
             cmd.Parameters.AddWithValue("@patient_id", model.PatientId);
-            cmd.Parameters.AddWithValue("@party_id", model.PartyId);
+            cmd.Parameters.AddWithValue("@vaccine_id", model.VaccineId);
             return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
     }
