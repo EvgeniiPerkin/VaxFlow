@@ -67,7 +67,7 @@ namespace VaxFlow
             services.AddSingleton<PatternRepository>();
             services.AddSingleton<VaccineVersionRepository>();
             services.AddSingleton<DiseaseRepository>();
-            services.AddSingleton<PartyRepository>();
+            services.AddSingleton<VaccineRepository>();
             services.AddSingleton<PatientRepository>();
 
             services.AddSingleton<DoctorService>();
@@ -76,7 +76,7 @@ namespace VaxFlow
             services.AddSingleton<JobCategoryService>();
             services.AddSingleton<DiseaseService>();
             services.AddSingleton<VaccineVersionService>();
-            services.AddSingleton<PartyService>();
+            services.AddSingleton<VaccineService>();
             services.AddSingleton<PatientVaccinationDataProcessingService>();
 
             services.AddSingleton<MainWindow>();
@@ -84,7 +84,7 @@ namespace VaxFlow
             services.AddSingleton<DoctorView>();
             services.AddSingleton<VaccineVersionsView>();
             services.AddSingleton<DiseaseView>();
-            services.AddSingleton<PatryView>();
+            services.AddSingleton<VaccineView>();
             services.AddSingleton<JobCategoryView>();
             services.AddSingleton<PatternsView>();
             services.AddTransient<SettingsView>();
@@ -95,7 +95,7 @@ namespace VaxFlow
             services.AddSingleton<DoctorViewModel>();
             services.AddSingleton<VaccineVersionsViewModel>();
             services.AddSingleton<DiseaseViewModel>();
-            services.AddSingleton<PatryViewModel>();
+            services.AddSingleton<VaccineViewModel>();
             services.AddSingleton<JobCategoryViewModel>();
             services.AddSingleton<PatternsViewModel>();
             services.AddTransient<SettingsViewModel>();

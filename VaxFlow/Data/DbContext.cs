@@ -20,7 +20,7 @@ namespace VaxFlow.Data
             JobCategoryService jobCategoryService,
             VaccineVersionService vaccineVersionService,
             DiseaseService diseaseService,
-            PartyService partyService,
+            VaccineService vaccineService,
             PatientVaccinationDataProcessingService patientVaccinationDataProcessingService
             )
         {
@@ -32,7 +32,7 @@ namespace VaxFlow.Data
             this.JobCategory = jobCategoryService;
             this.VaccineVersion = vaccineVersionService;
             this.Disease = diseaseService;
-            this.Party = partyService;
+            this.Vaccine = vaccineService;
             this.PatientVaccinationDataProcessing = patientVaccinationDataProcessingService;
         }
 
@@ -48,7 +48,7 @@ namespace VaxFlow.Data
         public JobCategoryService JobCategory { get; private set; }
         public VaccineVersionService VaccineVersion { get; private set; }
         public DiseaseService Disease { get; private set; }
-        public PartyService Party { get; private set; }
+        public VaccineService Vaccine { get; private set; }
         public PatientVaccinationDataProcessingService PatientVaccinationDataProcessing { get; private set; }
         #endregion
 

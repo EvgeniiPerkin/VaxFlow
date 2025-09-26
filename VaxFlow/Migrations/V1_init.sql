@@ -19,12 +19,14 @@ CREATE TABLE IF NOT EXISTS vaccine_versions (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     version TEXT NOT NULL CHECK(length(version) <= 10)
 );
-CREATE TABLE IF NOT EXISTS parties (
+CREATE TABLE IF NOT EXISTS vaccines (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     disease_id INTEGER NOT NULL,
     vaccine_version_id INTEGER NOT NULL,
-    party_name TEXT NOT NULL CHECK(length(party_name) <= 255),
+    vaccine_name TEXT NOT NULL CHECK(length(party_name) <= 255),
+    series TEXT NOT NULL CHECK(length(party_name) <= 50),
     count INTEGER NOT NULL DEFAULT 0,
+    expiration_date TEXT NOT NULL,
     dt_create TEXT NOT NULL,
     FOREIGN KEY (disease_id) REFERENCES diseases(id) 
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -46,14 +48,14 @@ CREATE TABLE IF NOT EXISTS patients (
 CREATE TABLE IF NOT EXISTS vaccinations (
     doctor_id INTEGER NOT NULL,
     patient_id INTEGER NOT NULL,
-    party_id INTEGER NOT NULL,
+    vaccine_id INTEGER NOT NULL,
     dt_of_vaccination TEXT NOT NULL,
-    PRIMARY KEY (doctor_id, patient_id, party_id),
+    PRIMARY KEY (doctor_id, patient_id, vaccine_id),
     FOREIGN KEY (doctor_id) REFERENCES doctors(id) 
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (patient_id) REFERENCES patients(id) 
         ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (party_id) REFERENCES parties(id) 
+    FOREIGN KEY (vaccine_id) REFERENCES vaccines(id) 
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE IF NOT EXISTS patterns ( 

@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using Microsoft.Data.Sqlite;
-using System;
+﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data.Repositories;
@@ -9,9 +7,9 @@ using VaxFlow.Services;
 
 namespace VaxFlow.Data.Services
 {
-    public class PartyService
+    public class VaccineService
     {
-        public PartyService(IAppConfiguration configuration, PartyRepository repository)
+        public VaccineService(IAppConfiguration configuration, VaccineRepository repository)
         {
             this.configuration = configuration;
             this.repository = repository;
@@ -19,41 +17,41 @@ namespace VaxFlow.Data.Services
 
         #region fields
         private readonly IAppConfiguration configuration;
-        private readonly PartyRepository repository;
+        private readonly VaccineRepository repository;
         #endregion
 
-        public async Task<int> CreateAsync(PartyModel model)
+        public async Task<int> CreateAsync(VaccineModel model)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.CreateAsync(connection, model);
         }
-        internal async Task<ObservableCollection<PartySummaryModel>> GetAvailablePartiesAsync()
+        internal async Task<ObservableCollection<VaccineSummaryModel>> GetAvailableVaccinesAsync()
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
-            return await repository.GetAvailablePartiesAsync(connection);
+            return await repository.GetAvailableVaccinesAsync(connection);
         }
-        internal async Task<ObservableCollection<PartySummaryModel>> FindByPartyNameAsync(string partyName)
+        internal async Task<ObservableCollection<VaccineSummaryModel>> FindByVaccineNameAsync(string vaccineName)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
-            return await repository.FindByPartyNameAsync(connection, partyName);
+            return await repository.FindByVaccineNameAsync(connection, vaccineName);
         }
 
-        public async Task<int> UpdateCountAsync(PartyModel model)
+        public async Task<int> UpdateCountAsync(VaccineModel model)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.UpdateCountAsync(connection, model);
         }
-        public async Task<int> DeleteAsync(PartyModel model)
+        public async Task<int> DeleteAsync(VaccineModel model)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await repository.DeleteAsync(connection, model);
         }
-        public async Task<int> UpdateAsync(PartyModel model)
+        public async Task<int> UpdateAsync(VaccineModel model)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);

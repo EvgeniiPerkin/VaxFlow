@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 namespace VaxFlow.Models
 {
     /// <summary>
-    /// Модель партии вакцины
+    /// Модель вакцины
     /// </summary>
-    public class PartyModel : ObservableValidator
+    public class VaccineModel : ObservableValidator
     {
         private int _Id;
 
@@ -21,15 +21,15 @@ namespace VaxFlow.Models
             }
         }
 
-        private int _VaccineId;
+        private int _DiseaseId;
 
-        /// <summary> Идентификатор вакцины </summary>
-        public int VaccineId
+        /// <summary> Идентификатор заболевания </summary>
+        public int DiseaseId
         {
-            get { return _VaccineId; }
+            get { return _DiseaseId; }
             set
             {
-                SetProperty(ref _VaccineId, value);
+                SetProperty(ref _DiseaseId, value);
             }
         }
 
@@ -45,18 +45,45 @@ namespace VaxFlow.Models
             }
         }
         
-        private string _PartyName = string.Empty;
+        private string _VaccineName = string.Empty;
 
-        /// <summary> Имя партии </summary>
+        /// <summary> Имя вакцины </summary>
         [Required(ErrorMessage = "Не должно быть пустым.")]
         [MinLength(1, ErrorMessage = "От 1 симв.")]
         [MaxLength(255, ErrorMessage = "До 255 симв.")]
-        public string PartyName
+        public string VaccineName
         {
-            get { return _PartyName; }
+            get { return _VaccineName; }
             set
             {
-                SetProperty(ref _PartyName, value);
+                SetProperty(ref _VaccineName, value);
+            }
+        }
+
+        private string _Series = string.Empty;
+
+        /// <summary> Серия вакцины </summary>
+        [Required(ErrorMessage = "Не должно быть пустым.")]
+        [MinLength(1, ErrorMessage = "От 1 симв.")]
+        [MaxLength(50, ErrorMessage = "До 50 симв.")]
+        public string Series
+        {
+            get { return _Series; }
+            set
+            {
+                SetProperty(ref _Series, value);
+            }
+        }
+
+        private DateTime _ExpirationDate = DateTime.Now;
+
+        /// <summary> Срок годности </summary>
+        public DateTime ExpirationDate
+        {
+            get { return _ExpirationDate; }
+            set
+            {
+                SetProperty(ref _ExpirationDate, value);
             }
         }
 

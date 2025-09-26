@@ -56,7 +56,7 @@ namespace VaxFlow.ViewModels
         public ObservableCollection<JobCategoryModel>? JobCategories { get; set; }
         public ObservableCollection<DiseaseModel>? Diseases { get; set; }
         public ObservableCollection<VaccineVersionModel>? VaccineVersions { get; set; }
-        public ObservableCollection<PartySummaryModel>? Parties { get; set; }
+        public ObservableCollection<VaccineSummaryModel>? Vaccines { get; set; }
         #endregion
 
         #region methods
@@ -68,7 +68,7 @@ namespace VaxFlow.ViewModels
                 JobCategories = await context.JobCategory.GetAllAsync();
                 Diseases = await context.Disease.GetAllAsync();
                 VaccineVersions = await context.VaccineVersion.GetAllAsync();
-                Parties = await context.Party.GetAvailablePartiesAsync();
+                Vaccines = await context.Vaccine.GetAvailableVaccinesAsync();
             }
             catch (Exception ex) 
             {
@@ -88,7 +88,7 @@ namespace VaxFlow.ViewModels
         private readonly List<ListItemTemplate> _templates =
         [
             new ListItemTemplate(typeof(VaccinationJournalViewModel), "JournalRegular", "Журнал вакцинации"),
-            new ListItemTemplate(typeof(PatryViewModel), "PatryRegular", "Партии вакцин"),
+            new ListItemTemplate(typeof(VaccineViewModel), "VaccineRegular", "Вакцины"),
             new ListItemTemplate(typeof(DiseaseViewModel),"DiseaseRegular", "Заболевания"),
             new ListItemTemplate(typeof(VaccineVersionsViewModel),"VaccineVersionRegular", "Версии вакцин"),
             new ListItemTemplate(typeof(DoctorViewModel), "PeopleSettingsRegular", "Врачи"),

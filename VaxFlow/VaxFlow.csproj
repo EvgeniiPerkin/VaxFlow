@@ -43,6 +43,9 @@
     <Compile Update="Views\DiseaseView.axaml.cs">
       <DependentUpon>DiseaseView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\VaccineView.axaml.cs">
+      <DependentUpon>VaccineView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

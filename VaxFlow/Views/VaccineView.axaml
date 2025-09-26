@@ -4,7 +4,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-  x:Class="VaxFlow.PatryView"
+  x:Class="VaxFlow.VaccineView"
   x:CompileBindings="False">
   <Grid
     RowDefinitions="auto,*,auto,auto"
@@ -14,7 +14,7 @@
       Grid.Column="0"
       Grid.ColumnSpan="4"
       Classes="h1"
-      Text="Партии вакцин"/>
+      Text="Вакцины"/>
     <DataGrid
       Grid.Row="1"
       Grid.Column="0"
@@ -23,11 +23,11 @@
       IsReadOnly="True"
       GridLinesVisibility="All"
       BorderThickness="1" BorderBrush="Gray"
-      ItemsSource="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-      SelectedItem="{Binding SelectedParty, Mode=TwoWay}">
+      ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+      SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="№ партии"  Binding="{Binding PartyName}"/>
-        <DataGridTextColumn Header="Вакцина" Binding="{Binding VaccineName}" />
+        <DataGridTextColumn Header="Вакцина"  Binding="{Binding VaccineName}"/>
+        <DataGridTextColumn Header="Заболевание" Binding="{Binding DiseaseName}" />
         <DataGridTextColumn Header="Весия Вакцины" Binding="{Binding VaccineVersion}" />
         <DataGridTextColumn Header="Кол-во" Binding="{Binding Count}" />
         <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
@@ -40,13 +40,13 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Left"
-        Command="{Binding AddPartyAsync}"
-        CommandParameter="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddVaccineAsync}"
+        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
       <Button
         Grid.Column="1"
         HorizontalAlignment="Right"
-        Command="{Binding RemovePartyAsync}"
-        CommandParameter="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Удалить</Button>
+        Command="{Binding RemoveVaccineAsync}"
+        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Удалить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
@@ -62,12 +62,12 @@
       <StackPanel
         Grid.Row="1"
         Grid.Column="0">
-        <TextBlock Classes="h3" Text="Вакцина"></TextBlock>
+        <TextBlock Classes="h3" Text="Заболевание"></TextBlock>
         <ComboBox
-          Width="150"
+          HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
-          ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-          SelectedValue="{Binding SelectedParty.VaccineId}"
+          ItemsSource="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+          SelectedValue="{Binding SelectedVaccine.DiseaseId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Desc}"/>
       </StackPanel>
@@ -76,20 +76,20 @@
         Grid.Column="1">
         <TextBlock Classes="h3" Text="Версия вакцины"></TextBlock>
         <ComboBox
-          Width="150"
+          HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
           ItemsSource="{Binding Path=DataContext.VaccineVersions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-          SelectedValue="{Binding SelectedParty.VaccineVersionId}"
+          SelectedValue="{Binding SelectedVaccine.VaccineVersionId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Version}"/>
       </StackPanel>
       <StackPanel
         Grid.Row="2"
         Grid.Column="0">
-        <TextBlock Classes="h3" Text="№ Партии"></TextBlock>
+        <TextBlock Classes="h3" Text="Наименование"></TextBlock>
         <TextBox
-          Watermark="TS 3"
-          Text="{Binding SelectedParty.PartyName}"/>
+          Watermark="Региваг"
+          Text="{Binding SelectedVaccine.VaccineName}"/>
       </StackPanel>
       <StackPanel
         Grid.Row="2"
@@ -97,26 +97,41 @@
         <TextBlock Classes="h3" Text="Кол-во"></TextBlock>
         <MaskedTextBox
           Watermark="560"
-          Width="150"
-          HorizontalAlignment="Left"
-          Text="{Binding SelectedParty.Count}"/>
+          HorizontalAlignment="Stretch"
+          Text="{Binding SelectedVaccine.Count}"/>
       </StackPanel>
       <StackPanel
         Grid.Row="3"
+        Grid.Column="0">
+        <TextBlock Classes="h3" Text="Серия"></TextBlock>
+        <TextBox
+          Watermark="g12"
+          Text="{Binding SelectedVaccine.Series}"/>
+      </StackPanel>
+      <StackPanel
+        Grid.Row="3"
+        Grid.Column="1">
+        <TextBlock Classes="h3" Text="Срок годности"></TextBlock>
+        <CalendarDatePicker
+          HorizontalAlignment="Stretch"
+          SelectedDate="{Binding SelectedVaccine.ExpirationDate}"/>
+      </StackPanel>
+      <StackPanel
+        Grid.Row="4"
         Grid.Column="0"
         Grid.ColumnSpan="3">
         <TextBlock Classes="h3" Text="Дата и время создания"></TextBlock>
         <TextBlock
           Classes="output"
-          Text="{Binding SelectedParty.DateTimeCreate}"/>
+          Text="{Binding SelectedVaccine.DateTimeCreate}"/>
       </StackPanel>
       <Button
-        Grid.Row="4"
+        Grid.Row="5"
         Grid.Column="0"
         Grid.ColumnSpan="3"
         HorizontalAlignment="Center"
-        Command="{Binding UpdatePartyAsync}"
-        CommandParameter="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        Command="{Binding UpdateVaccineAsync}"
+        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"

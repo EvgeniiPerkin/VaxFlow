@@ -9,78 +9,78 @@ namespace VaxFlow.ViewModels.Tests
         [TestMethod()]
         public void RefreshCollections_EmptyItem()
         {
-            ObservableCollection<PartySummaryModel> collection1 =
+            ObservableCollection<VaccineSummaryModel> collection1 =
             [
-                new() { Id = 1, PartyName = "OldName" }
+                new() { Id = 1, VaccineName = "OldName" }
             ];
-            ObservableCollection<PartySummaryModel> collection2 =
+            ObservableCollection<VaccineSummaryModel> collection2 =
             [];
 
-            PatryViewModel.RefreshCollections(collection1, collection2);
+            VaccineViewModel.RefreshCollections(collection1, collection2);
             Assert.AreEqual(0, collection1.Count);
         }
         [TestMethod()]
         public void RefreshCollections_ReplaceItem()
         {
-            ObservableCollection<PartySummaryModel> collection1 = 
+            ObservableCollection<VaccineSummaryModel> collection1 = 
             [
-                new() { Id = 1, PartyName = "OldName" }
+                new() { Id = 1, VaccineName = "OldName" }
             ];
-            ObservableCollection<PartySummaryModel> collection2 =
+            ObservableCollection<VaccineSummaryModel> collection2 =
             [
-                new() { Id = 1, PartyName = "NewName" }
+                new() { Id = 1, VaccineName = "NewName" }
             ];
 
-            PatryViewModel.RefreshCollections(collection1, collection2);
-            Assert.AreEqual("NewName", collection1[0].PartyName);
+            VaccineViewModel.RefreshCollections(collection1, collection2);
+            Assert.AreEqual("NewName", collection1[0].VaccineName);
         }
         [TestMethod()]
         public void RefreshCollections_NewItem()
         {
-            ObservableCollection<PartySummaryModel> collection1 =
+            ObservableCollection<VaccineSummaryModel> collection1 =
             [];
-            ObservableCollection<PartySummaryModel> collection2 =
+            ObservableCollection<VaccineSummaryModel> collection2 =
             [
-                new() { Id = 1, PartyName = "NewName" }
+                new() { Id = 1, VaccineName = "NewName" }
             ];
 
-            PatryViewModel.RefreshCollections(collection1, collection2);
-            Assert.AreEqual("NewName", collection1[0].PartyName);
+            VaccineViewModel.RefreshCollections(collection1, collection2);
+            Assert.AreEqual("NewName", collection1[0].VaccineName);
         }
         [TestMethod()]
         public void RefreshCollections_RemoveOldItem()
         {
-            ObservableCollection<PartySummaryModel> collection1 =
+            ObservableCollection<VaccineSummaryModel> collection1 =
             [
-                new() { Id = 1, PartyName = "OldName" }
+                new() { Id = 1, VaccineName = "OldName" }
             ];
-            ObservableCollection<PartySummaryModel> collection2 =
+            ObservableCollection<VaccineSummaryModel> collection2 =
             [
-                new() { Id = 2, PartyName = "NewName" }
+                new() { Id = 2, VaccineName = "NewName" }
             ];
 
-            PatryViewModel.RefreshCollections(collection1, collection2);
+            VaccineViewModel.RefreshCollections(collection1, collection2);
             Assert.AreEqual(1, collection1.Count);
             Assert.AreEqual(2, collection1[0].Id);
-            Assert.AreEqual("NewName", collection1[0].PartyName);
+            Assert.AreEqual("NewName", collection1[0].VaccineName);
         }
         [TestMethod()]
         public void RefreshCollections_AddNewItemAndRefreshOldItem()
         {
-            ObservableCollection<PartySummaryModel> collection1 =
+            ObservableCollection<VaccineSummaryModel> collection1 =
             [
-                new() { Id = 1, PartyName = "One" }
+                new() { Id = 1, VaccineName = "One" }
             ];
-            ObservableCollection<PartySummaryModel> collection2 =
+            ObservableCollection<VaccineSummaryModel> collection2 =
             [
-                new() { Id = 1, PartyName = "NewOne" },
-                new() { Id = 2, PartyName = "Two" }
+                new() { Id = 1, VaccineName = "NewOne" },
+                new() { Id = 2, VaccineName = "Two" }
             ];
 
-            PatryViewModel.RefreshCollections(collection1, collection2);
+            VaccineViewModel.RefreshCollections(collection1, collection2);
             Assert.AreEqual(2, collection1.Count);
-            Assert.AreEqual("NewOne", collection1[0].PartyName);
-            Assert.AreEqual("Two", collection1[1].PartyName);
+            Assert.AreEqual("NewOne", collection1[0].VaccineName);
+            Assert.AreEqual("Two", collection1[1].VaccineName);
         }
     }
 }

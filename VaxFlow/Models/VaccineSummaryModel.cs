@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VaxFlow.Models
+﻿namespace VaxFlow.Models
 {
     /// <summary>
-    /// Модель данных View (party_summary) из БД 
+    /// Модель данных View (vaccine_summary) из БД 
     /// </summary>
-    public class PartySummaryModel : PartyModel
+    public class VaccineSummaryModel : VaccineModel
     {
         private string _DiseaseName = "";
         /// <summary> Наименование заболевания </summary>
