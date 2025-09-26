@@ -4,12 +4,12 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="clr-namespace:VaxFlow.ViewModels"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="650"
   x:Class="VaxFlow.VaccinationJournalView"
   x:CompileBindings="False">
   <Grid
     RowDefinitions="auto,auto,*,auto"
-    ColumnDefinitions="0.8*,auto,*">
+    ColumnDefinitions="0.8*,*">
     <TextBlock
       Grid.Row="0"
       Grid.Column="0"
@@ -48,49 +48,73 @@
           Grid.ColumnSpan="3"
           Classes="b2">
           <Grid
-            RowDefinitions="auto,auto,auto,auto"
+            RowDefinitions="auto,auto,auto,auto,auto,auto,auto"
             ColumnDefinitions="auto,*,auto">
             <TextBlock
               Grid.Row="0"
               Grid.Column="0"
+              Grid.ColumnSpan="2"
               Classes="h3"
               Text="Фильтры"/>
             <TextBlock
               Grid.Row="1"
               Grid.Column="0"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Left"
+              Text="По дате:"></TextBlock>
+            <TextBlock
+              Grid.Row="2"
+              Grid.Column="0"
               VerticalAlignment="Center"
               HorizontalAlignment="Right"
-              Text="По дате От:"></TextBlock>
+              Text="От:"></TextBlock>
             <DatePicker
-              Grid.Row="1"
+              Grid.Row="2"
               Grid.Column="1"
               SelectedDate="{Binding DtFrom}"/>
             <TextBlock
-              Grid.Row="2"
+              Grid.Row="3"
               Grid.Column="0"
               VerticalAlignment="Center"
               HorizontalAlignment="Right"
-              Text=" По:"/>
+              Text="По:"/>
             <DatePicker
-              Grid.Row="2"
+              Grid.Row="3"
               Grid.Column="1"
               SelectedDate="{Binding DtTo}"/>
-            <TextBlock
-              Grid.Row="3"
+            <Separator
+              Grid.Row="4"
               Grid.Column="0"
+              Grid.ColumnSpan="3"/>
+            <TextBlock
+              Grid.Row="5"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
               VerticalAlignment="Center"
               Text="По ФИО или №полиса:"></TextBlock>
             <TextBox
-              Grid.Row="3"
+              Grid.Row="6"
               Grid.Column="1"
               Watermark="Гусейнова"
               Text="{Binding SearchStr}"/>
             <Button
-             Grid.Row="0"
-             Grid.RowSpan="3"
+             Grid.Row="2"
+             Grid.RowSpan="2"
              Grid.Column="4"
              HorizontalAlignment="Center"
-             Command="{Binding SearchAsync}">
+             VerticalAlignment="Center"
+             Command="{Binding SearchByDateAsync}">
+              <StackPanel Orientation="Horizontal">
+                <PathIcon Data="{StaticResource SearchRegular}"></PathIcon>
+              </StackPanel>
+            </Button>
+            <Button
+             Grid.Row="6"
+             Grid.Column="4"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Command="{Binding SearchByFullNameAsync}">
               <StackPanel Orientation="Horizontal">
                 <PathIcon Data="{StaticResource SearchRegular}"></PathIcon>
               </StackPanel>
@@ -108,43 +132,43 @@
           SelectedItem="{Binding SelectedPatient, Mode=TwoWay}">
           <DataGrid.Columns>
             <DataGridTextColumn Header="№"  Binding="{Binding Id}"/>
-            <DataGridTextColumn Header="ФИО" Binding="{Binding PatientInitials}" />
+            <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" />
             <DataGridTextColumn Header="№ Полиса" Binding="{Binding PolicyNumber}" />
             <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
           </DataGrid.Columns>
         </DataGrid>
+        <Grid
+          Grid.Row="3"
+          Grid.Column="0"
+          ColumnDefinitions="*,*">
+          <Button
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            Command="{Binding CreatePatientAsync}"
+            CommandParameter="{Binding Patients}">
+            <StackPanel Orientation="Horizontal">
+              <PathIcon Data="{StaticResource AddRegular}"/>
+            </StackPanel>
+          </Button>
+          <Button
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            Command="{Binding DeletePatientAsync}"
+            CommandParameter="{Binding SelectedPatient}">
+            <StackPanel Orientation="Horizontal">
+              <PathIcon Data="{StaticResource DeleteRegular}"/>
+            </StackPanel>
+          </Button>
+        </Grid>
       </Grid>
     </Border>
-    <Grid
-      Grid.Row="2"
-      Grid.Column="1">
-      <StackPanel
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Vertical">
-        <Button
-         Command="{Binding GetDataPatientAsync}"
-         CommandParameter="{Binding SelectedPatient}">
-          <StackPanel Orientation="Horizontal">
-            <PathIcon Data="{StaticResource RightRegular}"/>
-          </StackPanel>
-        </Button>
-        <Button
-         Command="{Binding SetDataPatientAsync}"
-         CommandParameter="{Binding Patient}">
-          <StackPanel Orientation="Horizontal">
-            <PathIcon Data="{StaticResource LeftRegular}"/>
-          </StackPanel>
-        </Button>
-      </StackPanel>
-    </Grid>
     <Border
       Grid.Row="2"
-      Grid.Column="2"
+      Grid.Column="1"
       Classes="b1">
       <Grid
         RowDefinitions="auto,*"
-        ColumnDefinitions="0.5*,*">
+        ColumnDefinitions="*,0.5*">
         <TextBlock
           Grid.Row="0"
           Grid.Column="0"
@@ -156,7 +180,93 @@
           Grid.Column="0"
           Classes="b2">
           <Grid
-            RowDefinitions="auto,*,auto"
+            RowDefinitions="auto,auto,auto,auto,auto,auto,auto,*"
+            ColumnDefinitions="*,*">
+            <TextBlock
+              Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Classes="h2"
+              Text="Данные пациента"/>
+            <TextBlock
+              Grid.Row="1"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Classes="danger"
+              Text="Поля с символом '*' обязательные!"/>
+            <StackPanel
+              Grid.Row="2"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+              <TextBlock Classes="h3" Text="Фамилия Имя Отчество*"></TextBlock>
+              <TextBox
+                Watermark="Гусейнова Зарема Юсуф кызы"
+                Text="{Binding SelectedPatient.FullName}"/>
+            </StackPanel>
+            <StackPanel
+              Grid.Row="3"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+              <TextBlock Classes="h3" Text="Рабочая категория"></TextBlock>
+              <ComboBox
+                HorizontalAlignment="Stretch"
+                MaxDropDownHeight="250"
+                ItemsSource="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                SelectedValue="{Binding SelectedPatient.JobCategoryId}"
+                SelectedValueBinding="{Binding Id}"
+                DisplayMemberBinding="{Binding Category}"/>
+            </StackPanel>
+            <StackPanel
+              Grid.Row="4"
+              Grid.Column="0">
+              <TextBlock Classes="h3" Text="Дата рождения*"></TextBlock>
+              <CalendarDatePicker
+                SelectedDate="{Binding SelectedPatient.Birthday}"/>
+            </StackPanel>
+            <StackPanel
+              Grid.Row="4"
+              Grid.Column="1">
+              <TextBlock Classes="h3" Text="№ полиса*"></TextBlock>
+              <TextBox
+                Watermark="84890992211"
+                Text="{Binding SelectedPatient.PolicyNumber}"/>
+            </StackPanel>
+            <StackPanel
+              Grid.Row="5"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+              <TextBlock Classes="h3" Text="Адрес регистрации*"></TextBlock>
+              <TextBox
+                Watermark="г.Москва, ул.Новая, д.8, кв. 4"
+                Text="{Binding SelectedPatient.RegistrationAddress}"/>
+            </StackPanel>
+            <StackPanel
+              Grid.Row="6"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+              <TextBlock Classes="h3" Text="Должность на работе*"></TextBlock>
+              <TextBox
+                Watermark="Начальник отдела"
+                Text="{Binding SelectedPatient.WorkingPosition}"/>
+            </StackPanel>
+            <Button
+              Grid.Row="7"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Command="{Binding SavePatientAsync}"
+              CommandParameter="{Binding SelectedPatient}">
+              <PathIcon Data="{StaticResource SaveRegular}"/>
+            </Button>
+          </Grid>
+        </Border>
+        <Border
+          Grid.Row="1"
+          Grid.Column="1"
+          Classes="b2">
+          <Grid
+            RowDefinitions="auto,*,auto,auto"
             ColumnDefinitions="*,*">
             <TextBlock
               Grid.Row="0"
@@ -169,7 +279,7 @@
               Grid.Column="0"
               Grid.ColumnSpan="2"
               MaxHeight="900"
-              ItemsSource="{Binding Patient.Vaccinations}"
+              ItemsSource="{Binding SelectedPatient.Vaccinations}"
               SelectedItem="{Binding SelectedVaccination, Mode=TwoWay}">
               <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -183,115 +293,88 @@
             <Button
               Grid.Row="2"
               Grid.Column="0"
-              HorizontalAlignment="Left"
-              Command="{Binding AddPartyAsync}"
-              Content="Добавить"/>
+              HorizontalAlignment="Right"
+              Command="{Binding SetVaccinationAsync}"
+              CommandParameter="{Binding Vaccination}">
+              <StackPanel Orientation="Horizontal">
+                <PathIcon Data="{StaticResource UpRegular}"/>
+              </StackPanel>
+            </Button>
             <Button
               Grid.Row="2"
               Grid.Column="1"
-              HorizontalAlignment="Right"
-              Command="{Binding RemovePartyAsync}"
-              Content="Удалить"/>
-          </Grid>
-        </Border>
-        <Border
-          Grid.Row="1"
-          Grid.Column="1"
-          Classes="b2">
-          <Grid
-            RowDefinitions="auto,auto,auto,auto,auto,auto,auto"
-            ColumnDefinitions="*,*,*">
-            <TextBlock
-              Grid.Row="0"
-              Grid.Column="0"
-              Grid.ColumnSpan="3"
-              Classes="h2"
-              Text="Данные пациента"/>
-            <TextBlock
-              Grid.Row="1"
-              Grid.Column="0"
-              Grid.ColumnSpan="3"
-              Classes="danger"
-              Text="Поля с символом '*' обязательные!"/>
-            <StackPanel
-              Grid.Row="2"
-              Grid.Column="0">
-              <TextBlock Classes="h3" Text="Фамилия*"></TextBlock>
-              <TextBox
-                Watermark="Гусейнова"
-                Text="{Binding Patient.LastName}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="2"
-              Grid.Column="1">
-              <TextBlock Classes="h3" Text="Имя*"></TextBlock>
-              <TextBox
-                Watermark="Зарема"
-                Text="{Binding Patient.FirstName}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="2"
-              Grid.Column="2">
-              <TextBlock Classes="h3" Text="Отчество"></TextBlock>
-              <TextBox
-                Watermark="Юсуф"
-                Text="{Binding Patient.Patronymic}"/>
-            </StackPanel>
-            <StackPanel
+              HorizontalAlignment="Left"
+              Command="{Binding RemoveVaccinationAsync}"
+              CommandParameter="{Binding SelectedVaccination}">
+              <StackPanel Orientation="Horizontal">
+                <PathIcon Data="{StaticResource DeleteRegular}"/>
+              </StackPanel>
+            </Button>
+            <Border
               Grid.Row="3"
-              Grid.Column="0">
-              <TextBlock Classes="h3" Text="Префикс"></TextBlock>
-              <TextBox
-                Watermark="кызы"
-                Text="{Binding Patient.NameSuffix}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="3"
-              Grid.Column="1"
-              Grid.ColumnSpan="2">
-              <TextBlock Classes="h3" Text="Рабочая категория"></TextBlock>
-              <ComboBox
-                MinWidth="150"
-                MaxDropDownHeight="250"
-                ItemsSource="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-                SelectedValue="{Binding Patient.JobCategoryId}"
-                SelectedValueBinding="{Binding Id}"
-                DisplayMemberBinding="{Binding Category}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="4"
-              Grid.Column="0">
-              <TextBlock Classes="h3" Text="Дата рождения*"></TextBlock>
-              <CalendarDatePicker
-                SelectedDate="{Binding Patient.Birthday}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="4"
-              Grid.Column="1"
-              Grid.ColumnSpan="2">
-              <TextBlock Classes="h3" Text="№ полиса*"></TextBlock>
-              <TextBox
-                Watermark="84890992211"
-                Text="{Binding Patient.PolicyNumber}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="5"
               Grid.Column="0"
-              Grid.ColumnSpan="3">
-              <TextBlock Classes="h3" Text="Адрес регистрации*"></TextBlock>
-              <TextBox
-                Watermark="г.Москва, ул.Новая, д.8, кв. 4"
-                Text="{Binding Patient.RegistrationAddress}"/>
-            </StackPanel>
-            <StackPanel
-              Grid.Row="6"
-              Grid.Column="0"
-              Grid.ColumnSpan="3">
-              <TextBlock Classes="h3" Text="Должность на работе*"></TextBlock>
-              <TextBox
-                Watermark="Начальник отдела"
-                Text="{Binding Patient.WorkingPosition}"/>
-            </StackPanel>
+              Grid.ColumnSpan="2"
+              Classes="b2">
+              <Grid
+                RowDefinitions="*,*,*,*,*"
+                ColumnDefinitions="*">
+                <TextBlock
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Classes="h2"
+                  Text="Вакцинация"/>
+                <StackPanel
+                  Grid.Row="1"
+                  Grid.Column="0">
+                  <TextBlock Classes="h3" Text="Врач"></TextBlock>
+                  <ComboBox
+                    HorizontalAlignment="Stretch"
+                    MaxDropDownHeight="250"
+                    IsEnabled="{Binding IsEnabledVacctination}"
+                    ItemsSource="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                    SelectedValue="{Binding Vaccination.DoctorId}"
+                    SelectedValueBinding="{Binding Id}"/>
+                </StackPanel>
+                <StackPanel
+                  Grid.Row="2"
+                  Grid.Column="0">
+                  <TextBlock Classes="h3" Text="Вакцина"></TextBlock>
+                  <ComboBox
+                    HorizontalAlignment="Stretch"
+                    MaxDropDownHeight="250"
+                    IsEnabled="{Binding IsEnabledVacctination}"
+                    ItemsSource="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                    SelectedValue="{Binding Vaccination.PartyId}"
+                    SelectedValueBinding="{Binding Id}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                          <TextBlock Text="{Binding VaccineName}"/>
+                          <TextBlock Text="{Binding VaccineVersion}"/>
+                        </StackPanel>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                </StackPanel>
+                <StackPanel
+                  Grid.Row="3"
+                  Grid.Column="0">
+                  <TextBlock Classes="h3" Text="Дата и время создания"></TextBlock>
+                  <TextBlock
+                    Classes="output"
+                    Text="{Binding Vaccination.DateTimeOfVaccination}"/>
+                </StackPanel>
+                <Button
+                  Grid.Row="4"
+                  Grid.Column="0"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Command="{Binding CreateVaccination}"
+                  CommandParameter="{Binding SelectedPatient}">
+                  <PathIcon Data="{StaticResource AddRegular}"/>
+                </Button>
+              </Grid>
+            </Border>
           </Grid>
         </Border>
       </Grid>

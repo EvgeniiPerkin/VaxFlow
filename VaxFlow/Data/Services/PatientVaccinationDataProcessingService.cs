@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -37,24 +38,19 @@ namespace VaxFlow.Data.Services
             await connection.OpenAsync().ConfigureAwait(false);
             return await vaccinationRepository.CreateAsync(connection, model);
         }
-        public async Task<PatientModel?> FindByPatientIdAsync(int patientId)
+        public async Task<ObservableCollection<VaccinationSummaryModel>> FindVaccinationByPatientIdAsync(int patientId)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
-            PatientModel? p = await patientRepository.FindByPatientIdAsync(connection, patientId);
-            if (p != null)
-            {
-                p.Vaccinations = await vaccinationRepository.FindByPatientId(connection, patientId);
-            }
-            return p;
+            return await vaccinationRepository.FindByPatientId(connection, patientId);
         }
-        public async Task<ObservableCollection<PatientSummaryModel>> FilteredPatientsByDateCreateAsync(DateTime from, DateTime? to = null)
+        public async Task<ObservableCollection<PatientModel>> FilteredPatientsByDateCreateAsync(DateTime from, DateTime? to = null)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);
             return await patientRepository.FilteredByDateCreateAsync(connection, from, to);
         }
-        public async Task<ObservableCollection<PatientSummaryModel>> FindPatientsByInitialsOrPolicyNumberAsync(string searchStr)
+        public async Task<ObservableCollection<PatientModel>> FindByInitialsOrPolicyNumberAsync(string searchStr)
         {
             using var connection = new SqliteConnection(configuration.DataSourceSQLite);
             await connection.OpenAsync().ConfigureAwait(false);

@@ -21,59 +21,18 @@ namespace VaxFlow.Models
                 SetProperty(ref _Id, value);
             }
         }
-        private string _LastName = string.Empty;
+        private string _FullName = string.Empty;
 
-        /// <summary> Фамилия </summary>
+        /// <summary> Фамилия Имя Отчество </summary>
         [Required(ErrorMessage = "Не должно быть пустым.")]
         [MinLength(1, ErrorMessage = "От 1 симв.")]
-        [MaxLength(100, ErrorMessage = "До 100 симв.")]
-        public string LastName
+        [MaxLength(100, ErrorMessage = "До 255 симв.")]
+        public string FullName
         {
-            get { return _LastName; }
+            get { return _FullName; }
             set
             {
-                SetProperty(ref _LastName, value);
-            }
-        }
-
-        private string _FirstName = string.Empty;
-
-        /// <summary> Имя </summary>
-        [Required(ErrorMessage = "Не должно быть пустым.")]
-        [MinLength(1, ErrorMessage = "От 1 симв.")]
-        [MaxLength(100, ErrorMessage = "До 100 симв.")]
-        public string FirstName
-        {
-            get { return _FirstName; }
-            set
-            {
-                SetProperty(ref _FirstName, value);
-            }
-        }
-
-        private string? _Patronymic;
-
-        /// <summary> Отчество </summary>
-        [MaxLength(100, ErrorMessage = "До 100 симв.")]
-        public string? Patronymic
-        {
-            get { return _Patronymic; }
-            set
-            {
-                SetProperty(ref _Patronymic, value);
-            }
-        }
-
-        private string? _NameSuffix;
-
-        /// <summary> Префикс(оглы, кызы) </summary>
-        [MaxLength(100, ErrorMessage = "До 100 симв.")]
-        public string? NameSuffix
-        {
-            get { return _NameSuffix; }
-            set
-            {
-                SetProperty(ref _NameSuffix, value);
+                SetProperty(ref _FullName, value);
             }
         }
 

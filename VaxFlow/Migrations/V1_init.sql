@@ -33,10 +33,7 @@ CREATE TABLE IF NOT EXISTS parties (
 );
 CREATE TABLE IF NOT EXISTS patients (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    last_name TEXT NOT NULL CHECK(length(last_name) <= 100),
-    first_name TEXT NOT NULL CHECK(length(first_name) <= 100),
-    patronymic TEXT CHECK(length(patronymic) <= 100),
-    name_suffix TEXT CHECK(length(name_suffix) <= 100),
+    full_name TEXT NOT NULL CHECK(length(full_name) <= 255),
     birthday TEXT NOT NULL,
     registration_address TEXT NOT NULL CHECK(length(registration_address) <= 255),
     dt_create TEXT NOT NULL,

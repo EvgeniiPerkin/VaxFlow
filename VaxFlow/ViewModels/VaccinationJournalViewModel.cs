@@ -40,13 +40,48 @@ namespace VaxFlow.ViewModels
         private DateTimeOffset? _DtTo;
 
         [ObservableProperty]
-        private ObservableCollection<PatientSummaryModel>? _Patients;
+        private ObservableCollection<PatientModel>? _Patients;
+
+        private PatientModel? _SelectedPatient;
+        public PatientModel? SelectedPatient
+        {
+            get { return _SelectedPatient; }
+            set
+            {
+                SetProperty(ref _SelectedPatient, value);
+                if (_SelectedPatient != null)
+                {
+                    try
+                    {
+                        _SelectedPatient.Vaccinations = context.PatientVaccinationDataProcessing
+                            .FindVaccinationByPatientIdAsync(_SelectedPatient.Id).Result;
+                    }
+                    catch(Exception ex)
+                    {
+                        logger.Error(ex, "Ошибка поиска вакцинации пациента по Id.");
+                    }
+                }
+            }
+        }
 
         [ObservableProperty]
-        private PatientSummaryModel? _SelectedPatient;
+        private VaccinationSummaryModel? _SelectedVaccination;
+
+        private VaccinationModel? _Vaccination;
+
+        /// <summary> Description </summary>
+        public VaccinationModel? Vaccination
+        {
+            get { return _Vaccination; }
+            set
+            {
+                SetProperty(ref _Vaccination, value);
+                IsEnabledVacctination = _Vaccination != null;
+            }
+        }
 
         [ObservableProperty]
-        private PatientModel? _Patient;
+        private bool _IsEnabledVacctination;
         #endregion
 
         #region methods
@@ -66,7 +101,7 @@ namespace VaxFlow.ViewModels
 
         #region commands
         [RelayCommand]
-        public async Task SearchAsync()
+        public async Task SearchByDateAsync()
         {
             try
             {
@@ -83,117 +118,227 @@ namespace VaxFlow.ViewModels
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Ошибка поиска пациента.");
-                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", "Ошибка поиска пациентов");
+                logger.Error(ex, "Ошибка поиска пациента по датам.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", "Ошибка поиска пациентов по датам:" + ex.Message);
+            }
+            finally
+            {
+                SelectedPatient = null;
             }
         }
 
         [RelayCommand]
-        public async Task GetDataPatientAsync(object parameter)
+        public async Task SearchByFullNameAsync()
         {
             try
             {
-                Patient = await context.PatientVaccinationDataProcessing.FindByPatientIdAsync(SelectedPatient.Id);
+                if (!string.IsNullOrEmpty(SearchStr))
+                {
+                    Patients = await context.PatientVaccinationDataProcessing
+                        .FindByInitialsOrPolicyNumberAsync(SearchStr);
+                }
             }
             catch (Exception ex)
             {
-                //logger.Error(ex, "Ошибка удаления записи доктора.");
-                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
-                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+                logger.Error(ex, "Ошибка поиска пациента по фио.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка", "Ошибка поиска пациентов по фио:" + ex.Message );
+            }
+            finally
+            {
+                SelectedPatient = null;
             }
         }
-        private bool CanGetDataPatientAsync(object parameter)
+
+        [RelayCommand]
+        public async Task CreatePatientAsync()
+        {
+            try
+            {
+                int affectedRows = await context.PatientVaccinationDataProcessing
+                    .CreatePatientAsync(new PatientModel()
+                    {
+                        FullName = "Иванов_Иван_Иванович",
+                        DateTimeCreate = DateTime.Now,
+                        Birthday = new DateTime(2000, 1, 1),
+                        PolicyNumber = "0000 0000 0000 0000",
+                        RegistrationAddress = "Москва",
+                        WorkingPosition = "Слесарь",
+                        JobCategoryId = 1
+                    });
+                if (affectedRows > 0)
+                {
+                    var dtn = DateTime.Now;
+                    DtFrom = new DateTime(dtn.Year, dtn.Month, dtn.Day);
+                    DtTo = null;
+                    SearchStr = string.Empty;
+                    await OnLoadAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка создания пустой записи пациента.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка",
+                    "Ошибка создания пустой записи пациента:" + ex.Message);
+            }
+            finally
+            {
+                SelectedPatient = null;
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeletePatientAsync(object parameter)
+        {
+            try
+            {
+                bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.",
+                    "Удалить безвозвратно данные пациента?\n" +
+                    "Если у пациента были записи вакцинации, они так же будут удалены," +
+                    "что приведет к искажению отчетности.");
+                if (!result) return;
+
+                if (parameter is PatientModel p)
+                {
+                    int affectedRows = await context.PatientVaccinationDataProcessing
+                        .DeletePatientAsync(p);
+
+                    if (affectedRows > 0)
+                    {
+                        Patients?.Remove(p);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка удаления записи пациента.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка",
+                    "Ошибка удаления записи пациента:" + ex.Message);
+            }
+            finally
+            {
+                SelectedPatient = null;
+            }
+        }
+        private bool CanDeletePatientAsync(object parameter)
         {
             return parameter != null;
         }
 
         [RelayCommand]
-        public async Task SetDataPatientAsync(object parameter)
+        public async Task SavePatientAsync(object parameter)
         {
             try
             {
+                if (parameter is PatientModel p)
+                {
+                    int affectedRows = await context.PatientVaccinationDataProcessing
+                        .UpdatePatientAsync(p);
 
+                    if (affectedRows > 0)
+                    {
+                        await dialogWindow.ShowDialogOkCancelAsync("Сохранение данных", "Данные пациента успешно обновлены.");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                //logger.Error(ex, "Ошибка удаления записи доктора.");
-                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
-                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+                logger.Error(ex, "Ошибка изменения записи пациента.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка",
+                    "Ошибка изменения записи пациента:" + ex.Message);
             }
         }
-        private bool CanSetDataPatientAsync(object parameter)
+        private bool CanSavePatientAsync(object parameter)
         {
             return parameter != null;
         }
 
         [RelayCommand]
-        public async Task AddPartyAsync(object parameter)
+        public async Task SetVaccinationAsync(object parameter)
         {
             try
             {
+                if (SelectedPatient == null) return;
 
+                if (parameter is VaccinationModel v)
+                {
+                    int affectedRows = await context.PatientVaccinationDataProcessing
+                        .CreateVaccinationAsync(v);
+                    if (affectedRows > 0)
+                    {
+                        SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
+                            .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                //logger.Error(ex, "Ошибка удаления записи доктора.");
-                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
-                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+                logger.Error(ex, "Ошибка создания записи вакцинации пациента.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка",
+                    "Ошибка создания записи вакцинации пациента:" + ex.Message);
+            }
+            finally
+            {
+                Vaccination = null;
+                SelectedVaccination = null;
             }
         }
-        private bool CanAddPartyAsync(object parameter)
+        private bool CanSetVaccinationAsync(object parameter)
         {
             return parameter != null;
         }
+
         [RelayCommand]
-        public async Task RemovePartyAsync(object parameter)
+        public async Task RemoveVaccinationAsync(object parameter)
         {
             try
             {
+                if (SelectedPatient == null) return;
 
+                if (parameter is VaccinationSummaryModel v)
+                {
+                    int affectedRows = await context.PatientVaccinationDataProcessing
+                        .DeleteVaccinationAsync(v);
+                    if (affectedRows > 0)
+                    {
+                        SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
+                            .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                //logger.Error(ex, "Ошибка удаления записи доктора.");
-                //Output = $"Ошибка удаления записи доктора: {ex.Message}";
-                //await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
+                logger.Error(ex, "Ошибка удаления записи вакцинации пациента.");
+                await dialogWindow.ShowDialogOkCancelAsync("Ошибка",
+                    "Ошибка удаления записи вакцинации пациента:" + ex.Message);
+            }
+            finally
+            {
+                Vaccination = null;
+                SelectedVaccination = null;
             }
         }
-        private bool CanRemovePartyAsync(object parameter)
+        private bool CanRemoveVaccinationAsync(object parameter)
         {
             return parameter != null;
         }
-        //[RelayCommand]
-        //public async Task UpdateDoctorAsync(object parameter)
-        //{
-        //    try
-        //    {
-        //        if (SelectedDoctor == null) return;
 
-        //        if (parameter == null) return;
+        [RelayCommand]
+        public void CreateVaccination()
+        {
+            if (SelectedPatient == null) return;
 
-        //        if (parameter is ObservableCollection<DoctorModel> collection)
-        //        {
-        //            int affectedRows = await context.Doctor.UpdateAsync(SelectedDoctor);
-        //            if (affectedRows > 0)
-        //            {
-        //                logger.Info($"Обновление данных доктора id:{SelectedDoctor.Id}");
-        //                int indx = collection.IndexOf(SelectedDoctor);
-        //                collection[indx] = SelectedDoctor;
-        //                Output = "Успешное обновление данных доктора.";
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.Error(ex, "Ошибка изменения данных доктора.");
-        //        Output = $"Ошибка изменения записи доктора: {ex.Message}";
-        //        await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
-        //    }
-        //}
-        //private bool CanUpdateDoctorAsync(object parameter)
-        //{
-        //    return parameter != null;
-        //}
+            Vaccination = new()
+            {
+                DoctorId = 0,
+                PartyId = 0,
+                PatientId = SelectedPatient.Id,
+                DateTimeOfVaccination = DateTime.Now,
+            };
+        }
+        private bool CanCreateVaccination(object parameter)
+        {
+            return parameter != null;
+        }
         #endregion
     }
 }

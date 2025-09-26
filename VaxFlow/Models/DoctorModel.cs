@@ -90,9 +90,8 @@ namespace VaxFlow.Models
 
         public override string ToString()
         {
-            return $"{ LastName } { FirstName }"
-                + (string.IsNullOrEmpty(Patronymic) ? "" : $" { Patronymic }")
-                + (string.IsNullOrEmpty(NameSuffix) ? "" : $" { NameSuffix }");
+            return $"{ LastName } { FirstName.Substring(0, 1)}"
+                + (string.IsNullOrEmpty(Patronymic) ? "" : $" { Patronymic.Substring(0, 1) }");
         }
     }
 }
