@@ -61,8 +61,12 @@ namespace VaxFlow.ViewModels
                         logger.Error(ex, "Ошибка поиска вакцинации пациента по Id.");
                     }
                 }
+                IsEnabledSelectedPatient = value != null;
             }
         }
+
+        [ObservableProperty]
+        private bool _IsEnabledSelectedPatient;
 
         [ObservableProperty]
         private VaccinationSummaryModel? _SelectedVaccination;

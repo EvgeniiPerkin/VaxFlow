@@ -165,10 +165,11 @@
     <Border
       Grid.Row="2"
       Grid.Column="1"
+      IsEnabled="{Binding IsEnabledSelectedPatient}"
       Classes="b1">
       <Grid
         RowDefinitions="auto,*"
-        ColumnDefinitions="*,0.5*">
+        ColumnDefinitions="*,0.7*">
         <TextBlock
           Grid.Row="0"
           Grid.Column="0"
