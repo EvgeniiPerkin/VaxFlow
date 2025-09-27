@@ -18,15 +18,15 @@
             }
         }
 
-        private string _DescParty = string.Empty;
+        private string _DescVaccine = string.Empty;
 
         /// <summary> Описание парции вакцины </summary>
         public string DescVaccine
         {
-            get { return _DescParty; }
+            get { return _DescVaccine; }
             set
             {
-                SetProperty(ref _DescParty, value);
+                SetProperty(ref _DescVaccine, value);
             }
         }
     }
