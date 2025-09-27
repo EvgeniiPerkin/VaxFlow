@@ -61,8 +61,7 @@ namespace VaxFlow.Services
                 SetProperty(ref _Vaccines, value);
             }
         }
-
-        public async Task RefreshAsync()
+        public async Task LoadAsync()
         {
             try
             {
@@ -75,6 +74,18 @@ namespace VaxFlow.Services
             catch (Exception ex)
             {
                 logger.Error(ex, "Ошибка загрузки данных списков.");
+            }
+        }
+
+        public async Task RefreshVaccinesAsync()
+        {
+            try
+            {
+                Vaccines = await context.Vaccine.GetAvailableVaccinesAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка загрузки данных списков вакцин.");
             }
         }
     }

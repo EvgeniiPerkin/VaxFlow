@@ -54,7 +54,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись вакцины id:{newVaccine.Id}");
-                    await ListService.RefreshAsync();
+                    await ListService.RefreshVaccinesAsync();
                     Output = "Успешнове создание новой записи вакцины.";
                 }
             }
@@ -84,7 +84,7 @@ namespace VaxFlow.ViewModels
                         if (affectedRows > 0)
                         {
                             logger.Info($"Удалена запись вакцины id:{model.Id}");
-                            await ListService.RefreshAsync();
+                            await ListService.RefreshVaccinesAsync();
                             Output = "Успешное удаление записи вакцины.";
                         }
                     }
@@ -116,7 +116,7 @@ namespace VaxFlow.ViewModels
                     {
                         logger.Info($"Обновление данных вакцины id:{model.Id}");
                         Output = "Успешное обновление данных вакцины.";
-                        await ListService.RefreshAsync();
+                        await ListService.RefreshVaccinesAsync();
                         await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }

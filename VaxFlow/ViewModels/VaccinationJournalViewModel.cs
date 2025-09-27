@@ -274,7 +274,7 @@ namespace VaxFlow.ViewModels
                     {
                         SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
                             .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
-                        await ListService.RefreshAsync();
+                        await ListService.RefreshVaccinesAsync();
                     }
                 }
             }
@@ -310,7 +310,7 @@ namespace VaxFlow.ViewModels
                     {
                         SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
                             .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
-                        await ListService.RefreshAsync();
+                        await ListService.RefreshVaccinesAsync();
                     }
                 }
             }

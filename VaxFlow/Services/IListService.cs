@@ -11,6 +11,7 @@ namespace VaxFlow.Services
         ObservableCollection<DiseaseModel>? Diseases { get; set; }
         ObservableCollection<VaccineVersionModel>? VaccineVersions { get; set; }
         ObservableCollection<VaccineSummaryModel>? Vaccines { get; set; }
-        Task RefreshAsync();
+        Task RefreshVaccinesAsync();
+        Task LoadAsync();
     }
 }

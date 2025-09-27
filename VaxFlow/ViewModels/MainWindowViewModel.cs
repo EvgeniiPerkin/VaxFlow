@@ -20,7 +20,7 @@ namespace VaxFlow.ViewModels
             SelectedListItem = Items.First(vm => vm.ModelType == typeof(VaccinationJournalViewModel));
             this.context = context;
             this.logger = logger;
-            Task.Run(() => listService.RefreshAsync());
+            Task.Run(() => listService.LoadAsync());
         }
 
         #region fields
