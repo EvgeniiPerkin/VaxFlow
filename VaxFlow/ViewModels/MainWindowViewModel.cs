@@ -8,20 +8,19 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using VaxFlow.Data;
-using VaxFlow.Models;
 using VaxFlow.Services;
 
 namespace VaxFlow.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        public MainWindowViewModel(DbContext context, IMyLogger logger)
+        public MainWindowViewModel(DbContext context, IMyLogger logger, IListService listService)
         {
             Items = new ObservableCollection<ListItemTemplate>(_templates);
             SelectedListItem = Items.First(vm => vm.ModelType == typeof(VaccinationJournalViewModel));
             this.context = context;
             this.logger = logger;
-            Task.Run(() => OnLoadAsync());
+            Task.Run(() => listService.RefreshAsync());
         }
 
         #region fields
@@ -52,29 +51,6 @@ namespace VaxFlow.ViewModels
             CurrentPage = vmb;
         }
         public ObservableCollection<ListItemTemplate> Items { get; }
-        public ObservableCollection<DoctorModel>? Doctors { get; set; }
-        public ObservableCollection<JobCategoryModel>? JobCategories { get; set; }
-        public ObservableCollection<DiseaseModel>? Diseases { get; set; }
-        public ObservableCollection<VaccineVersionModel>? VaccineVersions { get; set; }
-        public ObservableCollection<VaccineSummaryModel>? Vaccines { get; set; }
-        #endregion
-
-        #region methods
-        private async Task OnLoadAsync()
-        {
-            try
-            {
-                Doctors = await context.Doctor.GetAllAsync();
-                JobCategories = await context.JobCategory.GetAllAsync();
-                Diseases = await context.Disease.GetAllAsync();
-                VaccineVersions = await context.VaccineVersion.GetAllAsync();
-                Vaccines = await context.Vaccine.GetAvailableVaccinesAsync();
-            }
-            catch (Exception ex) 
-            {
-                logger.Error(ex, "Ошибка загрузки данных списков.");
-            }
-        }
         #endregion
 
         #region commands
