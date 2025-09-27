@@ -21,7 +21,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      ItemsSource="{Binding Doctors}"
       SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"/>
     <Grid
       Grid.Row="2"
@@ -30,18 +30,17 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Left"
-        Command="{Binding AddDoctorAsync}"
-        CommandParameter="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddDoctorAsync}">Добавить</Button>
       <Button
         Grid.Column="1"
         HorizontalAlignment="Right"
         Command="{Binding RemoveDoctorAsync}"
-        CommandParameter="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Удалить</Button>
+        CommandParameter="{Binding SelectedDoctor}">Удалить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
       Grid.Column="1"
-      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
+      RowDefinitions="auto,auto,auto,auto,auto"
       ColumnDefinitions="*,*,*">
       <TextBlock
         Grid.Row="0"
@@ -93,7 +92,7 @@
         Grid.ColumnSpan="3"
         HorizontalAlignment="Center"
         Command="{Binding UpdateDoctorAsync}"
-        CommandParameter="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        CommandParameter="{Binding SelectedDoctor}">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"

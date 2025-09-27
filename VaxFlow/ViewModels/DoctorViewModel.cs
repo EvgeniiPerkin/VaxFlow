@@ -12,17 +12,19 @@ namespace VaxFlow.ViewModels
 {
     public partial class DoctorViewModel : ViewModelBase
     {
-        public DoctorViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public DoctorViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.listService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
+        private readonly IListService listService;
         #endregion
 
         #region properties
@@ -30,6 +32,11 @@ namespace VaxFlow.ViewModels
         private DoctorModel? _SelectedDoctor;
         [ObservableProperty]
         private string _Output = "";
+        public ObservableCollection<DoctorModel>? Doctors
+        {
+            get => listService.Doctors; 
+            set => listService.Doctors = value; 
+        }
         #endregion
 
         #region methods
@@ -37,29 +44,26 @@ namespace VaxFlow.ViewModels
 
         #region commands
         [RelayCommand]
-        public async Task AddDoctorAsync(object parameter)
+        public async Task AddDoctorAsync()
         {
             try
             {
-                if (parameter == null) return;
+                if (Doctors == null) Doctors = [];
 
-                if (parameter is ObservableCollection<DoctorModel> collection)
+                DoctorModel newDoctor = new()
                 {
-                    DoctorModel newDoctor = new()
-                    {
-                        FirstName = "Зарема",
-                        LastName = "Гусейнова",
-                        Patronymic = "Юсуф",
-                        NameSuffix = "кызы",
-                        IsDismissed = false
-                    };
-                    int affectedRows = await context.Doctor.CreateAsync(newDoctor);
-                    if (affectedRows > 0)
-                    {
-                        logger.Info($"Создана запись доктора id:{newDoctor.Id}");
-                        collection.Add(newDoctor);
-                        Output = "Успешнове создание новой записи доктора.";
-                    }
+                    FirstName = "Зарема",
+                    LastName = "Гусейнова",
+                    Patronymic = "Юсуф",
+                    NameSuffix = "кызы",
+                    IsDismissed = false
+                };
+                int affectedRows = await context.Doctor.CreateAsync(newDoctor);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Создана запись доктора id:{newDoctor.Id}");
+                    Doctors.Add(newDoctor);
+                    Output = "Успешнове создание новой записи доктора.";
                 }
             }
             catch (Exception ex)
@@ -69,32 +73,25 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddDoctorAsync(object parameter)
-        {
-            return parameter != null;
-        }
 
         [RelayCommand]
         public async Task RemoveDoctorAsync(object parameter)
         {
             try
             {
-                if (SelectedDoctor != null)
-                {
-                    if (parameter == null) return;
+                if (parameter == null) return;
 
-                    if (parameter is ObservableCollection<DoctorModel> collection)
+                if (parameter is DoctorModel model)
+                {
+                    bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись доктора?");
+                    if (result)
                     {
-                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись доктора?");
-                        if (result)
+                        int affectedRows = await context.Doctor.DeleteAsync(model);
+                        if (affectedRows > 0)
                         {
-                            int affectedRows = await context.Doctor.DeleteAsync(SelectedDoctor);
-                            if (affectedRows > 0)
-                            {
-                                logger.Info($"Удалена запись доктора id:{SelectedDoctor.Id}");
-                                collection.Remove(SelectedDoctor);
-                                Output = "Успешное удаление записи доктора.";
-                            }
+                            logger.Info($"Удалена запись доктора id:{model.Id}");
+                            Doctors.Remove(model);
+                            Output = "Успешное удаление записи доктора.";
                         }
                     }
                 }
@@ -116,19 +113,16 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (SelectedDoctor == null) return;
-
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<DoctorModel> collection)
+                if (parameter is DoctorModel model)
                 {
-                    int affectedRows = await context.Doctor.UpdateAsync(SelectedDoctor);
+                    int affectedRows = await context.Doctor.UpdateAsync(model);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных доктора id:{SelectedDoctor.Id}");
-                        int indx = collection.IndexOf(SelectedDoctor);
-                        collection[indx] = SelectedDoctor;
+                        logger.Info($"Обновление данных доктора id:{model.Id}");
                         Output = "Успешное обновление данных доктора.";
+                        await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }
             }
