@@ -23,7 +23,7 @@
       IsReadOnly="True"
       GridLinesVisibility="All"
       BorderThickness="1" BorderBrush="Gray"
-      ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+      ItemsSource="{Binding Vaccines, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
       SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
       <DataGrid.Columns>
         <DataGridTextColumn Header="Заболевание" Binding="{Binding DiseaseName}" />
@@ -42,18 +42,17 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Left"
-        Command="{Binding AddVaccineAsync}"
-        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddVaccineAsync}">Добавить</Button>
       <Button
         Grid.Column="1"
         HorizontalAlignment="Right"
         Command="{Binding RemoveVaccineAsync}"
-        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Удалить</Button>
+        CommandParameter="{Binding SelectedVaccine}">Удалить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
       Grid.Column="1"
-      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
+      RowDefinitions="auto,auto,auto,auto,auto,auto"
       ColumnDefinitions="*,*">
       <TextBlock
         Grid.Row="0"
@@ -68,7 +67,7 @@
         <ComboBox
           HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
-          ItemsSource="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+          ItemsSource="{Binding Diseases}"
           SelectedValue="{Binding SelectedVaccine.DiseaseId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Desc}"/>
@@ -80,7 +79,7 @@
         <ComboBox
           HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
-          ItemsSource="{Binding Path=DataContext.VaccineVersions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+          ItemsSource="{Binding VaccineVersions}"
           SelectedValue="{Binding SelectedVaccine.VaccineVersionId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Version}"/>
@@ -133,7 +132,7 @@
         Grid.ColumnSpan="3"
         HorizontalAlignment="Center"
         Command="{Binding UpdateVaccineAsync}"
-        CommandParameter="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        CommandParameter="{Binding SelectedVaccine}">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"

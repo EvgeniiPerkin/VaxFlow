@@ -12,17 +12,20 @@ namespace VaxFlow.ViewModels
 {
     public partial class VaccineViewModel : ViewModelBase
     {
-        public VaccineViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public VaccineViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.listService = listService;
+            Vaccines = listService.Vaccines;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
+        private readonly IListService listService;
         #endregion
 
         #region properties
@@ -30,79 +33,49 @@ namespace VaxFlow.ViewModels
         private VaccineSummaryModel? _SelectedVaccine;
         [ObservableProperty]
         private string _Output = "";
-        #endregion
-
-        #region methods
-        public static void RefreshCollections(ObservableCollection<VaccineSummaryModel> oldItems,
-            ObservableCollection<VaccineSummaryModel> newItems)
+        private ObservableCollection<VaccineSummaryModel>? _Vaccines;
+        public ObservableCollection<VaccineSummaryModel>? Vaccines
         {
-            for (int i = 0; i < oldItems.Count; i++)
+            get => _Vaccines;
+            set
             {
-                bool isFound = false;
-                
-                for (int j = 0; j < newItems.Count; j++)
-                {
-                    if (oldItems[i].Id == newItems[j].Id)
-                    {
-                        oldItems[i] = newItems[j];
-                        isFound = true;
-                        break;
-                    }
-                }
-
-                if (!isFound)
-                {
-                    oldItems.Remove(oldItems[i]);
-                }
+                SetProperty(ref _Vaccines, value);
             }
-            for (int j = 0; j < newItems.Count; j++)
-            {
-                bool isFound = false;
-                
-                for (int i = 0; i < oldItems.Count; i++)
-                {
-                    if (oldItems[i].Id == newItems[j].Id)
-                    {
-                        isFound = true;
-                        break;
-                    }
-                }
+        }
 
-                if (!isFound)
-                {
-                    oldItems.Add(newItems[j]);
-                }
-            }
+        public ObservableCollection<DiseaseModel>? Diseases
+        {
+            get => listService.Diseases;
+        }
+        public ObservableCollection<VaccineVersionModel>? VaccineVersions
+        {
+            get => listService.VaccineVersions;
         }
         #endregion
 
         #region commands
         [RelayCommand]
-        public async Task AddVaccineAsync(object parameter)
+        public async Task AddVaccineAsync()
         {
             try
             {
-                if (parameter == null) return;
-
-                if (parameter is ObservableCollection<VaccineSummaryModel> collection)
+                VaccineModel newVaccine = new()
                 {
-                    VaccineModel newVaccine = new()
-                    {
-                        VaccineName = "Regivag",
-                        Count = 290,
-                        DateTimeCreate = DateTime.Now,
-                        ExpirationDate = DateTime.Now,
-                        Series = "s23",
-                        DiseaseId = 1,
-                        VaccineVersionId = 1
-                    };
-                    int affectedRows = await context.Vaccine.CreateAsync(newVaccine);
-                    if (affectedRows > 0)
-                    {
-                        logger.Info($"Создана запись вакцины id:{newVaccine.Id}");
-                        RefreshCollections(collection, await context.Vaccine.GetAvailableVaccinesAsync());
-                        Output = "Успешнове создание новой записи вакцины.";
-                    }
+                    VaccineName = "Regivag",
+                    Count = 290,
+                    DateTimeCreate = DateTime.Now,
+                    ExpirationDate = DateTime.Now,
+                    Series = "s23",
+                    DiseaseId = 1,
+                    VaccineVersionId = 1
+                };
+                int affectedRows = await context.Vaccine.CreateAsync(newVaccine);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Создана запись вакцины id:{newVaccine.Id}");
+                    await listService.RefreshAsync();
+                    Vaccines = listService.Vaccines;
+                    Output = "Успешнове создание новой записи вакцины.";
                 }
             }
             catch (Exception ex)
@@ -112,34 +85,28 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddVaccineAsync(object parameter)
-        {
-            return parameter != null;
-        }
 
         [RelayCommand]
         public async Task RemoveVaccineAsync(object parameter)
         {
             try
             {
-                if (SelectedVaccine != null)
-                {
-                    if (parameter == null) return;
+                if (parameter == null) return;
 
-                    if (parameter is ObservableCollection<VaccineSummaryModel> collection)
+                if (parameter is VaccineSummaryModel model)
+                {
+                    bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления", 
+                        "Удалить вакцину?\nВ случае удаления, " +
+                        "связанные с ней данныые примема пациентов так же буудут удалены безвозвратно.");
+                    if (result)
                     {
-                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления", 
-                            "Удалить вакцину?\nВ случае удаления, " +
-                            "связанные с ней данныые примема пациентов так же буудут удалены безвозвратно.");
-                        if (result)
+                        int affectedRows = await context.Vaccine.DeleteAsync(model);
+                        if (affectedRows > 0)
                         {
-                            int affectedRows = await context.Vaccine.DeleteAsync(SelectedVaccine);
-                            if (affectedRows > 0)
-                            {
-                                logger.Info($"Удалена запись вакцины id:{SelectedVaccine.Id}");
-                                collection.Remove(SelectedVaccine);
-                                Output = "Успешное удаление записи вакцины.";
-                            }
+                            logger.Info($"Удалена запись вакцины id:{model.Id}");
+                            await listService.RefreshAsync();
+                            Vaccines = listService.Vaccines;
+                            Output = "Успешное удаление записи вакцины.";
                         }
                     }
                 }
@@ -161,18 +128,18 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (SelectedVaccine == null) return;
-
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<VaccineSummaryModel> collection)
+                if (parameter is VaccineSummaryModel model)
                 {
-                    int affectedRows = await context.Vaccine.UpdateAsync((VaccineModel)SelectedVaccine);
+                    int affectedRows = await context.Vaccine.UpdateAsync(model);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных вакцины id:{SelectedVaccine.Id}");
-                        RefreshCollections(collection, await context.Vaccine.GetAvailableVaccinesAsync());
+                        logger.Info($"Обновление данных вакцины id:{model.Id}");
                         Output = "Успешное обновление данных вакцины.";
+                        await listService.RefreshAsync();
+                        Vaccines = listService.Vaccines;
+                        await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }
             }
