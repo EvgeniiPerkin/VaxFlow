@@ -12,17 +12,19 @@ namespace VaxFlow.ViewModels
 {
     public partial class VaccineVersionsViewModel : ViewModelBase
     {
-        public VaccineVersionsViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public VaccineVersionsViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.listService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
+        private readonly IListService listService;
         #endregion
 
         #region properties
@@ -30,6 +32,11 @@ namespace VaxFlow.ViewModels
         private VaccineVersionModel? _SelectedVaccineVersion;
         [ObservableProperty]
         private string _Output = "";
+        public ObservableCollection<VaccineVersionModel>? VaccineVersions 
+        {
+            get => listService.VaccineVersions;
+            set => listService.VaccineVersions = value;
+        }
         #endregion
 
         #region methods
@@ -41,21 +48,18 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (parameter == null) return;
+                if (VaccineVersions == null) VaccineVersions = [];
 
-                if (parameter is ObservableCollection<VaccineVersionModel> collection)
+                VaccineVersionModel newVaccineVersion = new()
                 {
-                    VaccineVersionModel newVaccineVersion = new()
-                    {
-                        Version = "VX"
-                    };
-                    int affectedRows = await context.VaccineVersion.CreateAsync(newVaccineVersion);
-                    if (affectedRows > 0)
-                    {
-                        logger.Info($"Создана запись рверсии вакцины id:{newVaccineVersion.Id}");
-                        collection.Add(newVaccineVersion);
-                        Output = "Успешнове создание новой записи версии вакцины.";
-                    }
+                    Version = "VX"
+                };
+                int affectedRows = await context.VaccineVersion.CreateAsync(newVaccineVersion);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Создана запись рверсии вакцины id:{newVaccineVersion.Id}");
+                    VaccineVersions.Add(newVaccineVersion);
+                    Output = "Успешнове создание новой записи версии вакцины.";
                 }
             }
             catch (Exception ex)
@@ -65,29 +69,22 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddVaccineVersionAsync(object parameter)
-        {
-            return parameter != null;
-        }
 
         [RelayCommand]
         public async Task UpdateVaccineVersionAsync(object parameter)
         {
             try
             {
-                if (SelectedVaccineVersion == null) return;
-
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<VaccineVersionModel> collection)
+                if (parameter is VaccineVersionModel model)
                 {
-                    int affectedRows = await context.VaccineVersion.UpdateAsync(SelectedVaccineVersion);
+                    int affectedRows = await context.VaccineVersion.UpdateAsync(model);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных версии вакцины id:{SelectedVaccineVersion.Id}");
-                        int indx = collection.IndexOf(SelectedVaccineVersion);
-                        collection[indx] = SelectedVaccineVersion;
+                        logger.Info($"Обновление данных версии вакцины id:{model.Id}");
                         Output = "Успешное обновление данных версии вакцины.";
+                        await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }
             }

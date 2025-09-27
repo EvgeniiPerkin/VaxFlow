@@ -19,7 +19,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Path=DataContext.VaccineVersions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      ItemsSource="{Binding VaccineVersions}"
       SelectedItem="{Binding SelectedVaccineVersion, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>
@@ -38,8 +38,7 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Center"
-        Command="{Binding AddVaccineVersionAsync}"
-        CommandParameter="{Binding Path=DataContext.VaccineVersions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddVaccineVersionAsync}">Добавить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
@@ -65,7 +64,7 @@
         Grid.Column="0"
         HorizontalAlignment="Left"
         Command="{Binding UpdateVaccineVersionAsync}"
-        CommandParameter="{Binding Path=DataContext.VaccineVersions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        CommandParameter="{Binding SelectedVaccineVersion}">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"
