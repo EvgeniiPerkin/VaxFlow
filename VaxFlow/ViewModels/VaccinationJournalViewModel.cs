@@ -13,11 +13,12 @@ namespace VaxFlow.ViewModels
     public partial class VaccinationJournalViewModel : ViewModelBase
     {
         public VaccinationJournalViewModel() { }
-        public VaccinationJournalViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public VaccinationJournalViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.ListService = listService;
             var dtn = DateTime.Now;
             DtFrom = new DateTime(dtn.Year, dtn.Month, dtn.Day);
             _ = OnLoadAsync();
@@ -30,6 +31,8 @@ namespace VaxFlow.ViewModels
         #endregion
 
         #region properties
+        public IListService ListService { get; }
+
         [ObservableProperty]
         private string _SearchStr = "";
 
@@ -271,6 +274,7 @@ namespace VaxFlow.ViewModels
                     {
                         SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
                             .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
+                        await ListService.RefreshAsync();
                     }
                 }
             }
@@ -306,6 +310,7 @@ namespace VaxFlow.ViewModels
                     {
                         SelectedPatient.Vaccinations = await context.PatientVaccinationDataProcessing
                             .FindVaccinationByPatientIdAsync(SelectedPatient.Id);
+                        await ListService.RefreshAsync();
                     }
                 }
             }

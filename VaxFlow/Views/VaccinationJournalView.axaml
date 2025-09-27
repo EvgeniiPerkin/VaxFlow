@@ -212,7 +212,7 @@
               <ComboBox
                 HorizontalAlignment="Stretch"
                 MaxDropDownHeight="250"
-                ItemsSource="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                ItemsSource="{Binding ListService.JobCategories}"
                 SelectedValue="{Binding SelectedPatient.JobCategoryId}"
                 SelectedValueBinding="{Binding Id}"
                 DisplayMemberBinding="{Binding Category}"/>
@@ -332,7 +332,7 @@
                     HorizontalAlignment="Stretch"
                     MaxDropDownHeight="250"
                     IsEnabled="{Binding IsEnabledVacctination}"
-                    ItemsSource="{Binding Path=DataContext.Doctors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                    ItemsSource="{Binding ListService.Doctors}"
                     SelectedValue="{Binding Vaccination.DoctorId}"
                     SelectedValueBinding="{Binding Id}"/>
                 </StackPanel>
@@ -344,7 +344,7 @@
                     HorizontalAlignment="Stretch"
                     MaxDropDownHeight="250"
                     IsEnabled="{Binding IsEnabledVacctination}"
-                    ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                    ItemsSource="{Binding ListService.Vaccines, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     SelectedValue="{Binding Vaccination.VaccineId}"
                     SelectedValueBinding="{Binding Id}">
                     <ComboBox.ItemTemplate>

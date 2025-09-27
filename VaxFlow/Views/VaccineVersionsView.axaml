@@ -19,7 +19,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding VaccineVersions}"
+      ItemsSource="{Binding ListService.VaccineVersions}"
       SelectedItem="{Binding SelectedVaccineVersion, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>

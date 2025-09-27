@@ -17,40 +17,21 @@ namespace VaxFlow.ViewModels
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
-            this.listService = listService;
-            Vaccines = listService.Vaccines;
+            this.ListService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
-        private readonly IListService listService;
         #endregion
 
         #region properties
+        public IListService ListService { get; }
         [ObservableProperty]
         private VaccineSummaryModel? _SelectedVaccine;
         [ObservableProperty]
         private string _Output = "";
-        private ObservableCollection<VaccineSummaryModel>? _Vaccines;
-        public ObservableCollection<VaccineSummaryModel>? Vaccines
-        {
-            get => _Vaccines;
-            set
-            {
-                SetProperty(ref _Vaccines, value);
-            }
-        }
-
-        public ObservableCollection<DiseaseModel>? Diseases
-        {
-            get => listService.Diseases;
-        }
-        public ObservableCollection<VaccineVersionModel>? VaccineVersions
-        {
-            get => listService.VaccineVersions;
-        }
         #endregion
 
         #region commands
@@ -73,8 +54,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись вакцины id:{newVaccine.Id}");
-                    await listService.RefreshAsync();
-                    Vaccines = listService.Vaccines;
+                    await ListService.RefreshAsync();
                     Output = "Успешнове создание новой записи вакцины.";
                 }
             }
@@ -104,8 +84,7 @@ namespace VaxFlow.ViewModels
                         if (affectedRows > 0)
                         {
                             logger.Info($"Удалена запись вакцины id:{model.Id}");
-                            await listService.RefreshAsync();
-                            Vaccines = listService.Vaccines;
+                            await ListService.RefreshAsync();
                             Output = "Успешное удаление записи вакцины.";
                         }
                     }
@@ -137,8 +116,7 @@ namespace VaxFlow.ViewModels
                     {
                         logger.Info($"Обновление данных вакцины id:{model.Id}");
                         Output = "Успешное обновление данных вакцины.";
-                        await listService.RefreshAsync();
-                        Vaccines = listService.Vaccines;
+                        await ListService.RefreshAsync();
                         await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }

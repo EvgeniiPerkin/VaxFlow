@@ -21,7 +21,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Doctors}"
+      ItemsSource="{Binding ListService.Doctors}"
       SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>

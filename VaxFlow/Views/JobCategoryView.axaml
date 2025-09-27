@@ -19,7 +19,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding JobCategories}"
+      ItemsSource="{Binding ListService.JobCategories}"
       SelectedItem="{Binding SelectedJobCategory, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>

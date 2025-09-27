@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
@@ -6,7 +7,7 @@ using VaxFlow.Models;
 
 namespace VaxFlow.Services
 {
-    public class ListService : IListService
+    public class ListService : ObservableValidator, IListService
     {
         private readonly DbContext context;
         private readonly IMyLogger logger;
@@ -15,11 +16,51 @@ namespace VaxFlow.Services
             this.context = context;
             this.logger = logger;
         }
-        public ObservableCollection<DoctorModel>? Doctors { get; set; }
-        public ObservableCollection<JobCategoryModel>? JobCategories { get; set; }
-        public ObservableCollection<DiseaseModel>? Diseases { get; set; }
-        public ObservableCollection<VaccineVersionModel>? VaccineVersions { get; set; }
-        public ObservableCollection<VaccineSummaryModel>? Vaccines { get; set; }
+        private ObservableCollection<DoctorModel>? _Doctors;
+        public ObservableCollection<DoctorModel>? Doctors
+        {
+            get => _Doctors;
+            set
+            {
+                SetProperty(ref _Doctors, value);
+            }
+        }
+        private ObservableCollection<JobCategoryModel>? _JobCategories;
+        public ObservableCollection<JobCategoryModel>? JobCategories
+        {
+            get => _JobCategories;
+            set
+            {
+                SetProperty(ref _JobCategories, value);
+            }
+        }
+        private ObservableCollection<DiseaseModel>? _Diseases;
+        public ObservableCollection<DiseaseModel>? Diseases
+        {
+            get => _Diseases;
+            set
+            {
+                SetProperty(ref _Diseases, value);
+            }
+        }
+        private ObservableCollection<VaccineVersionModel>? _VaccineVersions;
+        public ObservableCollection<VaccineVersionModel>? VaccineVersions
+        {
+            get => _VaccineVersions;
+            set
+            {
+                SetProperty(ref _VaccineVersions, value);
+            }
+        }
+        private ObservableCollection<VaccineSummaryModel>? _Vaccines;
+        public ObservableCollection<VaccineSummaryModel>? Vaccines
+        {
+            get => _Vaccines;
+            set
+            {
+                SetProperty(ref _Vaccines, value);
+            }
+        }
 
         public async Task RefreshAsync()
         {

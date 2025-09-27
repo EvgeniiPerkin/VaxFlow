@@ -23,7 +23,7 @@
       IsReadOnly="True"
       GridLinesVisibility="All"
       BorderThickness="1" BorderBrush="Gray"
-      ItemsSource="{Binding Vaccines, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+      ItemsSource="{Binding ListService.Vaccines, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
       SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
       <DataGrid.Columns>
         <DataGridTextColumn Header="Заболевание" Binding="{Binding DiseaseName}" />
@@ -67,7 +67,7 @@
         <ComboBox
           HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
-          ItemsSource="{Binding Diseases}"
+          ItemsSource="{Binding ListService.Diseases}"
           SelectedValue="{Binding SelectedVaccine.DiseaseId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Desc}"/>
@@ -79,7 +79,7 @@
         <ComboBox
           HorizontalAlignment="Stretch"
           MaxDropDownHeight="250"
-          ItemsSource="{Binding VaccineVersions}"
+          ItemsSource="{Binding ListService.VaccineVersions}"
           SelectedValue="{Binding SelectedVaccine.VaccineVersionId}"
           SelectedValueBinding="{Binding Id}"
           DisplayMemberBinding="{Binding Version}"/>

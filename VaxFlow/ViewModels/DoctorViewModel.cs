@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
 using VaxFlow.DialogWindows;
@@ -17,26 +16,21 @@ namespace VaxFlow.ViewModels
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
-            this.listService = listService;
+            this.ListService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
-        private readonly IListService listService;
         #endregion
 
         #region properties
+        public IListService ListService { get; }
         [ObservableProperty]
         private DoctorModel? _SelectedDoctor;
         [ObservableProperty]
         private string _Output = "";
-        public ObservableCollection<DoctorModel>? Doctors
-        {
-            get => listService.Doctors; 
-            set => listService.Doctors = value; 
-        }
         #endregion
 
         #region methods
@@ -48,7 +42,7 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (Doctors == null) Doctors = [];
+                if (ListService.Doctors == null) ListService.Doctors = [];
 
                 DoctorModel newDoctor = new()
                 {
@@ -62,7 +56,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись доктора id:{newDoctor.Id}");
-                    Doctors.Add(newDoctor);
+                    ListService.Doctors.Add(newDoctor);
                     Output = "Успешнове создание новой записи доктора.";
                 }
             }
@@ -90,7 +84,7 @@ namespace VaxFlow.ViewModels
                         if (affectedRows > 0)
                         {
                             logger.Info($"Удалена запись доктора id:{model.Id}");
-                            Doctors.Remove(model);
+                            ListService.Doctors?.Remove(model);
                             Output = "Успешное удаление записи доктора.";
                         }
                     }

@@ -17,26 +17,21 @@ namespace VaxFlow.ViewModels
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
-            this.listService = listService;
+            this.ListService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
-        private readonly IListService listService;
         #endregion
 
         #region properties
+        public IListService ListService { get; }
         [ObservableProperty]
         private VaccineVersionModel? _SelectedVaccineVersion;
         [ObservableProperty]
         private string _Output = "";
-        public ObservableCollection<VaccineVersionModel>? VaccineVersions 
-        {
-            get => listService.VaccineVersions;
-            set => listService.VaccineVersions = value;
-        }
         #endregion
 
         #region methods
@@ -48,7 +43,7 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (VaccineVersions == null) VaccineVersions = [];
+                if (ListService.VaccineVersions == null) ListService.VaccineVersions = [];
 
                 VaccineVersionModel newVaccineVersion = new()
                 {
@@ -58,7 +53,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись рверсии вакцины id:{newVaccineVersion.Id}");
-                    VaccineVersions.Add(newVaccineVersion);
+                    ListService.VaccineVersions.Add(newVaccineVersion);
                     Output = "Успешнове создание новой записи версии вакцины.";
                 }
             }

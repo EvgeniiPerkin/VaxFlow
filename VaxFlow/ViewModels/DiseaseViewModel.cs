@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using VaxFlow.Data;
 using VaxFlow.DialogWindows;
@@ -17,26 +16,21 @@ namespace VaxFlow.ViewModels
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
-            this.listService = listService;
+            ListService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
-        private readonly IListService listService;
         #endregion
 
         #region properties
+        public IListService ListService { get; }
         [ObservableProperty]
         private DiseaseModel? _SelectedDisease;
         [ObservableProperty]
         private string _Output = "";
-        public ObservableCollection<DiseaseModel>? Diseases
-        {
-            get { return listService.Diseases; }
-            set { listService.Diseases = value; }
-        }
         #endregion
 
         #region commands
@@ -45,7 +39,7 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (Diseases == null) return;
+                if (ListService.Diseases == null) ListService.Diseases = [];
 
                 DiseaseModel newDisease= new()
                 {
@@ -55,7 +49,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись заболевания id:{newDisease.Id}");
-                    Diseases.Add(newDisease);
+                    ListService.Diseases.Add(newDisease);
                     Output = "Успешнове создание новой записи заболевания.";
                 }
             }

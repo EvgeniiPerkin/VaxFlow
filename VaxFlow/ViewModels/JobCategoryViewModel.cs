@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using VaxFlow.Data;
 using VaxFlow.DialogWindows;
 using VaxFlow.Models;
@@ -18,26 +16,21 @@ namespace VaxFlow.ViewModels
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
-            this.listService = listService;
+            this.ListService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
-        private readonly IListService listService;
         #endregion
 
         #region properties
+        public IListService ListService { get; }
         [ObservableProperty]
         private JobCategoryModel? _SelectedJobCategory;
         [ObservableProperty]
         private string _Output = "";
-        public ObservableCollection<JobCategoryModel>? JobCategories
-        { 
-            get => listService.JobCategories; 
-            set => listService.JobCategories = value; 
-        }
         #endregion
 
         #region methods
@@ -49,7 +42,7 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (JobCategories == null) JobCategories = [];
+                if (ListService.JobCategories == null) ListService.JobCategories = [];
 
                 JobCategoryModel newJobCategory = new()
                 {
@@ -60,7 +53,7 @@ namespace VaxFlow.ViewModels
                 if (affectedRows > 0)
                 {
                     logger.Info($"Создана запись рабочей категории id:{newJobCategory.Id}");
-                    JobCategories.Add(newJobCategory);
+                    ListService.JobCategories.Add(newJobCategory);
                     Output = "Успешнове создание новой записи рабочей категории.";
                 }
             }
@@ -88,7 +81,7 @@ namespace VaxFlow.ViewModels
                         if (affectedRows > 0)
                         {
                             logger.Info($"Удалена запись рабочей категории id:{model.Id}");
-                            JobCategories?.Remove(model);
+                            ListService.JobCategories?.Remove(model);
                             Output = "Успешное удаление записи рабочей категории.";
                         }
                     }

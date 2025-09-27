@@ -122,7 +122,7 @@ namespace VaxFlow.Data.Repositories
             cmd.Parameters.AddWithValue("@count", model.Count);
             cmd.Parameters.AddWithValue("@dt_create", SqliteHelper.FromDateTime(model.DateTimeCreate));
             cmd.Parameters.AddWithValue("@expiration_date", SqliteHelper.FromDate(model.ExpirationDate));
-            cmd.Parameters.AddWithValue("@series", model.VaccineName);
+            cmd.Parameters.AddWithValue("@series", model.Series);
             cmd.Parameters.AddWithValue("@id", model.Id);
             return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
