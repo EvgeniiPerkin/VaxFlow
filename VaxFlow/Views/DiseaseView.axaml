@@ -19,7 +19,7 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      ItemsSource="{Binding Diseases}"
       SelectedItem="{Binding SelectedDisease, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>
@@ -38,8 +38,9 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Center"
-        Command="{Binding AddDiseaseAsync}"
-        CommandParameter="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddDiseaseAsync}">
+        <PathIcon Data="{StaticResource AddRegular}"/>
+      </Button>
     </Grid>
     <Grid
       Grid.Row="1"
@@ -65,7 +66,7 @@
         Grid.Column="0"
         HorizontalAlignment="Left"
         Command="{Binding UpdateDiseaseAsync}"
-        CommandParameter="{Binding Path=DataContext.Diseases, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        CommandParameter="{Binding SelectedDisease}">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"

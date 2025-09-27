@@ -12,17 +12,19 @@ namespace VaxFlow.ViewModels
 {
     public partial class DiseaseViewModel : ViewModelBase
     {
-        public DiseaseViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public DiseaseViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.listService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
+        private readonly IListService listService;
         #endregion
 
         #region properties
@@ -30,32 +32,31 @@ namespace VaxFlow.ViewModels
         private DiseaseModel? _SelectedDisease;
         [ObservableProperty]
         private string _Output = "";
-        #endregion
-
-        #region methods
+        public ObservableCollection<DiseaseModel>? Diseases
+        {
+            get { return listService.Diseases; }
+            set { listService.Diseases = value; }
+        }
         #endregion
 
         #region commands
         [RelayCommand]
-        public async Task AddDiseaseAsync(object parameter)
+        public async Task AddDiseaseAsync()
         {
             try
             {
-                if (parameter == null) return;
+                if (Diseases == null) return;
 
-                if (parameter is ObservableCollection<DiseaseModel> collection)
+                DiseaseModel newDisease= new()
                 {
-                    DiseaseModel newDisease= new()
-                    {
-                        Desc = "Короновирус"
-                    };
-                    int affectedRows = await context.Disease.CreateAsync(newDisease);
-                    if (affectedRows > 0)
-                    {
-                        logger.Info($"Создана запись заболевания id:{newDisease.Id}");
-                        collection.Add(newDisease);
-                        Output = "Успешнове создание новой записи заболевания.";
-                    }
+                    Desc = "Короновирус"
+                };
+                int affectedRows = await context.Disease.CreateAsync(newDisease);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Создана запись заболевания id:{newDisease.Id}");
+                    Diseases.Add(newDisease);
+                    Output = "Успешнове создание новой записи заболевания.";
                 }
             }
             catch (Exception ex)
@@ -65,29 +66,22 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddDiseaseAsync(object parameter)
-        {
-            return parameter != null;
-        }
 
         [RelayCommand]
         public async Task UpdateDiseaseAsync(object parameter)
         {
             try
             {
-                if (SelectedDisease == null) return;
-
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<DiseaseModel> collection)
+                if (parameter is DiseaseModel model)
                 {
-                    int affectedRows = await context.Disease.UpdateAsync(SelectedDisease);
+                    int affectedRows = await context.Disease.UpdateAsync(model);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных заболевания id:{SelectedDisease.Id}");
-                        int indx = collection.IndexOf(SelectedDisease);
-                        collection[indx] = SelectedDisease;
+                        logger.Info($"Обновление данных заболевания id:{model.Id}");
                         Output = "Успешное обновление данных заболевания.";
+                        await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }
             }
