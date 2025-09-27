@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using VaxFlow.Data;
 using VaxFlow.DialogWindows;
 using VaxFlow.Models;
@@ -12,17 +13,19 @@ namespace VaxFlow.ViewModels
 {
     public partial class JobCategoryViewModel : ViewModelBase
     {
-        public JobCategoryViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow)
+        public JobCategoryViewModel(DbContext context, IMyLogger logger, IDialogWindow dialogWindow, IListService listService)
         {
             this.context = context;
             this.logger = logger;
             this.dialogWindow = dialogWindow;
+            this.listService = listService;
         }
 
         #region fields
         private readonly DbContext context;
         private readonly IMyLogger logger;
         private readonly IDialogWindow dialogWindow;
+        private readonly IListService listService;
         #endregion
 
         #region properties
@@ -30,6 +33,11 @@ namespace VaxFlow.ViewModels
         private JobCategoryModel? _SelectedJobCategory;
         [ObservableProperty]
         private string _Output = "";
+        public ObservableCollection<JobCategoryModel>? JobCategories
+        { 
+            get => listService.JobCategories; 
+            set => listService.JobCategories = value; 
+        }
         #endregion
 
         #region methods
@@ -37,26 +45,23 @@ namespace VaxFlow.ViewModels
 
         #region commands
         [RelayCommand]
-        public async Task AddJobCategoryAsync(object parameter)
+        public async Task AddJobCategoryAsync()
         {
             try
             {
-                if (parameter == null) return;
+                if (JobCategories == null) JobCategories = [];
 
-                if (parameter is ObservableCollection<JobCategoryModel> collection)
+                JobCategoryModel newJobCategory = new()
                 {
-                    JobCategoryModel newJobCategory = new()
-                    {
-                        Category = "Работники бюджетной сферы («бюджетники»)",
-                        Desc = "Работают в учреждениях, финансируемых из государственного или муниципального бюджета (образование, здравоохранение, культура, госуправление)."
-                    };
-                    int affectedRows = await context.JobCategory.CreateAsync(newJobCategory);
-                    if (affectedRows > 0)
-                    {
-                        logger.Info($"Создана запись рабочей категории id:{newJobCategory.Id}");
-                        collection.Add(newJobCategory);
-                        Output = "Успешнове создание новой записи рабочей категории.";
-                    }
+                    Category = "Работники бюджетной сферы («бюджетники»)",
+                    Desc = "Работают в учреждениях, финансируемых из государственного или муниципального бюджета (образование, здравоохранение, культура, госуправление)."
+                };
+                int affectedRows = await context.JobCategory.CreateAsync(newJobCategory);
+                if (affectedRows > 0)
+                {
+                    logger.Info($"Создана запись рабочей категории id:{newJobCategory.Id}");
+                    JobCategories.Add(newJobCategory);
+                    Output = "Успешнове создание новой записи рабочей категории.";
                 }
             }
             catch (Exception ex)
@@ -66,32 +71,25 @@ namespace VaxFlow.ViewModels
                 await dialogWindow.ShowDialogOkCancelAsync("Ошибка", Output);
             }
         }
-        private bool CanAddJobCategoryAsync(object parameter)
-        {
-            return parameter != null;
-        }
 
         [RelayCommand]
         public async Task RemoveJobCategoryAsync(object parameter)
         {
             try
             {
-                if (SelectedJobCategory != null)
-                {
-                    if (parameter == null) return;
+                if (parameter == null) return;
 
-                    if (parameter is ObservableCollection<JobCategoryModel> collection)
+                if (parameter is JobCategoryModel model)
+                {
+                    bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись рабочей категории?");
+                    if (result)
                     {
-                        bool result = await dialogWindow.ShowDialogYesNoAsync("Подтверждение удаления.", "Удалить запись рабочей категории?");
-                        if (result)
+                        int affectedRows = await context.JobCategory.DeleteAsync(model);
+                        if (affectedRows > 0)
                         {
-                            int affectedRows = await context.JobCategory.DeleteAsync(SelectedJobCategory);
-                            if (affectedRows > 0)
-                            {
-                                logger.Info($"Удалена запись рабочей категории id:{SelectedJobCategory.Id}");
-                                collection.Remove(SelectedJobCategory);
-                                Output = "Успешное удаление записи рабочей категории.";
-                            }
+                            logger.Info($"Удалена запись рабочей категории id:{model.Id}");
+                            JobCategories?.Remove(model);
+                            Output = "Успешное удаление записи рабочей категории.";
                         }
                     }
                 }
@@ -113,19 +111,16 @@ namespace VaxFlow.ViewModels
         {
             try
             {
-                if (SelectedJobCategory == null) return;
-
                 if (parameter == null) return;
 
-                if (parameter is ObservableCollection<JobCategoryModel> collection)
+                if (parameter is JobCategoryModel model)
                 {
-                    int affectedRows = await context.JobCategory.UpdateAsync(SelectedJobCategory);
+                    int affectedRows = await context.JobCategory.UpdateAsync(model);
                     if (affectedRows > 0)
                     {
-                        logger.Info($"Обновление данных рабочей категории id:{SelectedJobCategory.Id}");
-                        int indx = collection.IndexOf(SelectedJobCategory);
-                        collection[indx] = SelectedJobCategory;
+                        logger.Info($"Обновление данных рабочей категории id:{model.Id}");
                         Output = "Успешное обновление данных рабочей категории.";
+                        await dialogWindow.ShowDialogOkCancelAsync("Информация.", Output);
                     }
                 }
             }

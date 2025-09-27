@@ -22,7 +22,17 @@
       Grid.Column="0"
       MaxHeight="900"
       ItemsSource="{Binding Doctors}"
-      SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"/>
+      SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding LastName}"/>
+            <TextBlock Text="{Binding FirstName}"/>
+            <TextBlock Text="{Binding Patronymic}"/>
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
     <Grid
       Grid.Row="2"
       Grid.Column="0"

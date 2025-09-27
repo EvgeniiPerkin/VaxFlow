@@ -19,13 +19,12 @@
       Grid.Row="1"
       Grid.Column="0"
       MaxHeight="900"
-      ItemsSource="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }"
+      ItemsSource="{Binding JobCategories}"
       SelectedItem="{Binding SelectedJobCategory, Mode=TwoWay}">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Id}"/>
-            <TextBlock Text=" | "/>
             <TextBlock Text="{Binding Category}"/>
           </StackPanel>
         </DataTemplate>
@@ -38,18 +37,17 @@
       <Button
         Grid.Column="0"
         HorizontalAlignment="Left"
-        Command="{Binding AddJobCategoryAsync}"
-        CommandParameter="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Добавить</Button>
+        Command="{Binding AddJobCategoryAsync}">Добавить</Button>
       <Button
         Grid.Column="1"
         HorizontalAlignment="Right"
         Command="{Binding RemoveJobCategoryAsync}"
-        CommandParameter="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Удалить</Button>
+        CommandParameter="{Binding SelectedJobCategory}">Удалить</Button>
     </Grid>
     <Grid
       Grid.Row="1"
       Grid.Column="1"
-      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
+      RowDefinitions="auto,auto,auto,auto"
       ColumnDefinitions="*">
       <TextBlock
         Grid.Row="0"
@@ -81,7 +79,7 @@
         Grid.Column="0"
         HorizontalAlignment="Left"
         Command="{Binding UpdateJobCategoryAsync}"
-        CommandParameter="{Binding Path=DataContext.JobCategories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl} }">Сохранить</Button>
+        CommandParameter="{Binding SelectedJobCategory}">Сохранить</Button>
     </Grid>
     <TextBlock
       Grid.Row="3"
