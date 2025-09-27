@@ -285,7 +285,7 @@
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding DescParty}"/>
+                    <TextBlock Text="{Binding DescVaccine}"/>
                     <TextBlock Text="{Binding DoctorInitials}"/>
                   </StackPanel>
                 </DataTemplate>
@@ -344,8 +344,8 @@
                     HorizontalAlignment="Stretch"
                     MaxDropDownHeight="250"
                     IsEnabled="{Binding IsEnabledVacctination}"
-                    ItemsSource="{Binding Path=DataContext.Parties, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
-                    SelectedValue="{Binding Vaccination.PartyId}"
+                    ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
+                    SelectedValue="{Binding Vaccination.VaccineId}"
                     SelectedValueBinding="{Binding Id}">
                     <ComboBox.ItemTemplate>
                       <DataTemplate>

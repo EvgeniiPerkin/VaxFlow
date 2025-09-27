@@ -31,7 +31,7 @@ namespace VaxFlow.Data.Repositories
             ObservableCollection<VaccineSummaryModel> items = [];
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                SELECT id, count, dt_create, vaccine_name, disease_id, vaccine_name, vaccine_version, vaccine_version_id, expiration_date, series
+                SELECT id, count, dt_create, vaccine_name, disease_id, disease_name, vaccine_version, vaccine_version_id, expiration_date, series
                 FROM vaccine_summary
                 WHERE count > 0;";
             using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
@@ -65,7 +65,7 @@ namespace VaxFlow.Data.Repositories
 
             using var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                SELECT id, count, dt_create, vaccine_name, disease_id, vaccine_name, vaccine_version, vaccine_version_id, expiration_date, series
+                SELECT id, count, dt_create, vaccine_name, disease_id, disease_name, vaccine_version, vaccine_version_id, expiration_date, series
                 FROM vaccine_summary
                 WHERE vaccine_name LIKE @vaccine_name;";
             cmd.Parameters.AddWithValue("@vaccine_name", $"%{cleanVaccineName.Trim()}%");
