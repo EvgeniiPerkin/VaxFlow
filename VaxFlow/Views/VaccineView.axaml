@@ -8,7 +8,7 @@
   x:CompileBindings="False">
   <Grid
     RowDefinitions="auto,*,auto,auto"
-    ColumnDefinitions="*,*">
+    ColumnDefinitions="*,0.7*">
     <TextBlock
       Grid.Row="0"
       Grid.Column="0"
@@ -26,10 +26,12 @@
       ItemsSource="{Binding Path=DataContext.Vaccines, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=2, AncestorType=UserControl}}"
       SelectedItem="{Binding SelectedVaccine, Mode=TwoWay}">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Вакцина"  Binding="{Binding VaccineName}"/>
         <DataGridTextColumn Header="Заболевание" Binding="{Binding DiseaseName}" />
         <DataGridTextColumn Header="Весия Вакцины" Binding="{Binding VaccineVersion}" />
+        <DataGridTextColumn Header="Вакцина"  Binding="{Binding VaccineName}"/>
         <DataGridTextColumn Header="Кол-во" Binding="{Binding Count}" />
+        <DataGridTextColumn Header="Серия" Binding="{Binding Series}" />
+        <DataGridTextColumn Header="Срок годности" Binding="{Binding ExpirationDate}" />
         <DataGridTextColumn Header="Дата создания" Binding="{Binding DateTimeCreate}" />
       </DataGrid.Columns>
     </DataGrid>
