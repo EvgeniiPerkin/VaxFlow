@@ -17,7 +17,7 @@ namespace VaxFlow.Services
                 Directory.CreateDirectory(pathToAppFiles);
             }
 
-            string pathToDatabase = Path.Combine(pathToAppFiles, "vax_flow.db");
+            string pathToDatabase = Path.Combine(pathToAppFiles, "vax_flow_v2.db");
             DataSourceSQLite = $"Data Source ={pathToDatabase}";
             PathToLogFile = Path.Combine(pathToAppFiles, "vax_flow.log");
         }
